@@ -4,13 +4,13 @@ import os from "node:os";
 import path from "node:path";
 
 const CACHE_DIR = path.join(
-  process.env.FILEN_CACHE_DIR ?? path.join(os.tmpdir(), "lumen-filen-cache"),
+  process.env.PHOTO_CACHE_DIR ?? path.join(os.tmpdir(), "lumen-photo-cache"),
   "files"
 );
 const MAX_ENTRIES = 500;
 
-function cacheKey(filenPath: string): string {
-  return createHash("sha256").update(filenPath).digest("hex").slice(0, 32);
+function cacheKey(keyPath: string): string {
+  return createHash("sha256").update(keyPath).digest("hex").slice(0, 32);
 }
 
 export async function ensureCacheDir(): Promise<void> {
@@ -18,10 +18,10 @@ export async function ensureCacheDir(): Promise<void> {
 }
 
 export async function getCachedFile(
-  filenPath: string
+  keyPath: string
 ): Promise<Buffer | null> {
   try {
-    const key = cacheKey(filenPath);
+    const key = cacheKey(keyPath);
     const filePath = path.join(CACHE_DIR, `${key}.bin`);
     const buf = await fs.readFile(filePath);
     // Touch mtime for LRU cleanup.
@@ -34,11 +34,11 @@ export async function getCachedFile(
 }
 
 export async function setCachedFile(
-  filenPath: string,
+  keyPath: string,
   buffer: Buffer
 ): Promise<void> {
   await ensureCacheDir();
-  const key = cacheKey(filenPath);
+  const key = cacheKey(keyPath);
   const filePath = path.join(CACHE_DIR, `${key}.bin`);
   await fs.writeFile(filePath, buffer);
   await cleanupIfNeeded().catch(() => {});

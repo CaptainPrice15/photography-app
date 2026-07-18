@@ -1,16 +1,8 @@
 import type { NextRequest } from "next/server";
-import { getLoggedInSdk } from "@/lib/storage/filenSource";
+import { getPcloudFile } from "@/lib/storage/pcloudSource";
 import { getSession } from "@/lib/auth";
 
 export const runtime = "nodejs";
-
-function toFilenPath(segments: string[]): string {
-  const joined = segments.map((s) => decodeURIComponent(s)).join("/");
-  if (joined.includes("..") || joined.startsWith("/")) {
-    throw new Error("Invalid path");
-  }
-  return `/photos/${joined}`;
-}
 
 export async function GET(
   _req: NextRequest,
@@ -22,22 +14,14 @@ export async function GET(
   }
 
   const { path } = await params;
-  let filenPath: string;
-  try {
-    filenPath = toFilenPath(path);
-  } catch {
-    return new Response("Invalid path", { status: 400 });
-  }
 
   try {
-    const sdk = await getLoggedInSdk();
-    const stat = await sdk.fs().stat({ path: filenPath });
-    if (stat.isDirectory()) {
+    const file = await getPcloudFile(path);
+    if (!file) {
       return new Response("Not found", { status: 404 });
     }
 
-    const buffer = await sdk.fs().readFile({ path: filenPath });
-    const name = path[path.length - 1] ?? "download";
+    const name = file.name;
     const ext = name.split(".").pop()?.toLowerCase() ?? "";
     const mime =
       ext === "jpg" || ext === "jpeg"
@@ -52,7 +36,7 @@ export async function GET(
                 ? "image/heic"
                 : "application/octet-stream";
 
-    return new Response(buffer as unknown as BodyInit, {
+    return new Response(file.buffer as unknown as BodyInit, {
       headers: {
         "Content-Type": mime,
         "Content-Disposition": `attachment; filename="${name}"`,
@@ -60,7 +44,7 @@ export async function GET(
       },
     });
   } catch (err) {
-    console.error("Filen download error:", err);
+    console.error("pCloud download error:", err);
     return new Response("Failed to download", { status: 500 });
   }
 }

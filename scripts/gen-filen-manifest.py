@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-"""Generate filen-manifest.json for the Filen /photos folder structure.
+"""Generate manifest.json for the photo storage /photos folder structure.
 
-The Next.js app (lib/storage/filenSource.ts) auto-discovers image files inside
-each /photos/<collection>/ folder. This manifest only supplies collection
-metadata (title / description / accent colors). Re-run this script whenever you
-add new folders or rename collections, then upload the result to Filen as
-/photos/manifest.json.
+The Next.js app (lib/storage/pcloudSource.ts or localSource.ts) auto-discovers
+image files inside each /photos/<collection>/ folder. This manifest only
+supplies collection metadata (title / description / accent colors). Re-run this
+script whenever you add new folders or rename collections, then upload the
+result to your storage backend as /photos/manifest.json (or place it under
+public/photos locally).
 
 Usage:
     python scripts/gen-filen-manifest.py
-    python scripts/gen-filen-manifest.py --root public/photos --out filen-manifest.json
+    python scripts/gen-filen-manifest.py --root public/photos --out manifest.json
 
 Only the Python standard library is used.
 """
@@ -62,16 +63,16 @@ def title_case(slug: str) -> str:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Generate Filen manifest.json")
+    parser = argparse.ArgumentParser(description="Generate photo manifest.json")
     parser.add_argument(
         "--root",
         default="public/photos",
-        help="Local mirror of the Filen /photos folder (default: public/photos)",
+        help="Local mirror of the /photos folder (default: public/photos)",
     )
     parser.add_argument(
         "--out",
-        default="filen-manifest.json",
-        help="Output manifest path (default: filen-manifest.json)",
+        default="manifest.json",
+        help="Output manifest path (default: manifest.json)",
     )
     args = parser.parse_args()
 
@@ -142,7 +143,7 @@ def main() -> None:
         f"\nWrote {args.out}: {len(collections)} collections, "
         f"{total_photos} photos."
     )
-    print("Upload this file to Filen at /photos/manifest.json")
+    print("Upload this file to your storage backend at /photos/manifest.json")
 
 
 if __name__ == "__main__":

@@ -44,6 +44,7 @@ export function Hero({ photos }: { photos: Photo[] }) {
                 fill
                 priority
                 sizes="100vw"
+                unoptimized={p.unoptimized}
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30" />

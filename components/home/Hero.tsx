@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { ProtectedImage } from "@/components/shared/ProtectedImage";
 import type { Photo } from "@/lib/storage/types";
 
 const container = {
@@ -64,14 +64,14 @@ export function Hero({ photos }: { photos: Photo[] }) {
                 }}
                 transition={{ duration: 6, ease: "linear" }}
               >
-                <Image
+                <ProtectedImage
                   src={p.src}
                   alt={p.alt}
                   fill
                   priority={idx === 0}
                   sizes="100vw"
                   unoptimized={p.unoptimized}
-                  className="object-cover"
+                  className="absolute inset-0 object-cover"
                 />
               </motion.div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/40" />

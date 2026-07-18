@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { photoSource } from "@/lib/storage";
 import { MasonryGallery } from "@/components/gallery/MasonryGallery";
 import { CollectionThemeSetter } from "@/components/theme/CollectionThemeSetter";
 import { SectionReveal } from "@/components/shared/SectionReveal";
+import { ProtectedImage } from "@/components/shared/ProtectedImage";
 
 export const dynamic = "force-dynamic";
 
@@ -47,13 +47,13 @@ export default async function CollectionPage({
 
       <header className="relative">
         <div className="relative h-[42vh] min-h-[320px] w-full overflow-hidden">
-          <Image
+          <ProtectedImage
             src={collection.cover}
             alt={collection.title}
             fill
             sizes="100vw"
             unoptimized={collection.photos[0]?.unoptimized}
-            className="object-cover"
+            className="absolute inset-0 object-cover"
             placeholder="blur"
             blurDataURL={collection.photos[0]?.blurDataURL}
           />

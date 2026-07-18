@@ -198,6 +198,56 @@ errors in the server log and correct motion/glass markup present in the HTML.
 
 ---
 
+## ✅ Image Protection — Watermark + Copy Deterrents (DONE)
+
+Build passes (`npm run build` ✓), lint clean (1 false-positive alt warning on the
+spread `alt` prop in `ProtectedImage`). Smoke test: download route returns `402`
+unauthenticated; global security headers present on every route; watermark pipeline
+validated (valid resized JPEG with tiled watermark).
+
+### Reality check
+"Block screenshot / right-click / open-in-new-tab" are **client-side deterrents
+only** — bypassable via DevTools/JS-disabled. Real protection = server-side
+watermark baked into the *only* bytes the browser receives. Approved approach:
+watermark via `sharp` + client deterrents (Tier A + Tier B).
+
+### Phase 1 — Server-side watermark engine
+- `lib/watermark.ts` (NEW): `watermarkPreview()` — downscales to 1600px long edge,
+  composites a tiled, rotated `lumen.photo` text pattern (opacity 0.22) via SVG,
+  outputs `image/jpeg` q82 (mozjpeg). Wrapped in try/catch so non-raster formats
+  fall back to a plain (still header-hardened) preview.
+- `app/api/photos/[...path]/route.ts`: now serves **only** the watermarked derivative
+  (cached under `wm:<key>` in `lib/cache`); adds `Content-Disposition: inline`,
+  `X-Content-Type-Options: nosniff`, `Referrer-Policy: no-referrer`,
+  `Cross-Origin-Resource-Policy: same-origin`.
+- `package.json`: `sharp` moved from `devDependencies` → `dependencies` (runs at
+  request time in the proxy).
+
+### Phase 2 — Copy-deterrent UI (`ProtectedImage`)
+- `components/shared/ProtectedImage.tsx` (NEW): `next/image` wrapper, client
+  component, blocks `contextmenu` / `dragstart` / `pointerdown` (long-press save).
+  Exposes `unprotected` and `linkWrapped` (keeps link navigation, blocks only
+  contextmenu+drag on cover images).
+- Wired into `PhotoCard`, `Hero`, `Lightbox`, `CollectionCard` (cover, `linkWrapped`),
+  and `collections/[slug]` cover.
+
+### Phase 3 — Harden original download
+- `app/api/download/[...path]/route.ts`: added `X-Content-Type-Options: nosniff` +
+  `Referrer-Policy: no-referrer` alongside existing `Content-Disposition: attachment`
+  and `Cache-Control: no-store`. Still gates on `session.paid` (402).
+
+### Phase 4 — Global security headers
+- `next.config.ts`: `headers()` adds to `/:path*` — `Referrer-Policy: no-referrer`,
+  `X-Content-Type-Options: nosniff`, `Cross-Origin-Resource-Policy: same-origin`,
+  and a minimal `Content-Security-Policy` (`img-src 'self'`, etc.).
+
+### Known limits
+- Screenshots yield the watermarked preview (acceptable; watermark deters reuse).
+- Determined users get only the watermarked preview unless they pay for the clean
+  original. Tier B deterrents are bypassable by design.
+
+---
+
 ## 🔮 Optional Future Tier (after core phases)
 - CSS scroll-driven animations for parallax.
 - Cursor-following spotlight hover (`requestAnimationFrame`).
@@ -207,5 +257,11 @@ errors in the server log and correct motion/glass markup present in the HTML.
 ---
 
 ## Scope guardrails (will NOT change)
-- Image workflow / HEIC / pCloud optimization.
-- Routing. Auth/security. No new heavy UI libraries. Tailwind v4 setup.
+- Routing. No new heavy UI libraries beyond `sharp` (already present for blur gen).
+  Tailwind v4 setup.
+
+### Changed by the image-protection work (deliberate)
+- Image *delivery*: gallery now serves watermarked, downscaled previews (not the
+  clean original). This is a security feature, not a workflow change — HEIC/pCloud
+  handling is untouched. Auth/security *was* changed (download gating hardened,
+  security headers added).

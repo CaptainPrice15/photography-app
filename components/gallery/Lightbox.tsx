@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
+import { ProtectedImage } from "@/components/shared/ProtectedImage";
 import type { Photo } from "@/lib/storage/types";
 
 interface Props {
@@ -106,7 +106,7 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
               className="relative mx-4 flex max-h-[88vh] max-w-5xl items-center"
               onClick={(e) => e.stopPropagation()}
             >
-              <Image
+              <ProtectedImage
                 src={photo.src}
                 alt={photo.alt}
                 width={photo.width}

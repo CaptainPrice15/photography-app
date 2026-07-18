@@ -41,6 +41,8 @@ export async function GET(
         "Content-Type": mime,
         "Content-Disposition": `attachment; filename="${name}"`,
         "Cache-Control": "no-store",
+        "X-Content-Type-Options": "nosniff",
+        "Referrer-Policy": "no-referrer",
       },
     });
   } catch (err) {

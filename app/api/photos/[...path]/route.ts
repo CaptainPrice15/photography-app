@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { getPcloudFile } from "@/lib/storage/pcloudSource";
 import { getCachedFile, setCachedFile } from "@/lib/cache";
+import { watermarkPreview } from "@/lib/watermark";
 import convert from "heic-convert";
 
 export const runtime = "nodejs";
@@ -58,21 +59,12 @@ export async function GET(
 ): Promise<Response> {
   const { path } = await params;
 
-  const cacheKey = path.join("/");
+  const cacheKey = `wm:${path.join("/")}`;
   try {
     const cached = await getCachedFile(cacheKey);
     if (cached) {
-      const name = path[path.length - 1] ?? "";
-      // HEIC is always transcoded to JPEG before caching, so reflect that.
-      const contentType =
-        extOf(name) === "heic" || extOf(name) === "heif"
-          ? "image/jpeg"
-          : mimeFromName(name);
       return new Response(cached as unknown as BodyInit, {
-        headers: {
-          "Content-Type": contentType,
-          "Cache-Control": "public, max-age=86400, immutable",
-        },
+        headers: previewHeaders("image/jpeg"),
       });
     }
 
@@ -81,17 +73,34 @@ export async function GET(
       return new Response("Not found", { status: 404 });
     }
 
+    // Serve a watermarked, downscaled derivative only. The clean original is
+    // never sent to unauthenticated views — it can only be fetched via the
+    // gated /api/download route after payment.
     const { bytes, contentType } = await toBrowserBytes(file.name, file.buffer);
-    await setCachedFile(cacheKey, bytes);
+    let preview = { bytes, contentType };
+    try {
+      preview = await watermarkPreview(bytes, contentType);
+    } catch (wmErr) {
+      console.error("[photos] watermark failed, serving plain preview:", wmErr);
+    }
+    await setCachedFile(cacheKey, preview.bytes);
 
-    return new Response(bytes as unknown as BodyInit, {
-      headers: {
-        "Content-Type": contentType,
-        "Cache-Control": "public, max-age=86400, immutable",
-      },
+    return new Response(preview.bytes as unknown as BodyInit, {
+      headers: previewHeaders(preview.contentType),
     });
   } catch (err) {
     console.error("pCloud photo proxy error:", err);
     return new Response("Failed to load image", { status: 500 });
   }
+}
+
+function previewHeaders(contentType: string): Record<string, string> {
+  return {
+    "Content-Type": contentType,
+    "Content-Disposition": "inline",
+    "Cache-Control": "public, max-age=86400, immutable",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer",
+    "Cross-Origin-Resource-Policy": "same-origin",
+  };
 }

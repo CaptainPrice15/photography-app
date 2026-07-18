@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { ProtectedImage } from "@/components/shared/ProtectedImage";
 import type { Collection } from "@/lib/storage/types";
 
 export function CollectionCard({ collection }: { collection: Collection }) {
@@ -19,10 +19,11 @@ export function CollectionCard({ collection }: { collection: Collection }) {
         className="block overflow-hidden rounded-3xl border border-border-40 bg-surface shadow-card transition-all duration-300 group-hover:-translate-y-1.5 group-hover:shadow-card-hover group-hover:shadow-glow"
       >
         <div className="relative aspect-[4/3] w-full overflow-hidden">
-          <Image
+          <ProtectedImage
             src={collection.cover}
             alt={collection.title}
             fill
+            linkWrapped
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.07]"
             placeholder="blur"

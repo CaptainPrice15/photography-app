@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
+import { ProtectedImage } from "@/components/shared/ProtectedImage";
 import type { Photo } from "@/lib/storage/types";
 
 interface Props {
@@ -25,7 +25,7 @@ export function PhotoCard({ photo, onOpen, sizes, priority }: Props) {
       className="group surface-contain relative mb-4 block w-full overflow-hidden rounded-2xl border border-border-40 bg-surface shadow-card transition-shadow duration-300 hover:shadow-card-hover hover:shadow-glow-sm"
     >
       <div className="overflow-hidden">
-        <Image
+        <ProtectedImage
           src={photo.src}
           alt={photo.alt}
           width={photo.width}

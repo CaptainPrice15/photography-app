@@ -8,5 +8,7 @@ import type { PhotoSource } from "./types";
 
 const SOURCE = process.env.NEXT_PUBLIC_PHOTO_SOURCE ?? "local";
 
+console.log(`[storage] active photo source = "${SOURCE}"`);
+
 export const photoSource: PhotoSource =
   SOURCE === "filen" ? filenSource : localSource;

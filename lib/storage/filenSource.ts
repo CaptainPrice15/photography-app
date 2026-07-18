@@ -162,6 +162,8 @@ async function scanCollections(): Promise<Collection[]> {
     console.error("[filen] scanCollections failed:", err);
     return [];
   }
+  console.log(`[filen] scanCollections → ${collections.length} collections`);
+  return collections;
 }
 
 export const filenSource: PhotoSource = {

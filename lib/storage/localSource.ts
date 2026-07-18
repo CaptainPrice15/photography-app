@@ -104,6 +104,7 @@ async function scanCollections(): Promise<Collection[]> {
     });
   }
 
+  console.log(`[local] scanCollections → ${collections.length} collections`);
   return collections;
 }
 

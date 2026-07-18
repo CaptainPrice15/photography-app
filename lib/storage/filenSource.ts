@@ -184,3 +184,19 @@ export const filenSource: PhotoSource = {
 };
 
 export { getLoggedInSdk };
+
+// Trigger a login at server startup (called from instrumentation.ts) so the
+// cached login promise is resolved before the first request arrives. Errors are
+// swallowed — the lazy per-request path already handles (and retries on) failures.
+export async function warmFilenLogin(): Promise<void> {
+  if (!process.env.FILEN_EMAIL || !process.env.FILEN_PASSWORD) {
+    console.log("[filen] no credentials set — skipping startup login");
+    return;
+  }
+  try {
+    await getLoggedInSdk();
+    console.log("[filen] startup login succeeded");
+  } catch (err) {
+    console.error("[filen] startup login failed (will retry on first request):", err);
+  }
+}

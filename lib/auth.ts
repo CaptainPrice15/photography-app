@@ -1,8 +1,12 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
+import bcrypt from "bcryptjs";
+import { prisma } from "@/lib/db";
 
 const COOKIE_NAME = "lumen_session";
 const SESSION_DAYS = 7;
+const MIN_PASSWORD = 8;
+const BCRYPT_COST = 12;
 
 export interface Session {
   email: string;
@@ -99,14 +103,87 @@ export async function login(
     return { ok: false, error: "Enter a valid email and password." };
   }
 
+  // Environment admin always wins (matches ADMIN_EMAIL / ADMIN_PASSWORD).
   const isAdmin =
     trimmed === (process.env.ADMIN_EMAIL ?? "").toLowerCase() &&
     password === process.env.ADMIN_PASSWORD;
 
-  const session: Session = isAdmin
-    ? { email: trimmed, role: "admin", paid: true }
-    : { email: trimmed, role: "user", paid: false };
+  if (isAdmin) {
+    const session: Session = { email: trimmed, role: "admin", paid: true };
+    await setSession(session);
+    return { ok: true, session };
+  }
 
-  await setSession(session);
-  return { ok: true, session };
+  // Otherwise verify against a registered user in the database.
+  try {
+    const user = await prisma.user.findUnique({ where: { email: trimmed } });
+    if (user && (await bcrypt.compare(password, user.passwordHash))) {
+      const session: Session = {
+        email: user.email,
+        role: user.role === "admin" ? "admin" : "user",
+        paid: user.paid,
+      };
+      await setSession(session);
+      return { ok: true, session };
+    }
+  } catch (err) {
+    console.error("login db lookup failed:", err);
+  }
+
+  return { ok: false, error: "Invalid email or password." };
+}
+
+function normalizeEmail(email: string): string {
+  return email.trim().toLowerCase();
+}
+
+export type RegisterError =
+  | "INVALID_EMAIL"
+  | "WEAK_PASSWORD"
+  | "MISMATCH"
+  | "EMAIL_EXISTS"
+  | "ADMIN_RESERVED"
+  | "SERVER_ERROR";
+
+export async function register(
+  email: string,
+  password: string,
+  confirm: string
+): Promise<{ ok: true; session: Session } | { ok: false; error: RegisterError }> {
+  const trimmed = normalizeEmail(email);
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+    return { ok: false, error: "INVALID_EMAIL" };
+  }
+  if (password.length < MIN_PASSWORD) {
+    return { ok: false, error: "WEAK_PASSWORD" };
+  }
+  if (password !== confirm) {
+    return { ok: false, error: "MISMATCH" };
+  }
+
+  // The admin email is reserved for the environment credential and cannot be
+  // registered through the public signup form.
+  if (trimmed === (process.env.ADMIN_EMAIL ?? "").toLowerCase()) {
+    return { ok: false, error: "ADMIN_RESERVED" };
+  }
+
+  try {
+    const existing = await prisma.user.findUnique({ where: { email: trimmed } });
+    if (existing) {
+      return { ok: false, error: "EMAIL_EXISTS" };
+    }
+
+    const passwordHash = await bcrypt.hash(password, BCRYPT_COST);
+    const user = await prisma.user.create({
+      data: { email: trimmed, passwordHash, role: "user", paid: false },
+    });
+
+    const session: Session = { email: user.email, role: "user", paid: false };
+    await setSession(session);
+    return { ok: true, session };
+  } catch (err) {
+    console.error("registration failed:", err);
+    return { ok: false, error: "SERVER_ERROR" };
+  }
 }

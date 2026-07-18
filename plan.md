@@ -248,6 +248,43 @@ watermark via `sharp` + client deterrents (Tier A + Tier B).
 
 ---
 
+## ✅ Signup / Registration (DONE)
+
+Build passes (`npm run build` ✓), lint clean (only the pre-existing false-positive
+`alt` warning on `ProtectedImage`). End-to-end DB integration script verified:
+register persists, duplicate detected, correct password verifies via bcrypt, wrong
+password rejected, admin email reserved. Both `/signup` and `/login` render (200)
+with correct fields + cross-links.
+
+### Approach
+Chosen: **Prisma + SQLite** user store, **open signup**, **env-only admin**.
+
+### Files
+- `prisma/schema.prisma` (NEW): `User` model (email unique, passwordHash, role,
+  paid, createdAt). SQLite datasource.
+- `lib/db.ts` (NEW): Prisma client singleton (globalThis pattern).
+- `lib/auth.ts`: added `register(email, password, confirm)` (validation → bcrypt
+  hash → insert → session) + shared `normalizeEmail`; `login()` now also verifies
+  registered users against the DB via bcrypt (env admin still wins). Added
+  `bcryptjs` import.
+- `app/actions/auth.ts`: added `registerAction` (mirrors `loginAction`, maps
+  `RegisterError` → messages, supports `returnTo`); `loginAction` now honors
+  `returnTo`.
+- `app/signup/page.tsx` (NEW): glass card form, email + password + confirm, inline
+  errors, link to `/login`.
+- `app/login/page.tsx`: added "Create an account" link to `/signup` (+ `Link` import).
+- `package.json`: `@prisma/client`, `prisma`, `bcryptjs`, `@types/bcryptjs`; scripts
+  `db:generate`, `db:push`, `postinstall: prisma generate`.
+- `.env.example`: added `DATABASE_URL="file:./dev.db"`.
+- `.gitignore`: `*.db`, `*.db-journal`, `/prisma/dev.db`, `/prisma/migrations`.
+
+### Validation
+Email format + lowercase normalize; password ≥ 8 chars; confirm must match;
+`ADMIN_EMAIL` reserved; duplicate → `EMAIL_EXISTS`. Out of scope v1: email
+verification, rate limiting, OAuth.
+
+---
+
 ## 🔮 Optional Future Tier (after core phases)
 - CSS scroll-driven animations for parallax.
 - Cursor-following spotlight hover (`requestAnimationFrame`).

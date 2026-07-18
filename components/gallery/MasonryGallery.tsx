@@ -30,7 +30,7 @@ export function MasonryGallery({ collections, photos }: Props) {
       {filtered.length === 0 ? (
         <p className="py-20 text-center text-muted">No photos in this collection yet.</p>
       ) : (
-        <div className="columns-1 gap-4 sm:columns-2 lg:columns-3 xl:columns-4 [column-fill:_balance]">
+        <div className="cv-auto columns-1 gap-4 sm:columns-2 lg:columns-3 xl:columns-4 [column-fill:_balance]">
           {filtered.map((p, i) => (
             <PhotoCard
               key={p.id}

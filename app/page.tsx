@@ -2,6 +2,7 @@ import { photoSource } from "@/lib/storage";
 import { Hero } from "@/components/home/Hero";
 import { CollectionCard } from "@/components/collections/CollectionCard";
 import { MasonryGallery } from "@/components/gallery/MasonryGallery";
+import { SectionReveal, RevealItem } from "@/components/shared/SectionReveal";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -18,20 +19,28 @@ export default async function HomePage() {
     <div>
       <Hero photos={featured} />
 
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <SectionReveal
+        as="section"
+        stagger
+        className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8"
+      >
         <div className="mb-10 flex items-end justify-between gap-4">
-          <div>
-            <h2 className="text-3xl font-semibold tracking-tight">Collections</h2>
-            <p className="mt-2 text-muted">
-              Themed albums, each with its own mood and accent.
-            </p>
-          </div>
-          <Link
-            href="/collections"
-            className="hidden shrink-0 rounded-full border border-border px-4 py-2 text-sm font-medium text-muted transition-colors hover:border-accent hover:text-accent sm:block"
-          >
-            View all
-          </Link>
+          <RevealItem>
+            <div>
+              <h2 className="text-3xl font-semibold tracking-tight">Collections</h2>
+              <p className="mt-2 text-muted">
+                Themed albums, each with its own mood and accent.
+              </p>
+            </div>
+          </RevealItem>
+          <RevealItem className="hidden shrink-0 sm:block">
+            <Link
+              href="/collections"
+              className="rounded-full border border-border bg-surface-65 px-4 py-2 text-sm font-medium text-muted backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:text-accent hover:shadow-glow-sm focus-glow active:scale-[0.98]"
+            >
+              View all
+            </Link>
+          </RevealItem>
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -39,9 +48,12 @@ export default async function HomePage() {
             <CollectionCard key={c.id} collection={c} />
           ))}
         </div>
-      </section>
+      </SectionReveal>
 
-      <section className="mx-auto max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
+      <SectionReveal
+        as="section"
+        className="cv-auto mx-auto max-w-7xl px-4 pb-8 sm:px-6 lg:px-8"
+      >
         <div className="mb-10 flex items-end justify-between gap-4">
           <div>
             <h2 className="text-3xl font-semibold tracking-tight">Latest</h2>
@@ -49,14 +61,14 @@ export default async function HomePage() {
           </div>
           <Link
             href="/gallery"
-            className="hidden shrink-0 rounded-full border border-border px-4 py-2 text-sm font-medium text-muted transition-colors hover:border-accent hover:text-accent sm:block"
+            className="hidden shrink-0 rounded-full border border-border bg-surface-65 px-4 py-2 text-sm font-medium text-muted backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:text-accent hover:shadow-glow-sm focus-glow active:scale-[0.98] sm:block"
           >
             Open gallery
           </Link>
         </div>
 
         <MasonryGallery collections={collections} photos={latest} />
-      </section>
+      </SectionReveal>
     </div>
   );
 }

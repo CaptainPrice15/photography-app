@@ -4,8 +4,24 @@ import Image from "next/image";
 import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useState } from "react";
-import type { Photo } from "@/lib/storage/types";
 import { motion } from "framer-motion";
+import type { Photo } from "@/lib/storage/types";
+
+const container = {
+  hidden: {},
+  show: {
+    transition: { delayChildren: 0.15, staggerChildren: 0.08 },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 24 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
+  },
+};
 
 export function Hero({ photos }: { photos: Photo[] }) {
   const [emblaRef, embla] = useEmblaCarousel({
@@ -36,49 +52,74 @@ export function Hero({ photos }: { photos: Photo[] }) {
     <section className="relative">
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex">
-          {photos.map((p) => (
-            <div key={p.id} className="relative h-[78vh] min-h-[520px] w-full shrink-0 grow-0 basis-full">
-              <Image
-                src={p.src}
-                alt={p.alt}
-                fill
-                priority
-                sizes="100vw"
-                unoptimized={p.unoptimized}
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30" />
-              <div className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
+          {photos.map((p, idx) => (
+            <div
+              key={p.id}
+              className="relative h-[88vh] min-h-[560px] w-full shrink-0 grow-0 basis-full"
+            >
+              <motion.div
+                className="absolute inset-0"
+                animate={{
+                  scale: idx === selected ? 1.08 : 1.02,
+                }}
+                transition={{ duration: 6, ease: "linear" }}
+              >
+                <Image
+                  src={p.src}
+                  alt={p.alt}
+                  fill
+                  priority={idx === 0}
+                  sizes="100vw"
+                  unoptimized={p.unoptimized}
+                  className="object-cover"
+                />
+              </motion.div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/40" />
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(0,0,0,0.55)_100%)]" />
+
+              <div className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
                 <motion.div
                   key={p.id}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6 }}
+                  variants={container}
+                  initial="hidden"
+                  animate="show"
                 >
-                  <p className="mb-3 inline-block rounded-full bg-white/15 px-3 py-1 text-xs font-medium uppercase tracking-wider text-white backdrop-blur">
+                  <motion.p
+                    variants={item}
+                    className="mb-4 inline-block rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-white backdrop-blur"
+                  >
                     Featured
-                  </p>
-                  <h1 className="max-w-2xl text-4xl font-semibold tracking-tight text-white sm:text-6xl">
+                  </motion.p>
+                  <motion.h1
+                    variants={item}
+                    className="max-w-2xl text-4xl font-semibold tracking-tight text-white sm:text-6xl"
+                  >
                     {p.title}
-                  </h1>
-                  <p className="mt-4 max-w-xl text-white/80">
-                    A curated frame from the latest collection. Explore the full gallery
-                    and themed albums.
-                  </p>
-                  <div className="mt-7 flex flex-wrap gap-3">
+                  </motion.h1>
+                  <motion.p
+                    variants={item}
+                    className="mt-4 max-w-xl text-white/80"
+                  >
+                    A curated frame from the latest collection. Explore the full
+                    gallery and themed albums.
+                  </motion.p>
+                  <motion.div
+                    variants={item}
+                    className="mt-8 flex flex-wrap gap-3"
+                  >
                     <Link
                       href="/gallery"
-                      className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-black transition-transform hover:scale-105"
+                      className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-black shadow-lg backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:shadow-glow focus-glow active:scale-[0.98]"
                     >
                       View Gallery
                     </Link>
                     <Link
                       href="/collections"
-                      className="rounded-full border border-white/40 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/10"
+                      className="glass rounded-full px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-glow focus-glow active:scale-[0.98]"
                     >
                       Collections
                     </Link>
-                  </div>
+                  </motion.div>
                 </motion.div>
               </div>
             </div>
@@ -86,14 +127,16 @@ export function Hero({ photos }: { photos: Photo[] }) {
         </div>
       </div>
 
-      <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+      <div className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 gap-2">
         {photos.map((_, i) => (
           <button
             key={i}
             aria-label={`Go to slide ${i + 1}`}
             onClick={() => embla?.scrollTo(i)}
-            className={`h-1.5 rounded-full transition-all ${
-              i === selected ? "w-8 bg-white" : "w-2.5 bg-white/40"
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              i === selected
+                ? "w-8 bg-white shadow-glow-sm"
+                : "w-2.5 bg-white/40 hover:bg-white/70"
             }`}
           />
         ))}

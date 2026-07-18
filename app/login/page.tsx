@@ -26,7 +26,7 @@ export default function LoginPage() {
             name="email"
             type="email"
             required
-            className="mt-1 w-full rounded-xl border border-border bg-bg px-4 py-2.5 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
+            className="mt-1 w-full rounded-xl border border-border bg-surface-65 px-4 py-2.5 text-sm outline-none backdrop-blur transition-colors focus:border-accent focus:shadow-glow-sm"
             placeholder="you@example.com"
           />
         </div>
@@ -40,7 +40,7 @@ export default function LoginPage() {
             type="password"
             required
             minLength={4}
-            className="mt-1 w-full rounded-xl border border-border bg-bg px-4 py-2.5 text-sm outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
+            className="mt-1 w-full rounded-xl border border-border bg-surface-65 px-4 py-2.5 text-sm outline-none backdrop-blur transition-colors focus:border-accent focus:shadow-glow-sm"
             placeholder="••••••••"
           />
         </div>
@@ -52,7 +52,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={isPending}
-          className="w-full rounded-xl bg-accent py-2.5 text-sm font-semibold text-white transition-transform hover:scale-[1.02] disabled:opacity-60"
+          className="w-full rounded-xl bg-accent py-2.5 text-sm font-semibold text-white shadow-lg shadow-accent/30 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-glow focus-glow active:scale-[0.98] disabled:opacity-60"
         >
           {isPending ? "Signing in…" : "Continue"}
         </button>

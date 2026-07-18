@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { photoSource } from "@/lib/storage";
 import { MasonryGallery } from "@/components/gallery/MasonryGallery";
 import { CollectionThemeSetter } from "@/components/theme/CollectionThemeSetter";
+import { SectionReveal } from "@/components/shared/SectionReveal";
 
 export const dynamic = "force-dynamic";
 
@@ -65,7 +66,7 @@ export default async function CollectionPage({
           <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/40 to-transparent" />
         </div>
         <div className="mx-auto -mt-20 max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div
+          <SectionReveal
             className="inline-block rounded-2xl border border-border bg-surface/80 px-5 py-4 backdrop-blur"
             style={{ boxShadow: `0 10px 40px -10px ${collection.accent}55` }}
           >
@@ -78,7 +79,7 @@ export default async function CollectionPage({
             <p className="mt-2 text-xs font-medium uppercase tracking-wider text-accent">
               {collection.photos.length} photos
             </p>
-          </div>
+          </SectionReveal>
         </div>
       </header>
 

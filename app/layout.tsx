@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
+import { MotionProvider } from "@/components/shared/MotionProvider";
 import { AmbientBackground } from "@/components/theme/AmbientBackground";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -71,10 +72,12 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AmbientBackground />
-          <Navbar session={session} />
-          <main className="flex min-h-screen flex-col pt-16">{children}</main>
-          <Footer />
+          <MotionProvider>
+            <AmbientBackground />
+            <Navbar session={session} />
+            <main className="flex min-h-screen flex-col pt-16">{children}</main>
+            <Footer />
+          </MotionProvider>
         </ThemeProvider>
       </body>
     </html>

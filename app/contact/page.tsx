@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { SectionReveal } from "@/components/shared/SectionReveal";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
-      <header className="mb-10 text-center">
+      <SectionReveal as="header" className="mb-10 text-center">
         <p className="text-sm font-medium uppercase tracking-wider text-accent">
           Contact
         </p>
@@ -20,11 +21,11 @@ export default function ContactPage() {
           Commissions, prints, or just a hello — drop a note and I&apos;ll reply
           within a couple of days.
         </p>
-      </header>
+      </SectionReveal>
 
-      <div className="rounded-3xl border border-border bg-surface/50 p-6 sm:p-8">
+      <SectionReveal className="rounded-3xl border border-border bg-surface/50 p-6 shadow-card sm:p-8">
         <ContactForm />
-      </div>
+      </SectionReveal>
     </div>
   );
 }

@@ -46,10 +46,14 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
     <AnimatePresence>
       {photo && (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-xl"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          style={{
+            backgroundImage:
+              "radial-gradient(ellipse at center, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.85) 100%)",
+          }}
           onClick={onClose}
           role="dialog"
           aria-modal="true"
@@ -58,7 +62,7 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
           <button
             aria-label="Close"
             onClick={onClose}
-            className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+            className="glass-strong absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full text-white transition-all duration-200 hover:shadow-glow"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <path d="M18 6 6 18M6 6l12 12" />
@@ -71,7 +75,7 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
               e.stopPropagation();
               go(-1);
             }}
-            className="absolute left-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 sm:left-6"
+            className="glass-strong absolute left-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full text-white transition-all duration-200 hover:shadow-glow sm:left-6"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M15 18l-6-6 6-6" />
@@ -84,7 +88,7 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
               e.stopPropagation();
               go(1);
             }}
-            className="absolute right-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 sm:right-6"
+            className="glass-strong absolute right-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full text-white transition-all duration-200 hover:shadow-glow sm:right-6"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 18l6-6-6-6" />
@@ -95,10 +99,10 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
             <motion.div
               key={photo.id}
               custom={direction}
-              initial={{ opacity: 0, x: direction * 60 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: direction * -60 }}
-              transition={{ duration: 0.25 }}
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               className="relative mx-4 flex max-h-[88vh] max-w-5xl items-center"
               onClick={(e) => e.stopPropagation()}
             >
@@ -126,7 +130,7 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
               </span>
               <a
                 href={`/checkout?file=${encodeURIComponent(photo.src.replace(/^\/api\/photos\//, ""))}`}
-                className="rounded-full bg-white/15 px-4 py-1.5 text-xs font-semibold text-white backdrop-blur transition-colors hover:bg-white/25"
+                className="glass-strong rounded-full px-4 py-1.5 text-xs font-semibold text-white transition-all duration-200 hover:shadow-glow"
               >
                 Download original
               </a>

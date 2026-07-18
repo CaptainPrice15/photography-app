@@ -33,7 +33,7 @@ function CheckoutInner() {
         <button
           type="submit"
           disabled={isPending || !file}
-          className="w-full rounded-xl bg-accent py-2.5 text-sm font-semibold text-white transition-transform hover:scale-[1.02] disabled:opacity-60"
+          className="w-full rounded-xl bg-accent py-2.5 text-sm font-semibold text-white shadow-lg shadow-accent/30 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-glow focus-glow active:scale-[0.98] disabled:opacity-60"
         >
           {isPending ? "Processing…" : "Complete payment"}
         </button>

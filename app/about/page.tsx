@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { photoSource } from "@/lib/storage";
+import { SectionReveal, RevealItem } from "@/components/shared/SectionReveal";
+import { CountUp } from "@/components/shared/CountUp";
 
 export const metadata: Metadata = {
   title: "About",
@@ -19,10 +21,10 @@ const gear = [
 ];
 
 const stats = [
-  { value: "12+", label: "Years shooting" },
-  { value: "40+", label: "Countries" },
-  { value: "30k", label: "Frames archived" },
-  { value: "4", label: "Active series" },
+  { value: 12, suffix: "+", label: "Years shooting" },
+  { value: 40, suffix: "+", label: "Countries" },
+  { value: 30, suffix: "k", label: "Frames archived" },
+  { value: 4, label: "Active series" },
 ];
 
 export default async function AboutPage() {
@@ -32,20 +34,22 @@ export default async function AboutPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="grid items-center gap-10 md:grid-cols-2">
-        <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-border bg-surface">
-          <Image
-            src={coverSrc}
-            alt="Portrait of the photographer"
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover"
-            placeholder={cover?.blurDataURL ? "blur" : "empty"}
-            blurDataURL={cover?.blurDataURL}
-            unoptimized={cover?.unoptimized}
-          />
-        </div>
-        <div>
+      <SectionReveal stagger className="grid items-center gap-10 md:grid-cols-2">
+        <RevealItem className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-border bg-surface">
+          <div className="animate-float h-full w-full">
+            <Image
+              src={coverSrc}
+              alt="Portrait of the photographer"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+              placeholder={cover?.blurDataURL ? "blur" : "empty"}
+              blurDataURL={cover?.blurDataURL}
+              unoptimized={cover?.unoptimized}
+            />
+          </div>
+        </RevealItem>
+        <RevealItem>
           <p className="text-sm font-medium uppercase tracking-wider text-accent">
             About
           </p>
@@ -64,46 +68,51 @@ export default async function AboutPage() {
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/contact"
-              className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white transition-transform hover:scale-105"
+              className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-accent/30 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-glow focus-glow active:scale-[0.98]"
             >
               Get in touch
             </Link>
             <Link
               href="/gallery"
-              className="rounded-full border border-border px-5 py-2.5 text-sm font-semibold text-fg transition-colors hover:bg-surface"
+              className="rounded-full border border-border bg-surface-65 px-5 py-2.5 text-sm font-semibold text-fg backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:text-accent hover:shadow-glow-sm focus-glow active:scale-[0.98]"
             >
               View gallery
             </Link>
           </div>
-        </div>
-      </div>
+        </RevealItem>
+      </SectionReveal>
 
-      <div className="mt-16 grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <SectionReveal stagger className="mt-16 grid grid-cols-2 gap-4 sm:grid-cols-4">
         {stats.map((s) => (
-          <div
+          <RevealItem
             key={s.label}
-            className="rounded-2xl border border-border bg-surface/60 p-5 text-center"
+            className="surface-contain rounded-2xl border border-border-40 bg-surface/60 p-5 text-center shadow-card"
           >
-            <p className="text-3xl font-semibold text-accent">{s.value}</p>
+            <p className="text-3xl font-semibold text-accent">
+              <CountUp value={s.value} suffix={s.suffix} />
+            </p>
             <p className="mt-1 text-xs text-muted">{s.label}</p>
-          </div>
+          </RevealItem>
         ))}
-      </div>
+      </SectionReveal>
 
-      <div className="mt-16">
-        <h2 className="text-2xl font-semibold tracking-tight">Gear I trust</h2>
+      <SectionReveal stagger className="mt-16">
+        <RevealItem>
+          <h2 className="text-2xl font-semibold tracking-tight">Gear I trust</h2>
+        </RevealItem>
         <ul className="mt-5 grid gap-3 sm:grid-cols-2">
           {gear.map((g) => (
-            <li
+            <RevealItem
               key={g}
-              className="flex items-center gap-3 rounded-xl border border-border bg-surface/60 px-4 py-3 text-sm"
+              as="li"
+              className="flex items-center gap-3 rounded-xl border border-border-40 bg-surface/60 px-4 py-3 text-sm"
             >
               <span className="h-2 w-2 rounded-full bg-accent" />
               {g}
-            </li>
+            </RevealItem>
           ))}
         </ul>
-      </div>
+      </SectionReveal>
     </div>
   );
 }

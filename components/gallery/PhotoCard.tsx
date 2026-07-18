@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { motion } from "framer-motion";
 import type { Photo } from "@/lib/storage/types";
 
 interface Props {
@@ -12,30 +13,41 @@ interface Props {
 
 export function PhotoCard({ photo, onOpen, sizes, priority }: Props) {
   return (
-    <button
+    <motion.button
       type="button"
       onClick={() => onOpen(photo)}
-      className="group relative mb-4 block w-full overflow-hidden rounded-2xl border border-border bg-surface"
       aria-label={`Open ${photo.title ?? photo.alt}`}
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "0px 0px -10% 0px" }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ y: -6, scale: 1.015 }}
+      className="group surface-contain relative mb-4 block w-full overflow-hidden rounded-2xl border border-border-40 bg-surface shadow-card transition-shadow duration-300 hover:shadow-card-hover hover:shadow-glow-sm"
     >
-      <Image
-        src={photo.src}
-        alt={photo.alt}
-        width={photo.width}
-        height={photo.height}
-        unoptimized={photo.unoptimized}
-        placeholder={photo.blurDataURL ? "blur" : "empty"}
-        blurDataURL={photo.blurDataURL}
-        sizes={sizes ?? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"}
-        priority={priority}
-        className="h-auto w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-      />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      <div className="overflow-hidden">
+        <Image
+          src={photo.src}
+          alt={photo.alt}
+          width={photo.width}
+          height={photo.height}
+          unoptimized={photo.unoptimized}
+          placeholder={photo.blurDataURL ? "blur" : "empty"}
+          blurDataURL={photo.blurDataURL}
+          sizes={sizes ?? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"}
+          priority={priority}
+          className="h-auto w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.06]"
+        />
+      </div>
+
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
       {photo.title && (
-        <span className="pointer-events-none absolute bottom-3 left-3 right-3 translate-y-2 text-sm font-medium text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-          {photo.title}
-        </span>
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-3 p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="glass-strong inline-block rounded-xl px-3 py-1.5">
+            <span className="text-sm font-medium text-fg">{photo.title}</span>
+          </div>
+        </div>
       )}
-    </button>
+    </motion.button>
   );
 }

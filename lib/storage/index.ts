@@ -6,15 +6,17 @@ import type { PhotoSource } from "./types";
 // Cloudinary/S3, Filen) just need to implement the PhotoSource interface — the UI
 // never imports a concrete source, so nothing else changes.
 //
-// Read at RUNTIME (not just build time). `photoSource` is only used in Server
-// Components / Route Handlers, so a plain (non-NEXT_PUBLIC_) env var works and is
-// picked up on redeploy without relying on build-time inlining. `NEXT_PUBLIC_`
-// is also honored for convenience/backwards-compat.
-const SOURCE =
-  process.env.PHOTO_SOURCE ?? process.env.NEXT_PUBLIC_PHOTO_SOURCE ?? "local";
+// Resolution order:
+//   1. Explicit override: PHOTO_SOURCE or NEXT_PUBLIC_PHOTO_SOURCE ("local" | "filen")
+//   2. Auto: if Filen credentials are present, use "filen" (so no extra env var
+//      is required once FILEN_EMAIL/FILEN_PASSWORD are set)
+//   3. Fallback: "local"
+const override = process.env.PHOTO_SOURCE ?? process.env.NEXT_PUBLIC_PHOTO_SOURCE;
+const hasFilenCreds = Boolean(process.env.FILEN_EMAIL && process.env.FILEN_PASSWORD);
+const SOURCE = override ?? (hasFilenCreds ? "filen" : "local");
 
 console.log(
-  `[storage] active photo source = "${SOURCE}" (PHOTO_SOURCE=${process.env.PHOTO_SOURCE ?? "∅"}, NEXT_PUBLIC_PHOTO_SOURCE=${process.env.NEXT_PUBLIC_PHOTO_SOURCE ?? "∅"})`
+  `[storage] active photo source = "${SOURCE}" (override=${override ?? "∅"}, hasFilenCreds=${hasFilenCreds})`
 );
 
 export const photoSource: PhotoSource =

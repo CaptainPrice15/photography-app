@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { getPcloudFile } from "@/lib/storage/pcloudSource";
 import { getCachedFile, setCachedFile } from "@/lib/cache";
+import convert from "heic-convert";
 
 export const runtime = "nodejs";
 
@@ -19,9 +20,36 @@ const MIME: Record<string, string> = {
   svg: "image/svg+xml",
 };
 
+function extOf(name: string): string {
+  return name.split(".").pop()?.toLowerCase() ?? "";
+}
+
 function mimeFromName(name: string): string {
-  const ext = name.split(".").pop()?.toLowerCase() ?? "";
-  return MIME[ext] ?? "application/octet-stream";
+  return MIME[extOf(name)] ?? "application/octet-stream";
+}
+
+// Browsers (Chrome/Firefox/Edge) cannot render HEIC/HEIF. Transcode those to
+// JPEG server-side so every browser displays them. Safari can show HEIC
+// natively, but serving JPEG universally keeps behavior consistent.
+async function toBrowserBytes(
+  name: string,
+  buffer: Buffer
+): Promise<{ bytes: Buffer; contentType: string }> {
+  const ext = extOf(name);
+  if (ext === "heic" || ext === "heif") {
+    try {
+      const jpg = await convert({
+        buffer,
+        format: "JPEG",
+        quality: 0.9,
+      });
+      return { bytes: Buffer.from(jpg), contentType: "image/jpeg" };
+    } catch (err) {
+      console.error("[photos] HEIC convert failed, serving raw:", err);
+      return { bytes: buffer, contentType: mimeFromName(name) };
+    }
+  }
+  return { bytes: buffer, contentType: mimeFromName(name) };
 }
 
 export async function GET(
@@ -35,9 +63,14 @@ export async function GET(
     const cached = await getCachedFile(cacheKey);
     if (cached) {
       const name = path[path.length - 1] ?? "";
+      // HEIC is always transcoded to JPEG before caching, so reflect that.
+      const contentType =
+        extOf(name) === "heic" || extOf(name) === "heif"
+          ? "image/jpeg"
+          : mimeFromName(name);
       return new Response(cached as unknown as BodyInit, {
         headers: {
-          "Content-Type": mimeFromName(name),
+          "Content-Type": contentType,
           "Cache-Control": "public, max-age=86400, immutable",
         },
       });
@@ -48,11 +81,12 @@ export async function GET(
       return new Response("Not found", { status: 404 });
     }
 
-    await setCachedFile(cacheKey, file.buffer);
+    const { bytes, contentType } = await toBrowserBytes(file.name, file.buffer);
+    await setCachedFile(cacheKey, bytes);
 
-    return new Response(file.buffer as unknown as BodyInit, {
+    return new Response(bytes as unknown as BodyInit, {
       headers: {
-        "Content-Type": mimeFromName(file.name),
+        "Content-Type": contentType,
         "Cache-Control": "public, max-age=86400, immutable",
       },
     });

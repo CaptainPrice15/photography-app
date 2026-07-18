@@ -1,26 +1,143 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-bg: rgb(var(--bg));
+  --color-surface: rgb(var(--surface));
+  --color-surface-2: rgb(var(--surface-2));
+  --color-fg: rgb(var(--fg));
+  --color-muted: rgb(var(--muted));
+  --color-border: rgb(var(--border));
+  --color-accent: rgb(var(--accent));
+  --color-accent-soft: rgb(var(--accent-soft));
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --bg: 255 255 255;
+  --surface: 245 245 247;
+  --surface-2: 237 237 241;
+  --fg: 17 17 19;
+  --muted: 110 110 120;
+  --border: 220 220 226;
+  --accent: 99 102 241;
+  --accent-soft: 129 140 248;
+
+  --ambient-x: 0%;
+  --ambient-y: 0%;
+}
+
+.dark {
+  --bg: 9 9 12;
+  --surface: 20 20 26;
+  --surface-2: 28 28 36;
+  --fg: 240 240 245;
+  --muted: 150 150 165;
+  --border: 42 42 52;
+  --accent: 129 140 248;
+  --accent-soft: 165 180 252;
+}
+
+* {
+  border-color: rgb(var(--border));
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: rgb(var(--bg));
+  color: rgb(var(--fg));
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Accent-driven recolor transition (per-collection theming). */
+:root,
+.dark {
+  transition: --accent 600ms ease, --accent-soft 600ms ease;
+}
+
+/* Ambient animated background blobs. */
+@keyframes ambient-drift-1 {
+  0% {
+    transform: translate3d(-10%, -8%, 0) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translate3d(12%, 10%, 0) rotate(180deg) scale(1.15);
+  }
+  100% {
+    transform: translate3d(-10%, -8%, 0) rotate(360deg) scale(1);
+  }
+}
+@keyframes ambient-drift-2 {
+  0% {
+    transform: translate3d(8%, 6%, 0) rotate(0deg) scale(1.1);
+  }
+  50% {
+    transform: translate3d(-12%, -10%, 0) rotate(-160deg) scale(0.95);
+  }
+  100% {
+    transform: translate3d(8%, 6%, 0) rotate(-360deg) scale(1.1);
+  }
+}
+@keyframes ambient-drift-3 {
+  0% {
+    transform: translate3d(0%, -12%, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0%, 14%, 0) rotate(120deg);
+  }
+  100% {
+    transform: translate3d(0%, -12%, 0) rotate(360deg);
+  }
+}
+
+.ambient-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.5;
+  will-change: transform;
+}
+.dark .ambient-blob {
+  opacity: 0.4;
+}
+
+.ambient-1 {
+  animation: ambient-drift-1 38s ease-in-out infinite;
+}
+.ambient-2 {
+  animation: ambient-drift-2 46s ease-in-out infinite;
+}
+.ambient-3 {
+  animation: ambient-drift-3 52s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .ambient-blob {
+    animation: none !important;
+  }
+  :root,
+  .dark {
+    transition: none !important;
+  }
+}
+
+/* Thin, themed scrollbar. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--accent) / 0.5);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
 }

@@ -4,6 +4,8 @@ import { CollectionCard } from "@/components/collections/CollectionCard";
 import { MasonryGallery } from "@/components/gallery/MasonryGallery";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const [collections, featured] = await Promise.all([
     photoSource.getCollections(),

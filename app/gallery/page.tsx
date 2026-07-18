@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   description: "Browse the full photography library in a responsive masonry grid.",
 };
 
+export const dynamic = "force-dynamic";
+
 export const revalidate = 3600;
 
 export default async function GalleryPage() {

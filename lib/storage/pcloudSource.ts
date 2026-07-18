@@ -59,7 +59,10 @@ function titleCase(slug: string): string {
   return slug.charAt(0).toUpperCase() + slug.slice(1);
 }
 
-async function apiCall(params: Record<string, string>): Promise<PCloudResult> {
+async function apiCall(
+  params: Record<string, string>,
+  opts: { throwOnError?: boolean } = {}
+): Promise<PCloudResult> {
   const method = params.method;
   const url = new URL(`${API}/${method}`);
   for (const [k, v] of Object.entries(params)) {
@@ -68,7 +71,7 @@ async function apiCall(params: Record<string, string>): Promise<PCloudResult> {
   }
   const res = await fetch(url.toString(), { cache: "no-store" });
   const data = (await res.json()) as PCloudResult;
-  if (data.result !== 0) {
+  if (data.result !== 0 && opts.throwOnError !== false) {
     throw new Error(`pCloud error ${data.result}: ${data.error ?? "unknown"}`);
   }
   return data;
@@ -78,6 +81,15 @@ let authToken: string | null = null;
 
 async function login(): Promise<string> {
   if (authToken) return authToken;
+
+  // If a pre-fetched persistent token is provided, use it directly and skip
+  // the login call (avoids device-verification / 2FA prompts on a server).
+  const preset = process.env.PCLOUD_AUTH_TOKEN;
+  if (preset) {
+    authToken = preset;
+    return authToken;
+  }
+
   const email = process.env.PCLOUD_EMAIL;
   const password = process.env.PCLOUD_PASSWORD;
   if (!email || !password) {
@@ -85,16 +97,37 @@ async function login(): Promise<string> {
       "PCLOUD_EMAIL and PCLOUD_PASSWORD environment variables are required."
     );
   }
-  const data = await apiCall({
-    method: "login",
-    username: email,
-    password,
-    getauth: "1",
-  });
-  if (!data.auth) {
+
+  const code =
+    process.env.PCLOUD_CODE ?? process.env.PCLOUD_TWO_FACTOR_CODE ?? undefined;
+
+  // First attempt. pCloud returns result 1022 ("Please provide 'code'") when
+  // the account has two-factor authentication enabled and a TOTP/email code is
+  // required. Retry with the code on that specific error.
+  const first = await apiCall(
+    {
+      method: "login",
+      username: email,
+      password,
+      getauth: "1",
+      ...(code ? { code } : {}),
+    },
+    { throwOnError: false }
+  );
+
+  if (first.result === 1022 && !code) {
+    throw new Error(
+      "pCloud requires a verification code (device verification or 2FA). " +
+        "Set PCLOUD_CODE, or fetch a token once via scripts/test-pcloud.mjs and set PCLOUD_AUTH_TOKEN."
+    );
+  }
+  if (first.result !== 0) {
+    throw new Error(`pCloud error ${first.result}: ${first.error ?? "unknown"}`);
+  }
+  if (!first.auth) {
     throw new Error("pCloud login did not return an auth token.");
   }
-  authToken = data.auth;
+  authToken = first.auth;
   return authToken;
 }
 

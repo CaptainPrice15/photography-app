@@ -5,7 +5,7 @@ import { photoSource } from "@/lib/storage";
 import { MasonryGallery } from "@/components/gallery/MasonryGallery";
 import { CollectionThemeSetter } from "@/components/theme/CollectionThemeSetter";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export async function generateStaticParams() {
   const collections = await photoSource.getCollections();

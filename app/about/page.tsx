@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "The photographer behind Lumen — bio, gear, and approach.",
 };
 
+export const dynamic = "force-dynamic";
+
 const gear = [
   "Sony A7 IV",
   "35mm f/1.4 GM",

@@ -84,10 +84,21 @@ async function login(): Promise<string> {
 
   // If a pre-fetched persistent token is provided, use it directly and skip
   // the login call (avoids device-verification / 2FA prompts on a server).
+  // Validate it once; if it has expired, fall back to password login.
   const preset = process.env.PCLOUD_AUTH_TOKEN;
   if (preset) {
-    authToken = preset;
-    return authToken;
+    const check = await apiCall(
+      { method: "userinfo", auth: preset },
+      { throwOnError: false }
+    );
+    if (check.result === 0) {
+      authToken = preset;
+      return authToken;
+    }
+    console.warn(
+      "[pcloud] preset PCLOUD_AUTH_TOKEN rejected (result " +
+        `${check.result}); falling back to login.`
+    );
   }
 
   const email = process.env.PCLOUD_EMAIL;
@@ -330,6 +341,10 @@ export async function getPcloudFile(
 // auth_token is resolved before the first request arrives. Errors are
 // swallowed — the lazy per-request path already handles (and retries on) failures.
 export async function warmPcloudLogin(): Promise<void> {
+  if (process.env.PCLOUD_AUTH_TOKEN) {
+    console.log("[pcloud] using preset PCLOUD_AUTH_TOKEN (no login call)");
+    return;
+  }
   if (!process.env.PCLOUD_EMAIL || !process.env.PCLOUD_PASSWORD) {
     console.log("[pcloud] no credentials set — skipping startup login");
     return;

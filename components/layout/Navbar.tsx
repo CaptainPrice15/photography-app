@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
+import { logoutAction } from "@/app/actions/auth";
+import type { Session } from "@/lib/auth";
 
 const links = [
   { href: "/", label: "Home" },
@@ -14,7 +16,7 @@ const links = [
   { href: "/contact", label: "Contact" },
 ];
 
-export function Navbar() {
+export function Navbar({ session }: { session: Session | null }) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -68,6 +70,25 @@ export function Navbar() {
           <div className="ml-2">
             <ThemeToggle />
           </div>
+          <div className="ml-2 flex items-center gap-2">
+            {session ? (
+              <form action={logoutAction}>
+                <button
+                  type="submit"
+                  className="rounded-full border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-surface"
+                >
+                  {session.role === "admin" ? "Admin · Log out" : "Log out"}
+                </button>
+              </form>
+            ) : (
+              <Link
+                href="/login"
+                className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white transition-transform hover:scale-105"
+              >
+                Log in
+              </Link>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
@@ -106,6 +127,26 @@ export function Navbar() {
                 </Link>
               );
             })}
+            <div className="mt-2 border-t border-border pt-3">
+              {session ? (
+                <form action={logoutAction}>
+                  <button
+                    type="submit"
+                    className="w-full rounded-xl border border-border px-4 py-3 text-sm font-medium transition-colors hover:bg-surface"
+                  >
+                    {session.role === "admin" ? "Admin · Log out" : "Log out"}
+                  </button>
+                </form>
+              ) : (
+                <Link
+                  href="/login"
+                  onClick={() => setOpen(false)}
+                  className="block rounded-xl bg-accent px-4 py-3 text-center text-sm font-semibold text-white"
+                >
+                  Log in
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       )}

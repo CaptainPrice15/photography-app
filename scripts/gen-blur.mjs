@@ -1,192 +1,141 @@
-// Generates placeholder photography images + manifest.json with blur placeholders.
+// Regenerates manifest.json from the real image files in public/photos.
 // Run: node scripts/gen-blur.mjs
+//
+// It scans every subfolder of public/photos for image files (jpg, png, webp,
+// avif, heic, gif, …), reads each image's real dimensions (respecting EXIF
+// orientation), and generates a tiny blur placeholder for web-safe formats.
+// Collection title/description/accent are kept from an existing manifest when
+// present, otherwise derived from the folder name.
 import sharp from "sharp";
-import { mkdir, writeFile, rm } from "node:fs/promises";
+import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
+import { dirname, join, extname } from "node:path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const PHOTOS_DIR = join(ROOT, "public", "photos");
+const MANIFEST = join(PHOTOS_DIR, "manifest.json");
 
-// Collection definitions with distinct accent palettes.
-const collections = [
-  {
-    id: "aurora",
-    slug: "aurora",
-    title: "Aurora",
-    description: "Cool teals and greens — northern lights, oceans, and still nights.",
-    accent: "#2dd4bf",
-    accentSoft: "#5eead4",
-    // gradient stops [from, to] used to synthesize varied photos
-    stops: ["#0f766e", "#2dd4bf", "#a7f3d0"],
-  },
-  {
-    id: "sunset",
-    slug: "sunset",
-    title: "Sunset",
-    description: "Warm ambers and roses — golden hour, deserts, and city dusk.",
-    accent: "#f59e0b",
-    accentSoft: "#fbbf24",
-    stops: ["#7c2d12", "#f59e0b", "#fecaca"],
-  },
-  {
-    id: "mono",
-    slug: "mono",
-    title: "Mono",
-    description: "Slate and silver — architecture, fog, and quiet minimalism.",
-    accent: "#64748b",
-    accentSoft: "#94a3b8",
-    stops: ["#0f172a", "#475569", "#cbd5e1"],
-  },
-  {
-    id: "bloom",
-    slug: "bloom",
-    title: "Bloom",
-    description: "Soft pinks and violets — florals, portraits, and dreamscape.",
-    accent: "#ec4899",
-    accentSoft: "#f472b6",
-    stops: ["#831843", "#ec4899", "#fbcfe8"],
-  },
-];
+const IMAGE_EXTENSIONS = new Set([
+  "jpg", "jpeg", "png", "webp", "avif", "gif",
+  "heic", "heif", "tif", "tiff", "bmp", "svg",
+]);
+const OPTIMIZABLE = new Set(["jpg", "jpeg", "png", "webp", "avif"]);
 
-// Varied aspect ratios for a true masonry feel.
-const ratios = [
-  [1200, 1600], // portrait
-  [1600, 1200], // landscape
-  [1200, 1200], // square
-  [1200, 1800], // tall
-  [1800, 1200], // wide
-  [1200, 1400],
-];
+function titleCase(slug) {
+  return slug.charAt(0).toUpperCase() + slug.slice(1);
+}
 
-function hashStr(s) {
-  let h = 2166136261;
-  for (let i = 0; i < s.length; i++) {
-    h ^= s.charCodeAt(i);
-    h = Math.imul(h, 16777619);
+async function main() {
+  let prevMeta = new Map();
+  try {
+    const raw = await fs.readFile(MANIFEST, "utf8");
+    const data = JSON.parse(raw);
+    for (const c of data.collections ?? []) prevMeta.set(c.slug, c);
+  } catch {
+    // No previous manifest — fine.
   }
-  return h >>> 0;
-}
 
-function mulberry32(a) {
-  return function () {
-    a |= 0;
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-async function makeImage(buffer, w, h) {
-  // Build a smooth diagonal gradient + soft blobs using SVG, rasterized by sharp.
-  const svg = buffer
-    .replaceAll("{{W}}", String(w))
-    .replaceAll("{{H}}", String(h));
-  return sharp(Buffer.from(svg)).jpeg({ quality: 82 }).toBuffer();
-}
-
-async function build() {
-  await rm(PHOTOS_DIR, { recursive: true, force: true });
-  await mkdir(PHOTOS_DIR, { recursive: true });
+  const entries = await fs.readdir(PHOTOS_DIR, { withFileTypes: true });
+  const dirs = entries.filter((e) => e.isDirectory() && !e.name.startsWith("."));
 
   const outCollections = [];
-  const allPhotos = [];
+  let total = 0;
 
-  for (const c of collections) {
-    const dir = join(PHOTOS_DIR, c.slug);
-    await mkdir(dir, { recursive: true });
+  for (const dir of dirs) {
+    const slug = dir.name;
+    const dirPath = join(PHOTOS_DIR, slug);
+    const files = (await fs.readdir(dirPath))
+      .filter((f) => IMAGE_EXTENSIONS.has(extname(f).replace(/^\./, "").toLowerCase()))
+      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+
+    if (files.length === 0) continue;
+
+    const meta = prevMeta.get(slug) ?? {};
     const photos = [];
-    const count = 6;
-    for (let i = 0; i < count; i++) {
-      const [w, h] = ratios[(i + hashStr(c.id)) % ratios.length];
-      const rnd = mulberry32(hashStr(c.id + i));
-      const a = c.stops[0];
-      const b = c.stops[1 + Math.floor(rnd() * 2)];
-      const angle = Math.floor(rnd() * 360);
-      const cx1 = 20 + Math.floor(rnd() * 60);
-      const cy1 = 20 + Math.floor(rnd() * 60);
-      const cx2 = 20 + Math.floor(rnd() * 60);
-      const cy2 = 20 + Math.floor(rnd() * 60);
-      const blob = c.stops[2];
 
-      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="{{W}}" height="{{H}}" viewBox="0 0 {{W}} {{H}}">
-  <defs>
-    <linearGradient id="g" gradientTransform="rotate(${angle} 0.5 0.5)">
-      <stop offset="0%" stop-color="${a}"/>
-      <stop offset="100%" stop-color="${b}"/>
-    </linearGradient>
-    <radialGradient id="r1" cx="${cx1}%" cy="${cy1}%" r="45%">
-      <stop offset="0%" stop-color="${blob}" stop-opacity="0.85"/>
-      <stop offset="100%" stop-color="${blob}" stop-opacity="0"/>
-    </radialGradient>
-    <radialGradient id="r2" cx="${cx2}%" cy="${cy2}%" r="40%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-  <rect width="{{W}}" height="{{H}}" fill="url(#g)"/>
-  <rect width="{{W}}" height="{{H}}" fill="url(#r1)"/>
-  <rect width="{{W}}" height="{{H}}" fill="url(#r2)"/>
-  <text x="50%" y="50%" font-family="system-ui, sans-serif" font-size="${Math.round(
-    Math.min(w, h) / 8
-  )}" font-weight="700" fill="#ffffff" fill-opacity="0.85" text-anchor="middle" dominant-baseline="middle">${c.title} ${i + 1}</text>
-</svg>`;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const ext = extname(file).replace(/^\./, "").toLowerCase();
+      const src = `/photos/${slug}/${file}`;
+      const id = `${slug}-${i + 1}`;
 
-      const jpg = await makeImage(svg, w, h);
-      const file = `${c.slug}-${i + 1}.jpg`;
-      await writeFile(join(dir, file), jpg);
+      let width = 1600;
+      let height = 1200;
+      let blurDataURL;
 
-      // Tiny blur placeholder.
-      const blur = await sharp(jpg)
-        .resize(16, Math.max(1, Math.round((16 * h) / w)), { fit: "inside" })
-        .jpeg({ quality: 50 })
-        .toBuffer();
-      const blurDataURL = `data:image/jpeg;base64,${blur.toString("base64")}`;
+      if (OPTIMIZABLE.has(ext)) {
+        try {
+          const buf = await fs.readFile(join(dirPath, file));
+          const img = sharp(buf, { failOn: "none" }).rotate();
+          const meta = await img.metadata();
+          width = meta.width ?? width;
+          height = meta.height ?? height;
+          const blur = await img
+            .resize(16, Math.max(1, Math.round((16 * height) / width)), {
+              fit: "inside",
+            })
+            .jpeg({ quality: 50 })
+            .toBuffer();
+          blurDataURL = `data:image/jpeg;base64,${blur.toString("base64")}`;
+        } catch {
+          // Keep defaults if sharp can't read it.
+        }
+      } else {
+        // HEIC/SVG/etc.: dimensions unknown without transcoding; the optimizer
+        // is bypassed at render time (unoptimized). Keep sensible defaults.
+        try {
+          const buf = await fs.readFile(join(dirPath, file));
+          const img = sharp(buf, { failOn: "none" }).rotate();
+          const m = await img.metadata();
+          if (m.width && m.height) {
+            width = m.width;
+            height = m.height;
+          }
+        } catch {
+          // ignore
+        }
+      }
 
-      const photo = {
-        id: `${c.id}-${i + 1}`,
-        src: `/photos/${c.slug}/${file}`,
-        alt: `${c.title} photograph ${i + 1}`,
-        width: w,
-        height: h,
-        title: `${c.title} ${i + 1}`,
-        collectionId: c.id,
+      photos.push({
+        id,
+        src,
+        alt: `${meta.title ?? titleCase(slug)} photograph ${i + 1}`,
+        width,
+        height,
+        title: `${meta.title ?? titleCase(slug)} ${i + 1}`,
+        collectionId: slug,
         blurDataURL,
         featured: i < 2,
-      };
-      photos.push(photo);
-      allPhotos.push(photo);
+        format: ext,
+        unoptimized: !OPTIMIZABLE.has(ext),
+      });
     }
 
-    const coverPhoto = photos[0];
     outCollections.push({
-      id: c.id,
-      slug: c.slug,
-      title: c.title,
-      description: c.description,
-      cover: coverPhoto.src,
-      accent: c.accent,
-      accentSoft: c.accentSoft,
+      id: slug,
+      slug,
+      title: meta.title ?? titleCase(slug),
+      description: meta.description,
+      cover: photos[0].src,
+      accent: meta.accent ?? "#64748b",
+      accentSoft: meta.accentSoft,
       photos,
     });
+    total += photos.length;
   }
 
   const manifest = {
     collections: outCollections,
     updatedAt: new Date().toISOString(),
   };
-  await writeFile(
-    join(PHOTOS_DIR, "manifest.json"),
-    JSON.stringify(manifest, null, 2)
-  );
+  await fs.writeFile(MANIFEST, JSON.stringify(manifest, null, 2));
   console.log(
-    `Generated ${allPhotos.length} placeholder images across ${collections.length} collections.`
+    `Scanned ${total} images across ${outCollections.length} collections into manifest.json`
   );
 }
 
-build().catch((e) => {
+main().catch((e) => {
   console.error(e);
   process.exit(1);
 });

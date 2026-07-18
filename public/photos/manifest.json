@@ -5,229 +5,69 @@
       "slug": "aurora",
       "title": "Aurora",
       "description": "Cool teals and greens — northern lights, oceans, and still nights.",
-      "cover": "/photos/aurora/aurora-1.jpg",
+      "cover": "/photos/aurora/IMG20260622105819.heic",
       "accent": "#2dd4bf",
       "accentSoft": "#5eead4",
       "photos": [
         {
           "id": "aurora-1",
-          "src": "/photos/aurora/aurora-1.jpg",
+          "src": "/photos/aurora/IMG20260622105819.heic",
           "alt": "Aurora photograph 1",
           "width": 1600,
           "height": 1200,
           "title": "Aurora 1",
           "collectionId": "aurora",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAMABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABQED/8QAHhABAAEEAgMAAAAAAAAAAAAAAQIAAwQREiETcZH/xAAVAQEBAAAAAAAAAAAAAAAAAAACBf/EABYRAQEBAAAAAAAAAAAAAAAAAAABEf/aAAwDAQACEQMRAD8AenlMuhD21hdlc4rv5Rssi4HSVZ5d3xJs1SxMtf/Z",
-          "featured": true
+          "featured": true,
+          "format": "heic",
+          "unoptimized": true
         },
         {
           "id": "aurora-2",
-          "src": "/photos/aurora/aurora-2.jpg",
+          "src": "/photos/aurora/IMG20260625132154.heic",
           "alt": "Aurora photograph 2",
-          "width": 1200,
+          "width": 1600,
           "height": 1200,
           "title": "Aurora 2",
           "collectionId": "aurora",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAQABADASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAABAL/xAAdEAABBAIDAAAAAAAAAAAAAAABAAIDEQQFEzFx/8QAFQEBAQAAAAAAAAAAAAAAAAAAAwX/xAAaEQACAgMAAAAAAAAAAAAAAAAAEQECEhNh/9oADAMBAAIRAxEAPwBmOHTdWQrmY+EWbpA1+x4HUXED1Iz9k2VtA2UzlkTVXHp//9k=",
-          "featured": true
+          "featured": true,
+          "format": "heic",
+          "unoptimized": true
         },
         {
           "id": "aurora-3",
-          "src": "/photos/aurora/aurora-3.jpg",
+          "src": "/photos/aurora/IMG20260625162003.heic",
           "alt": "Aurora photograph 3",
-          "width": 1200,
-          "height": 1800,
+          "width": 1600,
+          "height": 1200,
           "title": "Aurora 3",
           "collectionId": "aurora",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAYABADASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAABQABBP/EAB4QAAIDAAEFAAAAAAAAAAAAAAECAAMRBSIxMmFx/8QAFwEAAwEAAAAAAAAAAAAAAAAAAgMEBf/EABcRAAMBAAAAAAAAAAAAAAAAAAABAiH/2gAMAwEAAhEDEQA/AM4msM+mNX1oKxkE4+xK/IsD6yJm9XHSSfsa1pjVaUhVC9p30rglKGTWf//Z",
-          "featured": false
+          "featured": false,
+          "format": "heic",
+          "unoptimized": true
         },
         {
           "id": "aurora-4",
-          "src": "/photos/aurora/aurora-4.jpg",
+          "src": "/photos/aurora/IMG20260704101144.heic",
           "alt": "Aurora photograph 4",
-          "width": 1800,
+          "width": 1600,
           "height": 1200,
           "title": "Aurora 4",
           "collectionId": "aurora",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAALABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABAUG/8QAHBAAAQQDAQAAAAAAAAAAAAAAAQACAwQREiFh/8QAFQEBAQAAAAAAAAAAAAAAAAAAAgX/xAAWEQADAAAAAAAAAAAAAAAAAAAAAQL/2gAMAwEAAhEDEQA/ANBPYG2NgB6jWZIRCSXAlCtud3qk2JHnhcUlJMdH/9k=",
-          "featured": false
+          "featured": false,
+          "format": "heic",
+          "unoptimized": true
         },
         {
           "id": "aurora-5",
-          "src": "/photos/aurora/aurora-5.jpg",
+          "src": "/photos/aurora/IMG20260707092529.heic",
           "alt": "Aurora photograph 5",
-          "width": 1200,
-          "height": 1400,
+          "width": 1600,
+          "height": 1200,
           "title": "Aurora 5",
           "collectionId": "aurora",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAATABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAQFBv/EAB8QAAEEAwADAQAAAAAAAAAAAAEAAgMEERIhMTJRgf/EABcBAAMBAAAAAAAAAAAAAAAAAAIDBAX/xAAYEQEBAQEBAAAAAAAAAAAAAAABAAIDIf/aAAwDAQACEQMRAD8AUpwh87dlonVIxXzzwpNfaP1DT3PW5VAWHvZqQPwJqNinTIeysYHxMNHEIR0mr//Z",
-          "featured": false
-        },
-        {
-          "id": "aurora-6",
-          "src": "/photos/aurora/aurora-6.jpg",
-          "alt": "Aurora photograph 6",
-          "width": 1200,
-          "height": 1600,
-          "title": "Aurora 6",
-          "collectionId": "aurora",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAVABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAUGBP/EABwQAAIDAAMBAAAAAAAAAAAAAAABAgQRAxIhUf/EABYBAQEBAAAAAAAAAAAAAAAAAAIBBf/EABYRAQEBAAAAAAAAAAAAAAAAAAABAv/aAAwDAQACEQMRAD8A20XHIjrhzqsJehY6pJwUn9bY/q86mliwuozZUtTfo/pN+AAtBl//2Q==",
-          "featured": false
-        }
-      ]
-    },
-    {
-      "id": "sunset",
-      "slug": "sunset",
-      "title": "Sunset",
-      "description": "Warm ambers and roses — golden hour, deserts, and city dusk.",
-      "cover": "/photos/sunset/sunset-1.jpg",
-      "accent": "#f59e0b",
-      "accentSoft": "#fbbf24",
-      "photos": [
-        {
-          "id": "sunset-1",
-          "src": "/photos/sunset/sunset-1.jpg",
-          "alt": "Sunset photograph 1",
-          "width": 1600,
-          "height": 1200,
-          "title": "Sunset 1",
-          "collectionId": "sunset",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAMABADASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAABAb/xAAeEAACAwABBQAAAAAAAAAAAAABAwACEQQhIjJhcf/EABUBAQEAAAAAAAAAAAAAAAAAAAQF/8QAFhEAAwAAAAAAAAAAAAAAAAAAAAEC/9oADAMBAAIRAxEAPwCgZza55AfTkOzmpFDtwT6MnHvZ17oBjr2OGxh3ZQUn/9k=",
-          "featured": true
-        },
-        {
-          "id": "sunset-2",
-          "src": "/photos/sunset/sunset-2.jpg",
-          "alt": "Sunset photograph 2",
-          "width": 1200,
-          "height": 1200,
-          "title": "Sunset 2",
-          "collectionId": "sunset",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAQABADASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAABQT/xAAfEAABBAICAwAAAAAAAAAAAAABAAIDEQQFE3EUMVH/xAAUAQEAAAAAAAAAAAAAAAAAAAAF/8QAGREBAAIDAAAAAAAAAAAAAAAAAQARAgMS/9oADAMBAAIRAxEAPwBNsXK71YR+4xmxxk/FZ5BiuiR0ULtMx81tJNdonQY8BFG7n//Z",
-          "featured": true
-        },
-        {
-          "id": "sunset-3",
-          "src": "/photos/sunset/sunset-3.jpg",
-          "alt": "Sunset photograph 3",
-          "width": 1200,
-          "height": 1800,
-          "title": "Sunset 3",
-          "collectionId": "sunset",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAYABADASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAABgACBf/EAB4QAAICAwADAQAAAAAAAAAAAAECAAMEERIFITGB/8QAFgEBAQEAAAAAAAAAAAAAAAAABQID/8QAGREBAQEAAwAAAAAAAAAAAAAAAQARAhIi/9oADAMBAAIRAxEAPwDd+PtCdTiZKcsYyNCGk9b/ACGvI1ItjBevvrcM4eQk92UNYBURD+evVhMpTDuoVBf/2Q==",
-          "featured": false
-        },
-        {
-          "id": "sunset-4",
-          "src": "/photos/sunset/sunset-4.jpg",
-          "alt": "Sunset photograph 4",
-          "width": 1800,
-          "height": 1200,
-          "title": "Sunset 4",
-          "collectionId": "sunset",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAALABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAgMF/8QAHxAAAgEEAgMAAAAAAAAAAAAAAQIAAwUREgRxEyEy/8QAFAEBAAAAAAAAAAAAAAAAAAAABf/EABkRAAIDAQAAAAAAAAAAAAAAAAABAgMhEf/aAAwDAQACEQMRAD8AJt5qPqMDuHkWGoibhgepsL9Ayld28RGfUGot6tFZJp4f/9k=",
-          "featured": false
-        },
-        {
-          "id": "sunset-5",
-          "src": "/photos/sunset/sunset-5.jpg",
-          "alt": "Sunset photograph 5",
-          "width": 1200,
-          "height": 1400,
-          "title": "Sunset 5",
-          "collectionId": "sunset",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAATABADASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAABQAEBv/EAB4QAQACAgEFAAAAAAAAAAAAAAEAAgMEEQUhMXGR/8QAFwEAAwEAAAAAAAAAAAAAAAAAAAEDBP/EABYRAQEBAAAAAAAAAAAAAAAAAAEAAv/aAAwDAQACEQMRAD8AQ2cHNntDN/pq0bV8k6PZq0eQH2czLsZauCxYPkgluFkdkGkC3VBlKPUZv//Z",
-          "featured": false
-        },
-        {
-          "id": "sunset-6",
-          "src": "/photos/sunset/sunset-6.jpg",
-          "alt": "Sunset photograph 6",
-          "width": 1200,
-          "height": 1600,
-          "title": "Sunset 6",
-          "collectionId": "sunset",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAVABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABQAB/8QAHhAAAgEEAwEAAAAAAAAAAAAAAQIAAwQREwUSIXH/xAAWAQEBAQAAAAAAAAAAAAAAAAAFAQL/xAAaEQACAgMAAAAAAAAAAAAAAAAAAgESAwQx/9oADAMBAAIRAxEAPwBLXsbEO5a21oTj2KUKqox7AH7Decu1dCABkwnXRaCjTNja9QrnEFvHLt6ZSkwcNMf/2Q==",
-          "featured": false
-        }
-      ]
-    },
-    {
-      "id": "mono",
-      "slug": "mono",
-      "title": "Mono",
-      "description": "Slate and silver — architecture, fog, and quiet minimalism.",
-      "cover": "/photos/mono/mono-1.jpg",
-      "accent": "#64748b",
-      "accentSoft": "#94a3b8",
-      "photos": [
-        {
-          "id": "mono-1",
-          "src": "/photos/mono/mono-1.jpg",
-          "alt": "Mono photograph 1",
-          "width": 1200,
-          "height": 1600,
-          "title": "Mono 1",
-          "collectionId": "mono",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAVABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAQGBf/EACAQAAICAAYDAAAAAAAAAAAAAAECAAMEBRIUITERIkH/xAAXAQADAQAAAAAAAAAAAAAAAAAAAQID/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AmasuttTUBxF3oZGKsPBEuMsqp2p1Kp4+zAzetNz6KB31NUG8NiXSrSDFLybLCWhCBP/Z",
-          "featured": true
-        },
-        {
-          "id": "mono-2",
-          "src": "/photos/mono/mono-2.jpg",
-          "alt": "Mono photograph 2",
-          "width": 1600,
-          "height": 1200,
-          "title": "Mono 2",
-          "collectionId": "mono",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAMABADASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAABQb/xAAcEAABBQEBAQAAAAAAAAAAAAACAAEDBBEFEmH/xAAVAQEBAAAAAAAAAAAAAAAAAAACA//EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJ7lc87p4xMLfUrPyTqCzuWojl2JIZW8PiYsXJpQwy1VB//Z",
-          "featured": true
-        },
-        {
-          "id": "mono-3",
-          "src": "/photos/mono/mono-3.jpg",
-          "alt": "Mono photograph 3",
-          "width": 1200,
-          "height": 1200,
-          "title": "Mono 3",
-          "collectionId": "mono",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAQABADASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAABQb/xAAeEAACAgICAwAAAAAAAAAAAAABAgADBAURITFxgf/EABUBAQEAAAAAAAAAAAAAAAAAAAID/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AJ0WGtrAspPHnqVS4FaqCAIHrKXrIKEr6MpsVGZQX5+ygP//Z",
-          "featured": false
-        },
-        {
-          "id": "mono-4",
-          "src": "/photos/mono/mono-4.jpg",
-          "alt": "Mono photograph 4",
-          "width": 1200,
-          "height": 1800,
-          "title": "Mono 4",
-          "collectionId": "mono",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAYABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAUGA//EACAQAAEEAgEFAAAAAAAAAAAAAAEAAgMRBBIFBhMxYYH/xAAXAQADAQAAAAAAAAAAAAAAAAAAAQID/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A1hwBI4ghI+f4/sHdo8KwjDYnna/VJN1BrLGQ2/q0SocmKxsEiz4S67QhBP/Z",
-          "featured": false
-        },
-        {
-          "id": "mono-5",
-          "src": "/photos/mono/mono-5.jpg",
-          "alt": "Mono photograph 5",
-          "width": 1800,
-          "height": 1200,
-          "title": "Mono 5",
-          "collectionId": "mono",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAALABADASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAABQb/xAAcEAEAAgIDAQAAAAAAAAAAAAABAgMAEQUGYRL/xAAVAQEBAAAAAAAAAAAAAAAAAAACA//EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AHbpwbH7QPcmuxWURrSGl8xTkpIunJHlJSV27ygP/9k=",
-          "featured": false
-        },
-        {
-          "id": "mono-6",
-          "src": "/photos/mono/mono-6.jpg",
-          "alt": "Mono photograph 6",
-          "width": 1200,
-          "height": 1400,
-          "title": "Mono 6",
-          "collectionId": "mono",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAATABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABgAF/8QAIBAAAQQCAQUAAAAAAAAAAAAAAQACAxEEBSESEyIxUf/EABYBAQEBAAAAAAAAAAAAAAAAAAACA//EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/ANafFEhPCI77D7Ti5oTXIlMLjVc/Qjm6e2ZhuuL9BaIIdiPEorsiekqUg//Z",
-          "featured": false
+          "featured": false,
+          "format": "heic",
+          "unoptimized": true
         }
       ]
     },
@@ -236,78 +76,214 @@
       "slug": "bloom",
       "title": "Bloom",
       "description": "Soft pinks and violets — florals, portraits, and dreamscape.",
-      "cover": "/photos/bloom/bloom-1.jpg",
+      "cover": "/photos/bloom/IMG20260622105819.heic",
       "accent": "#ec4899",
       "accentSoft": "#f472b6",
       "photos": [
         {
           "id": "bloom-1",
-          "src": "/photos/bloom/bloom-1.jpg",
+          "src": "/photos/bloom/IMG20260622105819.heic",
           "alt": "Bloom photograph 1",
-          "width": 1800,
+          "width": 1600,
           "height": 1200,
           "title": "Bloom 1",
           "collectionId": "bloom",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAALABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAMEBv/EABsQAAIDAQEBAAAAAAAAAAAAAAECAAMRBFFx/8QAFQEBAQAAAAAAAAAAAAAAAAAAAgX/xAAXEQEBAQEAAAAAAAAAAAAAAAABABEC/9oADAMBAAIRAxEAPwA5ba3tyxgv2V9tfMKdRwTkzbsfYprbCMLnI1rParu3/9k=",
-          "featured": true
+          "featured": true,
+          "format": "heic",
+          "unoptimized": true
         },
         {
           "id": "bloom-2",
-          "src": "/photos/bloom/bloom-2.jpg",
+          "src": "/photos/bloom/IMG20260625132154.heic",
           "alt": "Bloom photograph 2",
-          "width": 1200,
-          "height": 1400,
+          "width": 1600,
+          "height": 1200,
           "title": "Bloom 2",
           "collectionId": "bloom",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAATABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAUGBP/EAB4QAAIBBQADAAAAAAAAAAAAAAABAgMEBREhMUGR/8QAFwEAAwEAAAAAAAAAAAAAAAAAAAIDBP/EABcRAQEBAQAAAAAAAAAAAAAAAAACARH/2gAMAwEAAhEDEQA/AKyppxfScytRQm9MYXGQdJNLXwmsneSqybevPpDN0TvW++k+9ENy25gALQ//2Q==",
-          "featured": true
+          "featured": true,
+          "format": "heic",
+          "unoptimized": true
         },
         {
           "id": "bloom-3",
-          "src": "/photos/bloom/bloom-3.jpg",
+          "src": "/photos/bloom/IMG20260625162003.heic",
           "alt": "Bloom photograph 3",
-          "width": 1200,
-          "height": 1600,
+          "width": 1600,
+          "height": 1200,
           "title": "Bloom 3",
           "collectionId": "bloom",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAVABADASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAQBAgP/xAAeEAACAgICAwAAAAAAAAAAAAABAgADBREEIUFxgf/EABYBAQEBAAAAAAAAAAAAAAAAAAMCBf/EABkRAAMAAwAAAAAAAAAAAAAAAAABEQMhMv/aAAwDAQACEQMRAD8Ag7C7mRtjPCZbRooG9ymRpFS7ChfPUSm2su4xLE3sr/Y1l+Sz1nYhCSA+j//Z",
-          "featured": false
+          "featured": false,
+          "format": "heic",
+          "unoptimized": true
         },
         {
           "id": "bloom-4",
-          "src": "/photos/bloom/bloom-4.jpg",
+          "src": "/photos/bloom/IMG20260704101144.heic",
           "alt": "Bloom photograph 4",
           "width": 1600,
           "height": 1200,
           "title": "Bloom 4",
           "collectionId": "bloom",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAMABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABQMG/8QAHhAAAQMEAwAAAAAAAAAAAAAAAQACEQQFEoEDI0H/xAAVAQEBAAAAAAAAAAAAAAAAAAACBP/EABcRAQADAAAAAAAAAAAAAAAAAAABAiH/2gAMAwEAAhEDEQA/AIWWl7MnRtadnGwgANGkPbgABCfpWjGfUl151//Z",
-          "featured": false
+          "featured": false,
+          "format": "heic",
+          "unoptimized": true
         },
         {
           "id": "bloom-5",
-          "src": "/photos/bloom/bloom-5.jpg",
+          "src": "/photos/bloom/IMG20260707092529.heic",
           "alt": "Bloom photograph 5",
-          "width": 1200,
+          "width": 1600,
           "height": 1200,
           "title": "Bloom 5",
           "collectionId": "bloom",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAQABADASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAABgL/xAAeEAACAQQDAQAAAAAAAAAAAAABAgADBAUREhNBcf/EABUBAQEAAAAAAAAAAAAAAAAAAAIE/8QAGBEAAgMAAAAAAAAAAAAAAAAAAAECAxH/2gAMAwEAAhEDEQA/AKxbtUYAAke6iigvFBuBMbdtRcaYj4Yqtsj2KATEX2Ren//Z",
-          "featured": false
+          "featured": false,
+          "format": "heic",
+          "unoptimized": true
+        }
+      ]
+    },
+    {
+      "id": "mono",
+      "slug": "mono",
+      "title": "Mono",
+      "description": "Slate and silver — architecture, fog, and quiet minimalism.",
+      "cover": "/photos/mono/IMG20260622105819.heic",
+      "accent": "#64748b",
+      "accentSoft": "#94a3b8",
+      "photos": [
+        {
+          "id": "mono-1",
+          "src": "/photos/mono/IMG20260622105819.heic",
+          "alt": "Mono photograph 1",
+          "width": 1600,
+          "height": 1200,
+          "title": "Mono 1",
+          "collectionId": "mono",
+          "featured": true,
+          "format": "heic",
+          "unoptimized": true
         },
         {
-          "id": "bloom-6",
-          "src": "/photos/bloom/bloom-6.jpg",
-          "alt": "Bloom photograph 6",
-          "width": 1200,
-          "height": 1800,
-          "title": "Bloom 6",
-          "collectionId": "bloom",
-          "blurDataURL": "data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wAARCAAYABADASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAUBAwT/xAAdEAACAwADAQEAAAAAAAAAAAACEQABAxITIQSB/8QAFgEBAQEAAAAAAAAAAAAAAAAAAwEF/8QAGREBAAIDAAAAAAAAAAAAAAAAAAEDAiEx/9oADAMBAAIRAxEAPwCCJWoaFXXKRICJFZN+cVNO+FdDHl+xJluWZ7LsdKrenHWu+d/GvHCEgbOv/9k=",
-          "featured": false
+          "id": "mono-2",
+          "src": "/photos/mono/IMG20260625132154.heic",
+          "alt": "Mono photograph 2",
+          "width": 1600,
+          "height": 1200,
+          "title": "Mono 2",
+          "collectionId": "mono",
+          "featured": true,
+          "format": "heic",
+          "unoptimized": true
+        },
+        {
+          "id": "mono-3",
+          "src": "/photos/mono/IMG20260625162003.heic",
+          "alt": "Mono photograph 3",
+          "width": 1600,
+          "height": 1200,
+          "title": "Mono 3",
+          "collectionId": "mono",
+          "featured": false,
+          "format": "heic",
+          "unoptimized": true
+        },
+        {
+          "id": "mono-4",
+          "src": "/photos/mono/IMG20260704101144.heic",
+          "alt": "Mono photograph 4",
+          "width": 1600,
+          "height": 1200,
+          "title": "Mono 4",
+          "collectionId": "mono",
+          "featured": false,
+          "format": "heic",
+          "unoptimized": true
+        },
+        {
+          "id": "mono-5",
+          "src": "/photos/mono/IMG20260707092529.heic",
+          "alt": "Mono photograph 5",
+          "width": 1600,
+          "height": 1200,
+          "title": "Mono 5",
+          "collectionId": "mono",
+          "featured": false,
+          "format": "heic",
+          "unoptimized": true
+        }
+      ]
+    },
+    {
+      "id": "sunset",
+      "slug": "sunset",
+      "title": "Sunset",
+      "description": "Warm ambers and roses — golden hour, deserts, and city dusk.",
+      "cover": "/photos/sunset/IMG20260622105819.heic",
+      "accent": "#f59e0b",
+      "accentSoft": "#fbbf24",
+      "photos": [
+        {
+          "id": "sunset-1",
+          "src": "/photos/sunset/IMG20260622105819.heic",
+          "alt": "Sunset photograph 1",
+          "width": 1600,
+          "height": 1200,
+          "title": "Sunset 1",
+          "collectionId": "sunset",
+          "featured": true,
+          "format": "heic",
+          "unoptimized": true
+        },
+        {
+          "id": "sunset-2",
+          "src": "/photos/sunset/IMG20260625132154.heic",
+          "alt": "Sunset photograph 2",
+          "width": 1600,
+          "height": 1200,
+          "title": "Sunset 2",
+          "collectionId": "sunset",
+          "featured": true,
+          "format": "heic",
+          "unoptimized": true
+        },
+        {
+          "id": "sunset-3",
+          "src": "/photos/sunset/IMG20260625162003.heic",
+          "alt": "Sunset photograph 3",
+          "width": 1600,
+          "height": 1200,
+          "title": "Sunset 3",
+          "collectionId": "sunset",
+          "featured": false,
+          "format": "heic",
+          "unoptimized": true
+        },
+        {
+          "id": "sunset-4",
+          "src": "/photos/sunset/IMG20260704101144.heic",
+          "alt": "Sunset photograph 4",
+          "width": 1600,
+          "height": 1200,
+          "title": "Sunset 4",
+          "collectionId": "sunset",
+          "featured": false,
+          "format": "heic",
+          "unoptimized": true
+        },
+        {
+          "id": "sunset-5",
+          "src": "/photos/sunset/IMG20260707092529.heic",
+          "alt": "Sunset photograph 5",
+          "width": 1600,
+          "height": 1200,
+          "title": "Sunset 5",
+          "collectionId": "sunset",
+          "featured": false,
+          "format": "heic",
+          "unoptimized": true
         }
       ]
     }
   ],
-  "updatedAt": "2026-07-18T04:08:52.922Z"
+  "updatedAt": "2026-07-18T04:47:20.399Z"
 }

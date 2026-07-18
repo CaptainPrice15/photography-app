@@ -107,6 +107,7 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
                 alt={photo.alt}
                 width={photo.width}
                 height={photo.height}
+                unoptimized={photo.unoptimized}
                 placeholder={photo.blurDataURL ? "blur" : "empty"}
                 blurDataURL={photo.blurDataURL}
                 sizes="100vw"
@@ -116,11 +117,19 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
           </AnimatePresence>
 
           {photo.title && (
-            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 text-center text-sm text-white/90">
-              {photo.title}
-              <span className="ml-2 text-white/50">
-                {index! + 1} / {photos.length}
+            <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-center text-sm text-white/90">
+              <span>
+                {photo.title}
+                <span className="ml-2 text-white/50">
+                  {index! + 1} / {photos.length}
+                </span>
               </span>
+              <a
+                href={`/checkout?file=${encodeURIComponent(photo.src.replace(/^\/api\/photos\//, ""))}`}
+                className="rounded-full bg-white/15 px-4 py-1.5 text-xs font-semibold text-white backdrop-blur transition-colors hover:bg-white/25"
+              >
+                Download original
+              </a>
             </div>
           )}
         </motion.div>

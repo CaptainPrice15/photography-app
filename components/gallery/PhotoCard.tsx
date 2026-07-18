@@ -23,6 +23,7 @@ export function PhotoCard({ photo, onOpen, sizes, priority }: Props) {
         alt={photo.alt}
         width={photo.width}
         height={photo.height}
+        unoptimized={photo.unoptimized}
         placeholder={photo.blurDataURL ? "blur" : "empty"}
         blurDataURL={photo.blurDataURL}
         sizes={sizes ?? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"}

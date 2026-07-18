@@ -5,6 +5,7 @@ import { ThemeProvider } from "next-themes";
 import { AmbientBackground } from "@/components/theme/AmbientBackground";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { getSession } from "@/lib/auth";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,11 +52,12 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getSession();
   return (
     <html
       lang="en"
@@ -70,7 +72,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AmbientBackground />
-          <Navbar />
+          <Navbar session={session} />
           <main className="flex min-h-screen flex-col pt-16">{children}</main>
           <Footer />
         </ThemeProvider>

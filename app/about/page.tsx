@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { photoSource } from "@/lib/storage";
 
 export const metadata: Metadata = {
   title: "About",
@@ -22,19 +23,24 @@ const stats = [
   { value: "4", label: "Active series" },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const collection = await photoSource.getCollection("bloom");
+  const cover = collection?.photos[0];
+  const coverSrc = cover?.src ?? "/photos/bloom/bloom-1.jpg";
+
   return (
     <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="grid items-center gap-10 md:grid-cols-2">
         <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-border bg-surface">
           <Image
-            src="/photos/bloom/bloom-1.jpg"
+            src={coverSrc}
             alt="Portrait of the photographer"
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover"
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRg=="
+            placeholder={cover?.blurDataURL ? "blur" : "empty"}
+            blurDataURL={cover?.blurDataURL}
+            unoptimized={cover?.unoptimized}
           />
         </div>
         <div>

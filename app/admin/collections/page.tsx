@@ -2,6 +2,8 @@ import { photoSource } from "@/lib/storage";
 import { Plus, Upload, MoreVertical } from "lucide-react";
 import { ProtectedImage } from "@/components/shared/ProtectedImage";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminCollections() {
   const collections = await photoSource.getCollections();
 

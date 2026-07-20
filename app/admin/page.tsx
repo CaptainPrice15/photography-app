@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/db";
 import { Users, ShoppingBag, Heart, Image as ImageIcon } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminOverview() {
   const [userCount, orderCount, favoriteCount, revenue] = await Promise.all([
     prisma.user.count(),

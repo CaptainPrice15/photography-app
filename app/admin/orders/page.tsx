@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/db";
 import { formatDistanceToNow } from "date-fns";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminOrders() {
   const orders = await prisma.order.findMany({
     orderBy: { createdAt: "desc" },

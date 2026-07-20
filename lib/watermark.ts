@@ -30,11 +30,20 @@ export async function watermarkPreview(
   const width = meta.width ?? PREVIEW_LONG_EDGE;
   const height = meta.height ?? PREVIEW_LONG_EDGE;
 
-  const fontSize = Math.max(18, Math.round(Math.min(width, height) / 28));
+  let targetWidth = width;
+  let targetHeight = height;
+
+  if (width > PREVIEW_LONG_EDGE || height > PREVIEW_LONG_EDGE) {
+    const ratio = Math.min(PREVIEW_LONG_EDGE / width, PREVIEW_LONG_EDGE / height);
+    targetWidth = Math.round(width * ratio);
+    targetHeight = Math.round(height * ratio);
+  }
+
+  const fontSize = Math.max(18, Math.round(Math.min(targetWidth, targetHeight) / 28));
   const tileGap = fontSize * 6;
 
   const watermarkSvg = Buffer.from(`
-    <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+    <svg width="${targetWidth}" height="${targetHeight}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <pattern id="wm" width="${tileGap}" height="${tileGap}" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)">
           <text x="0" y="${tileGap / 2}" font-family="Helvetica, Arial, sans-serif" font-size="${fontSize}" font-weight="600" fill="white" fill-opacity="${WATERMARK_OPACITY}" letter-spacing="2">${WATERMARK_TEXT}</text>
@@ -45,9 +54,7 @@ export async function watermarkPreview(
   `);
 
   const bytes = await base
-    .resize({
-      width: width > PREVIEW_LONG_EDGE ? PREVIEW_LONG_EDGE : undefined,
-      height: height > PREVIEW_LONG_EDGE ? PREVIEW_LONG_EDGE : undefined,
+    .resize(targetWidth, targetHeight, {
       fit: "inside",
       withoutEnlargement: true,
     })

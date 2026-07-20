@@ -101,11 +101,18 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
             <motion.div
               key={photo.id}
               custom={direction}
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.96 }}
+              initial={{ opacity: 0, scale: 0.96, x: direction * 40 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              exit={{ opacity: 0, scale: 0.96, x: direction * -40 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="relative mx-4 flex max-h-[88vh] max-w-5xl items-center"
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.18}
+              onDragEnd={(_, info) => {
+                if (info.offset.x < -80) go(1);
+                else if (info.offset.x > 80) go(-1);
+              }}
+              className="relative mx-4 flex max-h-[82vh] max-w-5xl cursor-grab items-center active:cursor-grabbing"
               onClick={(e) => e.stopPropagation()}
             >
               <ProtectedImage
@@ -117,23 +124,26 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
                 placeholder={photo.blurDataURL ? "blur" : "empty"}
                 blurDataURL={photo.blurDataURL}
                 sizes="100vw"
-                className="max-h-[88vh] w-auto rounded-lg object-contain"
+                className="max-h-[82vh] w-auto rounded-lg object-contain"
               />
             </motion.div>
           </AnimatePresence>
 
           {photo.title && (
-            <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 flex-col items-center gap-4 text-center text-sm text-white/90">
+            <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3 text-center text-sm text-white/90">
               <span>
                 {photo.title}
                 <span className="ml-2 text-white/50">
                   {index! + 1} / {photos.length}
                 </span>
               </span>
-              <div className="flex gap-4">
+              <div className="flex gap-3">
                 <FavoriteButton photoId={photo.id} />
                 <BuyButton photoId={photo.id} title={photo.title} />
               </div>
+              <span className="text-[11px] uppercase tracking-[0.2em] text-white/40">
+                Esc to close · ← → to navigate
+              </span>
             </div>
           )}
         </motion.div>

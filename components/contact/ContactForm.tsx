@@ -12,31 +12,64 @@ const fieldVariants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] as const } },
 };
 
-function Field({
+function FloatingField({
+  id,
+  name,
   label,
+  type = "text",
+  textarea = false,
+  required,
   reduce,
-  children,
 }: {
+  id: string;
+  name: string;
   label: string;
+  type?: string;
+  textarea?: boolean;
+  required?: boolean;
   reduce: boolean | null;
-  children: React.ReactNode;
 }) {
-  const inner = (
+  const common = (
     <>
-      <label className="mb-1.5 block text-sm font-medium">{label}</label>
-      {children}
+      {textarea ? (
+        <textarea
+          id={id}
+          name={name}
+          required={required}
+          rows={5}
+          placeholder=" "
+          className="peer w-full rounded-xl border border-border bg-surface/60 px-4 pt-6 pb-2 text-fg outline-none transition-colors placeholder:text-transparent focus:border-accent focus:shadow-glow-sm resize-none"
+        />
+      ) : (
+        <input
+          id={id}
+          name={name}
+          type={type}
+          required={required}
+          placeholder=" "
+          className="peer w-full rounded-xl border border-border bg-surface/60 px-4 pt-6 pb-2 text-fg outline-none transition-colors placeholder:text-transparent focus:border-accent focus:shadow-glow-sm"
+        />
+      )}
+      <label
+        htmlFor={id}
+        className="pointer-events-none absolute left-4 top-4 text-sm text-muted transition-all duration-200 peer-focus:top-2 peer-focus:text-xs peer-focus:text-accent peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-xs"
+      >
+        {label}
+      </label>
     </>
   );
-  if (reduce) return <div>{inner}</div>;
-  return <motion.div variants={fieldVariants}>{inner}</motion.div>;
+
+  if (reduce) return <div className="relative">{common}</div>;
+  return (
+    <motion.div variants={fieldVariants} className="relative">
+      {common}
+    </motion.div>
+  );
 }
 
 export function ContactForm() {
   const [state, formAction, pending] = useActionState(submitContact, initialState);
   const reduce = useReducedMotion();
-
-  const fieldClass =
-    "w-full rounded-xl border border-border bg-surface/60 px-4 py-3 text-fg outline-none transition-colors placeholder:text-muted focus:border-accent focus:shadow-glow-sm";
 
   return (
     <motion.form
@@ -46,31 +79,23 @@ export function ContactForm() {
       animate={reduce ? undefined : "show"}
       variants={{ show: { transition: { staggerChildren: 0.08 } } }}
     >
-      <Field reduce={reduce} label="Name">
-        <input id="name" name="name" required placeholder="Your name" className={fieldClass} />
-      </Field>
-
-      <Field reduce={reduce} label="Email">
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          placeholder="you@example.com"
-          className={fieldClass}
-        />
-      </Field>
-
-      <Field reduce={reduce} label="Message">
-        <textarea
-          id="message"
-          name="message"
-          required
-          rows={5}
-          placeholder="Tell me about your project or just say hi."
-          className={cn(fieldClass, "resize-none")}
-        />
-      </Field>
+      <FloatingField id="name" name="name" label="Name" required reduce={reduce} />
+      <FloatingField
+        id="email"
+        name="email"
+        label="Email"
+        type="email"
+        required
+        reduce={reduce}
+      />
+      <FloatingField
+        id="message"
+        name="message"
+        label="Message"
+        textarea
+        required
+        reduce={reduce}
+      />
 
       <motion.div variants={reduce ? undefined : fieldVariants}>
         <button
@@ -90,21 +115,31 @@ export function ContactForm() {
 
       <AnimatePresence>
         {state.status !== "idle" && (
-          <motion.p
+          <motion.div
             role="status"
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
+            exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}
             className={cn(
-              "rounded-xl border px-4 py-3 text-sm",
+              "flex items-center gap-2 rounded-xl border px-4 py-3 text-sm",
               state.status === "success"
                 ? "border-accent/40 bg-accent/10 text-accent"
                 : "border-red-500/40 bg-red-500/10 text-red-500"
             )}
           >
+            <span
+              className={cn(
+                "grid h-5 w-5 place-items-center rounded-full text-xs font-bold",
+                state.status === "success"
+                  ? "bg-accent/20"
+                  : "bg-red-500/20"
+              )}
+            >
+              {state.status === "success" ? "✓" : "!"}
+            </span>
             {state.message}
-          </motion.p>
+          </motion.div>
         )}
       </AnimatePresence>
     </motion.form>

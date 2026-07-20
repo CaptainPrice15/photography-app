@@ -13,11 +13,34 @@ export default async function HomePage() {
     photoSource.getFeatured(),
   ]);
 
-  const latest = (await photoSource.getAllPhotos()).slice(0, 8);
+  const latest = (await photoSource.getAllPhotos()).slice(0, 12);
+
+  const marqueeItems = [
+    ...collections.map((c) => c.title),
+    "Available as prints",
+    "Commissions open",
+    "Light is the only subject",
+  ];
 
   return (
     <div>
       <Hero photos={featured} />
+
+      {/* Marquee strip */}
+      <div className="marquee-mask relative overflow-hidden border-y border-border-25 bg-surface/40 py-3">
+        <div className="marquee gap-8 px-4">
+          {[0, 1].map((dup) => (
+            <div key={dup} className="flex shrink-0 items-center gap-8" aria-hidden={dup === 1}>
+              {marqueeItems.map((item, i) => (
+                <span key={i} className="flex items-center gap-8 text-sm font-medium text-muted">
+                  {item}
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent/60" />
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
 
       <SectionReveal
         as="section"
@@ -27,10 +50,10 @@ export default async function HomePage() {
         <div className="mb-10 flex items-end justify-between gap-4">
           <RevealItem>
             <div>
-              <h2 className="text-3xl font-semibold tracking-tight">Collections</h2>
-              <p className="mt-2 text-muted">
-                Themed albums, each with its own mood and accent.
-              </p>
+              <p className="label mb-3">Collections</p>
+              <h2 className="text-h2 font-semibold tracking-tight">
+                Albums with their own weather.
+              </h2>
             </div>
           </RevealItem>
           <RevealItem className="hidden shrink-0 sm:block">
@@ -43,9 +66,15 @@ export default async function HomePage() {
           </RevealItem>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {collections.map((c) => (
-            <CollectionCard key={c.id} collection={c} />
+        <div className="grid auto-rows-[180px] gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {collections.map((c, i) => (
+            <CollectionCard
+              key={c.id}
+              collection={c}
+              index={i}
+              featured={i === 0}
+              className={i === 0 ? "sm:col-span-2" : ""}
+            />
           ))}
         </div>
       </SectionReveal>
@@ -56,8 +85,8 @@ export default async function HomePage() {
       >
         <div className="mb-10 flex items-end justify-between gap-4">
           <div>
-            <h2 className="text-3xl font-semibold tracking-tight">Latest</h2>
-            <p className="mt-2 text-muted">Fresh frames from across the library.</p>
+            <p className="label mb-3">Latest</p>
+            <h2 className="text-h2 font-semibold tracking-tight">Fresh frames</h2>
           </div>
           <Link
             href="/gallery"

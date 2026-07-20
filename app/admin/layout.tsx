@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import Link from "next/link";
-import { LayoutDashboard, Images, ShoppingBag, Settings } from "lucide-react";
+import { LayoutDashboard, Images, ShoppingBag } from "lucide-react";
 
 export const metadata = {
   title: "Admin Dashboard",

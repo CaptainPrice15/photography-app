@@ -4,7 +4,9 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export function CursorSpotlight() {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches
+  );
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 
@@ -17,15 +19,18 @@ export function CursorSpotlight() {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
     };
-    
-    // We only show it if the device has a fine pointer (mouse)
-    if (window.matchMedia("(pointer: fine)").matches) {
-      setIsVisible(true);
+
+    // Only track the cursor on devices with a fine pointer (mouse)
+    const mq = window.matchMedia("(pointer: fine)");
+    if (mq.matches) {
       window.addEventListener("mousemove", moveCursor);
     }
+    const onChange = (e: MediaQueryListEvent) => setIsVisible(e.matches);
+    mq.addEventListener("change", onChange);
 
     return () => {
       window.removeEventListener("mousemove", moveCursor);
+      mq.removeEventListener("change", onChange);
     };
   }, [cursorX, cursorY]);
 

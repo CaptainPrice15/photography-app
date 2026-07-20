@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact/ContactForm";
-import { SectionReveal } from "@/components/shared/SectionReveal";
+import { SectionReveal, RevealItem } from "@/components/shared/SectionReveal";
+import { TextReveal } from "@/components/shared/TextReveal";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -9,23 +10,33 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
-      <SectionReveal as="header" className="mb-10 text-center">
-        <p className="text-sm font-medium uppercase tracking-wider text-accent">
-          Contact
-        </p>
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight">
-          Let&apos;s work together
-        </h1>
-        <p className="mt-3 text-muted">
-          Commissions, prints, or just a hello — drop a note and I&apos;ll reply
-          within a couple of days.
-        </p>
-      </SectionReveal>
+    <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+      <div className="grid gap-10 md:grid-cols-2 md:items-center">
+        <SectionReveal className="order-2 md:order-1">
+          <div className="glass-elevated rounded-3xl p-6 shadow-card sm:p-8">
+            <ContactForm />
+          </div>
+        </SectionReveal>
 
-      <SectionReveal className="rounded-3xl border border-border bg-surface/50 p-6 shadow-card sm:p-8">
-        <ContactForm />
-      </SectionReveal>
+        <SectionReveal stagger className="order-1 md:order-2">
+          <RevealItem>
+            <p className="text-sm font-medium uppercase tracking-wider text-accent">
+              Contact
+            </p>
+          </RevealItem>
+          <RevealItem>
+            <TextReveal as="h1" className="mt-3 text-h1 font-semibold tracking-tight">
+              Let&apos;s work together
+            </TextReveal>
+          </RevealItem>
+          <RevealItem>
+            <p className="mt-4 max-w-md text-muted">
+              Commissions, prints, or just a hello — drop a note and I&apos;ll reply
+              within a couple of days.
+            </p>
+          </RevealItem>
+        </SectionReveal>
+      </div>
     </div>
   );
 }

@@ -53,6 +53,8 @@ export const viewport: Viewport = {
   ],
 };
 
+import { CursorSpotlight } from "@/components/theme/CursorSpotlight";
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -73,6 +75,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <MotionProvider>
+            <CursorSpotlight />
             <AmbientBackground />
             <Navbar session={session} />
             <main className="flex min-h-screen flex-col pt-16">{children}</main>

@@ -4,6 +4,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import { ProtectedImage } from "@/components/shared/ProtectedImage";
 import type { Photo } from "@/lib/storage/types";
+import { FavoriteButton } from "./FavoriteButton";
+import { BuyButton } from "./BuyButton";
 
 interface Props {
   photos: Photo[];
@@ -121,19 +123,17 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
           </AnimatePresence>
 
           {photo.title && (
-            <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-center text-sm text-white/90">
+            <div className="absolute bottom-5 left-1/2 flex -translate-x-1/2 flex-col items-center gap-4 text-center text-sm text-white/90">
               <span>
                 {photo.title}
                 <span className="ml-2 text-white/50">
                   {index! + 1} / {photos.length}
                 </span>
               </span>
-              <a
-                href={`/checkout?file=${encodeURIComponent(photo.src.replace(/^\/api\/photos\//, ""))}`}
-                className="glass-strong rounded-full px-4 py-1.5 text-xs font-semibold text-white transition-all duration-200 hover:shadow-glow"
-              >
-                Download original
-              </a>
+              <div className="flex gap-4">
+                <FavoriteButton photoId={photo.id} />
+                <BuyButton photoId={photo.id} title={photo.title} />
+              </div>
             </div>
           )}
         </motion.div>

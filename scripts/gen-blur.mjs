@@ -63,6 +63,7 @@ async function main() {
       let width = 1600;
       let height = 1200;
       let blurDataURL;
+      let dominantColor = null;
 
       if (OPTIMIZABLE.has(ext)) {
         try {
@@ -78,6 +79,16 @@ async function main() {
             .jpeg({ quality: 50 })
             .toBuffer();
           blurDataURL = `data:image/jpeg;base64,${blur.toString("base64")}`;
+          
+          if (i === 0) {
+            try {
+              const { data } = await sharp(buf).resize(1, 1).raw().toBuffer({ resolveWithObject: true });
+              const toHex = (c) => c.toString(16).padStart(2, "0");
+              dominantColor = `#${toHex(data[0])}${toHex(data[1])}${toHex(data[2])}`;
+            } catch {
+              // ignore
+            }
+          }
         } catch {
           // Keep defaults if sharp can't read it.
         }
@@ -109,16 +120,19 @@ async function main() {
         featured: i < 2,
         format: ext,
         unoptimized: !OPTIMIZABLE.has(ext),
+        dominantColor: i === 0 ? dominantColor : undefined,
       });
     }
+    
+    const coverPhoto = photos[0];
 
     outCollections.push({
       id: slug,
       slug,
       title: meta.title ?? titleCase(slug),
       description: meta.description,
-      cover: photos[0].src,
-      accent: meta.accent ?? "#64748b",
+      cover: coverPhoto.src,
+      accent: coverPhoto.dominantColor || meta.accent || "#64748b",
       accentSoft: meta.accentSoft,
       photos,
     });

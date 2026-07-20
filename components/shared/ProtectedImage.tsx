@@ -23,11 +23,11 @@ type ProtectedImageProps = ImageProps & {
  */
 export const ProtectedImage = forwardRef<HTMLDivElement, ProtectedImageProps>(
   function ProtectedImage(
-    { unprotected = false, linkWrapped = false, className, ...props },
+    { unprotected = false, linkWrapped = false, className, alt, ...props },
     ref
   ) {
     if (unprotected) {
-      return <Image className={className} {...props} />;
+      return <Image className={className} alt={alt || ""} {...props} />;
     }
 
     const guard = (e: React.SyntheticEvent) => {
@@ -48,6 +48,7 @@ export const ProtectedImage = forwardRef<HTMLDivElement, ProtectedImageProps>(
         style={{ userSelect: "none", WebkitUserSelect: "none" } as React.CSSProperties}
       >
         <Image
+          alt={alt || ""}
           {...props}
           draggable={false}
           onContextMenu={(e) => e.preventDefault()}

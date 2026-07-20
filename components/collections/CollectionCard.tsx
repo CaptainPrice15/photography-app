@@ -1,11 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import { ProtectedImage } from "@/components/shared/ProtectedImage";
 import type { Collection } from "@/lib/storage/types";
 
 export function CollectionCard({ collection }: { collection: Collection }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -13,22 +21,25 @@ export function CollectionCard({ collection }: { collection: Collection }) {
       viewport={{ once: true, margin: "0px 0px -10% 0px" }}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       className="glow-border surface-contain group relative"
+      ref={ref}
     >
       <Link
         href={`/collections/${collection.slug}`}
         className="block overflow-hidden rounded-3xl border border-border-40 bg-surface shadow-card transition-all duration-300 group-hover:-translate-y-1.5 group-hover:shadow-card-hover group-hover:shadow-glow"
       >
         <div className="relative aspect-[4/3] w-full overflow-hidden">
-          <ProtectedImage
-            src={collection.cover}
-            alt={collection.title}
-            fill
-            linkWrapped
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.07]"
-            placeholder="blur"
-            blurDataURL={collection.photos[0]?.blurDataURL}
-          />
+          <motion.div style={{ y }} className="absolute inset-0 h-[120%] -top-[10%] w-full">
+            <ProtectedImage
+              src={collection.cover}
+              alt={collection.title}
+              fill
+              linkWrapped
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.07]"
+              placeholder="blur"
+              blurDataURL={collection.photos[0]?.blurDataURL}
+            />
+          </motion.div>
           <div
             className="absolute inset-0 opacity-40 mix-blend-screen transition-opacity duration-500 group-hover:opacity-60"
             style={{

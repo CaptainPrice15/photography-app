@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { ProtectedImage } from "@/components/shared/ProtectedImage";
 import type { Photo } from "@/lib/storage/types";
+import { FavoriteButton } from "./FavoriteButton";
+import { BuyButton } from "./BuyButton";
 
 interface Props {
   photo: Photo;
@@ -40,6 +42,11 @@ export function PhotoCard({ photo, onOpen, sizes, priority }: Props) {
       </div>
 
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+      <div className="absolute top-0 right-0 p-3 opacity-0 transition-all duration-300 translate-y-[-10px] group-hover:translate-y-0 group-hover:opacity-100 flex gap-2">
+        <FavoriteButton photoId={photo.id} />
+        <BuyButton photoId={photo.id} title={photo.title || "Photo"} />
+      </div>
 
       {photo.title && (
         <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-3 p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">

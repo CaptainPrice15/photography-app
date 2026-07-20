@@ -2,26 +2,41 @@ import { createHash } from "node:crypto";
 import { promises as fs } from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { kv } from "@vercel/kv";
 
 const CACHE_DIR = path.join(
   process.env.PHOTO_CACHE_DIR ?? path.join(os.tmpdir(), "lumen-photo-cache"),
   "files"
 );
 const MAX_ENTRIES = 500;
+const hasKV = Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
 
 function cacheKey(keyPath: string): string {
   return createHash("sha256").update(keyPath).digest("hex").slice(0, 32);
 }
 
 export async function ensureCacheDir(): Promise<void> {
-  await fs.mkdir(CACHE_DIR, { recursive: true });
+  if (!hasKV) {
+    await fs.mkdir(CACHE_DIR, { recursive: true });
+  }
 }
 
 export async function getCachedFile(
   keyPath: string
 ): Promise<Buffer | null> {
+  const key = cacheKey(keyPath);
+
+  if (hasKV) {
+    try {
+      const b64 = await kv.get<string>(key);
+      if (b64) return Buffer.from(b64, "base64");
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
   try {
-    const key = cacheKey(keyPath);
     const filePath = path.join(CACHE_DIR, `${key}.bin`);
     const buf = await fs.readFile(filePath);
     // Touch mtime for LRU cleanup.
@@ -37,14 +52,25 @@ export async function setCachedFile(
   keyPath: string,
   buffer: Buffer
 ): Promise<void> {
-  await ensureCacheDir();
   const key = cacheKey(keyPath);
+
+  if (hasKV) {
+    try {
+      await kv.set(key, buffer.toString("base64"), { ex: 2592000 }); // 30 days
+      return;
+    } catch (e) {
+      console.warn("KV cache write failed, falling back to FS.", e);
+    }
+  }
+
+  await ensureCacheDir();
   const filePath = path.join(CACHE_DIR, `${key}.bin`);
   await fs.writeFile(filePath, buffer);
   await cleanupIfNeeded().catch(() => {});
 }
 
 async function cleanupIfNeeded(): Promise<void> {
+  if (hasKV) return;
   const entries = await fs.readdir(CACHE_DIR);
   if (entries.length <= MAX_ENTRIES) return;
 

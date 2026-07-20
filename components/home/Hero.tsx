@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
-import { useCallback, useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useCallback, useEffect, useState, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ProtectedImage } from "@/components/shared/ProtectedImage";
 import type { Photo } from "@/lib/storage/types";
 
@@ -31,6 +31,13 @@ export function Hero({ photos }: { photos: Photo[] }) {
   });
   const [selected, setSelected] = useState(0);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
+
   const onSelect = useCallback(() => {
     if (!embla) return;
     setSelected(embla.selectedScrollSnap());
@@ -49,16 +56,17 @@ export function Hero({ photos }: { photos: Photo[] }) {
   if (photos.length === 0) return null;
 
   return (
-    <section className="relative">
+    <section className="relative" ref={containerRef}>
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex">
           {photos.map((p, idx) => (
             <div
               key={p.id}
-              className="relative h-[88vh] min-h-[560px] w-full shrink-0 grow-0 basis-full"
+              className="relative h-[88vh] min-h-[560px] w-full shrink-0 grow-0 basis-full overflow-hidden"
             >
               <motion.div
                 className="absolute inset-0"
+                style={{ y }}
                 animate={{
                   scale: idx === selected ? 1.08 : 1.02,
                 }}

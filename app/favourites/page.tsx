@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { getFavoritePhotos } from "@/app/actions/favorites";
+import { getBlurDataUrls } from "@/app/actions/blur";
 import { FavouritesGallery } from "./FavouritesGallery";
+import type { Photo } from "@/lib/storage/types";
 
 export const metadata: Metadata = {
   title: "Favourites",
@@ -19,6 +21,14 @@ export default async function FavouritesPage() {
 
   const photos = await getFavoritePhotos();
 
+  const firstPageIds = photos.slice(0, 20).map((p) => p.id);
+  const blurMap = await getBlurDataUrls(firstPageIds);
+
+  const enriched: Photo[] = photos.map((p) => ({
+    ...p,
+    blurDataURL: blurMap[p.id] ?? p.blurDataURL,
+  }));
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
       <header className="mb-12">
@@ -31,7 +41,7 @@ export default async function FavouritesPage() {
         </p>
       </header>
 
-      <FavouritesGallery photos={photos} />
+      <FavouritesGallery photos={enriched} />
     </div>
   );
 }

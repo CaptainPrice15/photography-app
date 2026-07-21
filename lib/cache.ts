@@ -8,7 +8,7 @@ const CACHE_DIR = path.join(
   process.env.PHOTO_CACHE_DIR ?? path.join(os.tmpdir(), "lumen-photo-cache"),
   "files"
 );
-const MAX_ENTRIES = 500;
+const MAX_ENTRIES = 2000;
 const hasKV = Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
 
 function cacheKey(keyPath: string): string {

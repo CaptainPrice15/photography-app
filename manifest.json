@@ -4,13 +4,13 @@
       "id": "Kedarnath",
       "slug": "Kedarnath",
       "title": "Kedarnath",
-      "accent": "#64748b",
-      "accentSoft": "#94a3b8",
-      "cover": "/api/photos/Kedarnath/IMG20250523192204.heic",
+      "accent": "#2dd4bf",
+      "accentSoft": "#5eead4",
+      "cover": "/api/photos/Kedarnath/IMG20250523192204.jpg",
       "photos": [
         {
           "id": "Kedarnath-1",
-          "src": "/api/photos/Kedarnath/IMG20250523192204.heic",
+          "src": "/api/photos/Kedarnath/IMG20250523192204.jpg",
           "alt": "Kedarnath photograph 1",
           "title": "Kedarnath 1",
           "collectionId": "Kedarnath",
@@ -18,7 +18,7 @@
         },
         {
           "id": "Kedarnath-2",
-          "src": "/api/photos/Kedarnath/IMG20250525042703.heic",
+          "src": "/api/photos/Kedarnath/IMG20250525042703.jpg",
           "alt": "Kedarnath photograph 2",
           "title": "Kedarnath 2",
           "collectionId": "Kedarnath",
@@ -26,7 +26,7 @@
         },
         {
           "id": "Kedarnath-3",
-          "src": "/api/photos/Kedarnath/IMG20250525043055.heic",
+          "src": "/api/photos/Kedarnath/IMG20250525043055.jpg",
           "alt": "Kedarnath photograph 3",
           "title": "Kedarnath 3",
           "collectionId": "Kedarnath",
@@ -34,7 +34,7 @@
         },
         {
           "id": "Kedarnath-4",
-          "src": "/api/photos/Kedarnath/IMG20250525045801.heic",
+          "src": "/api/photos/Kedarnath/IMG20250525045801.jpg",
           "alt": "Kedarnath photograph 4",
           "title": "Kedarnath 4",
           "collectionId": "Kedarnath",
@@ -42,7 +42,7 @@
         },
         {
           "id": "Kedarnath-5",
-          "src": "/api/photos/Kedarnath/IMG20250525052250.heic",
+          "src": "/api/photos/Kedarnath/IMG20250525052250.jpg",
           "alt": "Kedarnath photograph 5",
           "title": "Kedarnath 5",
           "collectionId": "Kedarnath",
@@ -50,7 +50,7 @@
         },
         {
           "id": "Kedarnath-6",
-          "src": "/api/photos/Kedarnath/IMG20250525053911.heic",
+          "src": "/api/photos/Kedarnath/IMG20250525053911.jpg",
           "alt": "Kedarnath photograph 6",
           "title": "Kedarnath 6",
           "collectionId": "Kedarnath",
@@ -58,7 +58,7 @@
         },
         {
           "id": "Kedarnath-7",
-          "src": "/api/photos/Kedarnath/IMG20250525110125.heic",
+          "src": "/api/photos/Kedarnath/IMG20250525110125.jpg",
           "alt": "Kedarnath photograph 7",
           "title": "Kedarnath 7",
           "collectionId": "Kedarnath",
@@ -66,7 +66,7 @@
         },
         {
           "id": "Kedarnath-8",
-          "src": "/api/photos/Kedarnath/IMG20250525110200.heic",
+          "src": "/api/photos/Kedarnath/IMG20250525110200.jpg",
           "alt": "Kedarnath photograph 8",
           "title": "Kedarnath 8",
           "collectionId": "Kedarnath",
@@ -74,7 +74,7 @@
         },
         {
           "id": "Kedarnath-9",
-          "src": "/api/photos/Kedarnath/IMG20250525114501.heic",
+          "src": "/api/photos/Kedarnath/IMG20250525114501.jpg",
           "alt": "Kedarnath photograph 9",
           "title": "Kedarnath 9",
           "collectionId": "Kedarnath",
@@ -82,7 +82,7 @@
         },
         {
           "id": "Kedarnath-10",
-          "src": "/api/photos/Kedarnath/IMG20250525131157.heic",
+          "src": "/api/photos/Kedarnath/IMG20250525131157.jpg",
           "alt": "Kedarnath photograph 10",
           "title": "Kedarnath 10",
           "collectionId": "Kedarnath",
@@ -90,7 +90,7 @@
         },
         {
           "id": "Kedarnath-11",
-          "src": "/api/photos/Kedarnath/IMG20250525161234.heic",
+          "src": "/api/photos/Kedarnath/IMG20250525161234.jpg",
           "alt": "Kedarnath photograph 11",
           "title": "Kedarnath 11",
           "collectionId": "Kedarnath",
@@ -98,7 +98,7 @@
         },
         {
           "id": "Kedarnath-12",
-          "src": "/api/photos/Kedarnath/IMG20250525161245.heic",
+          "src": "/api/photos/Kedarnath/IMG20250525161245.jpg",
           "alt": "Kedarnath photograph 12",
           "title": "Kedarnath 12",
           "collectionId": "Kedarnath",
@@ -106,7 +106,7 @@
         },
         {
           "id": "Kedarnath-13",
-          "src": "/api/photos/Kedarnath/IMG20250525181543.heic",
+          "src": "/api/photos/Kedarnath/IMG20250525181543.jpg",
           "alt": "Kedarnath photograph 13",
           "title": "Kedarnath 13",
           "collectionId": "Kedarnath",
@@ -114,7 +114,7 @@
         },
         {
           "id": "Kedarnath-14",
-          "src": "/api/photos/Kedarnath/IMG20250525183313.heic",
+          "src": "/api/photos/Kedarnath/IMG20250525183313.jpg",
           "alt": "Kedarnath photograph 14",
           "title": "Kedarnath 14",
           "collectionId": "Kedarnath",
@@ -122,7 +122,7 @@
         },
         {
           "id": "Kedarnath-15",
-          "src": "/api/photos/Kedarnath/IMG20250526075518.heic",
+          "src": "/api/photos/Kedarnath/IMG20250526075518.jpg",
           "alt": "Kedarnath photograph 15",
           "title": "Kedarnath 15",
           "collectionId": "Kedarnath",
@@ -130,7 +130,7 @@
         },
         {
           "id": "Kedarnath-16",
-          "src": "/api/photos/Kedarnath/IMG20250526080240.heic",
+          "src": "/api/photos/Kedarnath/IMG20250526080240.jpg",
           "alt": "Kedarnath photograph 16",
           "title": "Kedarnath 16",
           "collectionId": "Kedarnath",
@@ -138,7 +138,7 @@
         },
         {
           "id": "Kedarnath-17",
-          "src": "/api/photos/Kedarnath/IMG20250526113926.heic",
+          "src": "/api/photos/Kedarnath/IMG20250526113926.jpg",
           "alt": "Kedarnath photograph 17",
           "title": "Kedarnath 17",
           "collectionId": "Kedarnath",
@@ -146,7 +146,7 @@
         },
         {
           "id": "Kedarnath-18",
-          "src": "/api/photos/Kedarnath/IMG20250526114757.heic",
+          "src": "/api/photos/Kedarnath/IMG20250526114757.jpg",
           "alt": "Kedarnath photograph 18",
           "title": "Kedarnath 18",
           "collectionId": "Kedarnath",
@@ -158,13 +158,13 @@
       "id": "Sikkim",
       "slug": "Sikkim",
       "title": "Sikkim",
-      "accent": "#64748b",
-      "accentSoft": "#94a3b8",
-      "cover": "/api/photos/Sikkim/IMG20231029075117.heic",
+      "accent": "#f59e0b",
+      "accentSoft": "#fbbf24",
+      "cover": "/api/photos/Sikkim/IMG20231029075117.jpg",
       "photos": [
         {
           "id": "Sikkim-1",
-          "src": "/api/photos/Sikkim/IMG20231029075117.heic",
+          "src": "/api/photos/Sikkim/IMG20231029075117.jpg",
           "alt": "Sikkim photograph 1",
           "title": "Sikkim 1",
           "collectionId": "Sikkim",
@@ -172,7 +172,7 @@
         },
         {
           "id": "Sikkim-2",
-          "src": "/api/photos/Sikkim/IMG20231029075139.heic",
+          "src": "/api/photos/Sikkim/IMG20231029075139.jpg",
           "alt": "Sikkim photograph 2",
           "title": "Sikkim 2",
           "collectionId": "Sikkim",
@@ -180,7 +180,7 @@
         },
         {
           "id": "Sikkim-3",
-          "src": "/api/photos/Sikkim/IMG20231029115906.heic",
+          "src": "/api/photos/Sikkim/IMG20231029115906.jpg",
           "alt": "Sikkim photograph 3",
           "title": "Sikkim 3",
           "collectionId": "Sikkim",
@@ -188,7 +188,7 @@
         },
         {
           "id": "Sikkim-4",
-          "src": "/api/photos/Sikkim/IMG20231029120551.heic",
+          "src": "/api/photos/Sikkim/IMG20231029120551.jpg",
           "alt": "Sikkim photograph 4",
           "title": "Sikkim 4",
           "collectionId": "Sikkim",
@@ -196,7 +196,7 @@
         },
         {
           "id": "Sikkim-5",
-          "src": "/api/photos/Sikkim/IMG20231030073523.heic",
+          "src": "/api/photos/Sikkim/IMG20231030073523.jpg",
           "alt": "Sikkim photograph 5",
           "title": "Sikkim 5",
           "collectionId": "Sikkim",
@@ -204,7 +204,7 @@
         },
         {
           "id": "Sikkim-6",
-          "src": "/api/photos/Sikkim/IMG20231030171449.heic",
+          "src": "/api/photos/Sikkim/IMG20231030171449.jpg",
           "alt": "Sikkim photograph 6",
           "title": "Sikkim 6",
           "collectionId": "Sikkim",
@@ -212,7 +212,7 @@
         },
         {
           "id": "Sikkim-7",
-          "src": "/api/photos/Sikkim/IMG20231031071251.heic",
+          "src": "/api/photos/Sikkim/IMG20231031071251.jpg",
           "alt": "Sikkim photograph 7",
           "title": "Sikkim 7",
           "collectionId": "Sikkim",
@@ -220,7 +220,7 @@
         },
         {
           "id": "Sikkim-8",
-          "src": "/api/photos/Sikkim/IMG20231031174801.heic",
+          "src": "/api/photos/Sikkim/IMG20231031174801.jpg",
           "alt": "Sikkim photograph 8",
           "title": "Sikkim 8",
           "collectionId": "Sikkim",
@@ -228,7 +228,7 @@
         },
         {
           "id": "Sikkim-9",
-          "src": "/api/photos/Sikkim/IMG20231101145010.heic",
+          "src": "/api/photos/Sikkim/IMG20231101145010.jpg",
           "alt": "Sikkim photograph 9",
           "title": "Sikkim 9",
           "collectionId": "Sikkim",
@@ -236,7 +236,7 @@
         },
         {
           "id": "Sikkim-10",
-          "src": "/api/photos/Sikkim/IMG20231101145016.heic",
+          "src": "/api/photos/Sikkim/IMG20231101145016.jpg",
           "alt": "Sikkim photograph 10",
           "title": "Sikkim 10",
           "collectionId": "Sikkim",
@@ -244,7 +244,7 @@
         },
         {
           "id": "Sikkim-11",
-          "src": "/api/photos/Sikkim/IMG20231102114124.heic",
+          "src": "/api/photos/Sikkim/IMG20231102114124.jpg",
           "alt": "Sikkim photograph 11",
           "title": "Sikkim 11",
           "collectionId": "Sikkim",
@@ -252,7 +252,7 @@
         },
         {
           "id": "Sikkim-12",
-          "src": "/api/photos/Sikkim/IMG20231102114128.heic",
+          "src": "/api/photos/Sikkim/IMG20231102114128.jpg",
           "alt": "Sikkim photograph 12",
           "title": "Sikkim 12",
           "collectionId": "Sikkim",
@@ -261,5 +261,5 @@
       ]
     }
   ],
-  "updatedAt": "2026-07-18T12:10:52.486Z"
+  "updatedAt": "2026-07-21T16:38:28.702Z"
 }

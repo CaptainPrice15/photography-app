@@ -33,6 +33,7 @@ export async function POST(req: Request) {
       await prisma.order.create({
         data: {
           userId,
+          photoId,
           amount: session.amount_total || 0,
           status: "paid",
           stripeId: session.id,

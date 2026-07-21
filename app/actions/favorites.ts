@@ -3,6 +3,8 @@
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { photoSource } from "@/lib/storage";
+import type { Photo } from "@/lib/storage/types";
 
 export async function toggleFavorite(photoId: string) {
   const session = await getSession();
@@ -41,6 +43,7 @@ export async function toggleFavorite(photoId: string) {
 
   revalidatePath("/gallery");
   revalidatePath("/collections");
+  revalidatePath("/favourites");
 
   return { success: true };
 }
@@ -58,4 +61,23 @@ export async function getFavorites() {
   });
 
   return favorites.map(f => f.photoId);
+}
+
+export async function getFavoritePhotos(): Promise<Photo[]> {
+  const session = await getSession();
+  if (!session || !session.email) return [];
+
+  const user = await prisma.user.findUnique({ where: { email: session.email } });
+  if (!user) return [];
+
+  const favorites = await prisma.favorite.findMany({
+    where: { userId: user.id },
+    select: { photoId: true },
+  });
+
+  if (favorites.length === 0) return [];
+
+  const favIds = new Set(favorites.map(f => f.photoId));
+  const allPhotos = await photoSource.getAllPhotos();
+  return allPhotos.filter(p => favIds.has(p.id));
 }

@@ -10,12 +10,17 @@ import { Button } from "@/components/shared/Button";
 import { logoutAction } from "@/app/actions/auth";
 import type { Session } from "@/lib/auth";
 
-const links = [
+const publicLinks = [
   { href: "/", label: "Home" },
   { href: "/gallery", label: "Gallery" },
   { href: "/collections", label: "Collections" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
+];
+
+const authLinks = [
+  { href: "/favourites", label: "Favourites" },
+  { href: "/payment", label: "Payments" },
 ];
 
 function isActive(pathname: string, href: string) {
@@ -26,6 +31,7 @@ export function Navbar({ session }: { session: Session | null }) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const links = session ? [...publicLinks, ...authLinks] : publicLinks;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);

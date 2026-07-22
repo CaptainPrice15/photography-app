@@ -7,7 +7,7 @@ import { SectionReveal } from "@/components/shared/SectionReveal";
 import { TextReveal } from "@/components/shared/TextReveal";
 import { ProtectedImage } from "@/components/shared/ProtectedImage";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
   const collections = await photoSource.getCollections();
@@ -49,7 +49,7 @@ export default async function CollectionPage({
       <header className="relative">
         <div className="relative h-[55vh] min-h-[380px] w-full overflow-hidden">
           <ProtectedImage
-            src={collection.cover}
+            src={`${collection.cover}?size=preview`}
             alt={collection.title}
             fill
             sizes="100vw"

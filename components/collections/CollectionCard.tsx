@@ -53,7 +53,7 @@ export function CollectionCard({
         >
           <motion.div style={{ y }} className="absolute inset-0 h-[120%] -top-[10%] w-full">
             <ProtectedImage
-              src={collection.cover}
+              src={`${collection.cover}?size=preview`}
               alt={collection.title}
               fill
               linkWrapped

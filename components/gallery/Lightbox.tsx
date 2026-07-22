@@ -44,7 +44,7 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
 
   const photo = index !== null ? photos[index] : null;
 
-  // Preload adjacent images for instant navigation.
+  // Preload adjacent images at preview size (not full lightbox).
   useEffect(() => {
     if (index === null) return;
     const links: HTMLLinkElement[] = [];
@@ -55,7 +55,7 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
       const link = document.createElement("link");
       link.rel = "preload";
       link.as = "image";
-      link.href = p.src;
+      link.href = `${p.src}?size=preview`;
       document.head.appendChild(link);
       links.push(link);
     }

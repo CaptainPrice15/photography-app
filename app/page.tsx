@@ -5,7 +5,7 @@ import { MasonryGallery } from "@/components/gallery/MasonryGallery";
 import { SectionReveal, RevealItem } from "@/components/shared/SectionReveal";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export default async function HomePage() {
   const [collections, featured] = await Promise.all([

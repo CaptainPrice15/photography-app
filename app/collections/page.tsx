@@ -9,8 +9,6 @@ export const metadata: Metadata = {
   description: "Themed photography albums, each with its own palette and mood.",
 };
 
-export const dynamic = "force-dynamic";
-
 export const revalidate = 3600;
 
 export default async function CollectionsPage() {

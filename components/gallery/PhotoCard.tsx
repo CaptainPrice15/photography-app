@@ -37,7 +37,7 @@ export function PhotoCard({ photo, onOpen, sizes, priority }: Props) {
     >
       <div className="overflow-hidden rounded-2xl">
         <ProtectedImage
-          src={photo.src}
+          src={`${photo.src}?size=thumb`}
           alt={photo.alt}
           width={photo.width}
           height={photo.height}

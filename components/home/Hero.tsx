@@ -84,7 +84,7 @@ export function Hero({ photos }: { photos: Photo[] }) {
                 transition={{ duration: 7, ease: "linear" }}
               >
                 <ProtectedImage
-                  src={p.src}
+                  src={`${p.src}?size=${idx === selected || idx === 0 ? "preview" : "thumb"}`}
                   alt={p.alt}
                   fill
                   priority={idx === 0}

@@ -1,3 +1,5 @@
+import { readFileSync, existsSync } from "node:fs";
+import { join } from "node:path";
 import { isOptimizable, type Collection, type Photo, type PhotoSource } from "./types";
 
 const SCAN_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
@@ -63,6 +65,32 @@ function extOf(name: string): string {
 
 function titleCase(slug: string): string {
   return slug.charAt(0).toUpperCase() + slug.slice(1);
+}
+
+interface PhotoMeta {
+  width?: number;
+  height?: number;
+  blurDataURL?: string;
+  dominantColor?: string;
+}
+
+let photoMeta: Record<string, PhotoMeta> | null = null;
+
+function loadPhotoMeta(): Record<string, PhotoMeta> {
+  if (photoMeta) return photoMeta;
+  try {
+    const metaPath = join(process.cwd(), "photo-meta.json");
+    if (existsSync(metaPath)) {
+      const parsed: Record<string, PhotoMeta> = JSON.parse(readFileSync(metaPath, "utf8"));
+      photoMeta = parsed;
+      console.log(`[pcloud] loaded photo-meta.json (${Object.keys(parsed).length} entries)`);
+    } else {
+      photoMeta = {};
+    }
+  } catch {
+    photoMeta = {};
+  }
+  return photoMeta;
 }
 
 async function apiCall(
@@ -275,30 +303,33 @@ async function scanCollections(): Promise<Collection[]> {
         if (imageFiles.length === 0) return null;
 
         const info = meta.get(slug);
+        const metaMap = loadPhotoMeta();
         const photos: Photo[] = imageFiles.map((file, i) => {
           const format = extOf(file);
+          const meta = metaMap[`${slug}/${file}`] ?? {};
           return {
             id: `${slug}-${i + 1}`,
             src: `/api/photos/${slug}/${file}`,
             alt: `${info?.title ?? titleCase(slug)} photograph ${i + 1}`,
-            width: 1600,
-            height: 1200,
+            width: meta.width ?? 1600,
+            height: meta.height ?? 1200,
             title: `${info?.title ?? titleCase(slug)} ${i + 1}`,
             collectionId: slug,
-            blurDataURL: undefined,
+            blurDataURL: meta.blurDataURL,
             featured: i < 2,
             format,
             unoptimized: !isOptimizable(format),
           };
         });
 
+        const coverMeta = metaMap[`${slug}/${imageFiles[0]}`] ?? {};
         return {
           id: slug,
           slug,
           title: info?.title ?? titleCase(slug),
           description: info?.description,
           cover: photos[0].src,
-          accent: info?.accent ?? "#64748b",
+          accent: coverMeta.dominantColor ?? info?.accent ?? "#64748b",
           accentSoft: info?.accentSoft,
           photos,
         } satisfies Collection;

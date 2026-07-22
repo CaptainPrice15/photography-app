@@ -33,7 +33,7 @@ export async function generateBlurDataUrl(
   const targetWidth = Math.round(width * ratio);
   const targetHeight = Math.round(height * ratio);
 
-  const { data, info } = await base
+  const { data } = await base
     .resize(targetWidth, targetHeight, {
       fit: "inside",
       withoutEnlargement: true,

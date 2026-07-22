@@ -1,11 +1,13 @@
 import type { NextRequest } from "next/server";
 import { getPcloudFile } from "@/lib/storage/pcloudSource";
 import { getCachedFile, setCachedFile } from "@/lib/cache";
-import { watermarkPreview } from "@/lib/watermark";
+import { watermarkPreview, type PreviewSize } from "@/lib/watermark";
 import { generateBlurDataUrl, setCachedBlurDataUrl } from "@/lib/blur";
 import convert from "heic-convert";
 
 export const runtime = "nodejs";
+
+const ALLOWED_SIZES = new Set(["thumb", "preview", "lightbox", "blur"]);
 
 const MIME: Record<string, string> = {
   jpg: "image/jpeg",
@@ -30,9 +32,6 @@ function mimeFromName(name: string): string {
   return MIME[extOf(name)] ?? "application/octet-stream";
 }
 
-// Browsers (Chrome/Firefox/Edge) cannot render HEIC/HEIF. Transcode those to
-// JPEG server-side so every browser displays them. Safari can show HEIC
-// natively, but serving JPEG universally keeps behavior consistent.
 async function toBrowserBytes(
   name: string,
   buffer: Buffer
@@ -59,10 +58,14 @@ export async function GET(
   { params }: { params: Promise<{ path: string[] }> }
 ): Promise<Response> {
   const { path } = await params;
-  const isBlur = req.nextUrl.searchParams.get("size") === "blur";
+  const sizeParam = req.nextUrl.searchParams.get("size") ?? "lightbox";
+  const size: PreviewSize | "blur" =
+    ALLOWED_SIZES.has(sizeParam) ? (sizeParam as PreviewSize | "blur") : "lightbox";
   const pathStr = path.join("/");
+  const isBlur = size === "blur";
 
-  const cacheKey = `wm:${pathStr}`;
+  const rawCacheKey = `raw:${pathStr}`;
+  const wmCacheKey = `wm:${pathStr}:${size}`;
   const blurCacheKey = `blur:${pathStr}`;
 
   try {
@@ -70,24 +73,34 @@ export async function GET(
       const cachedBlur = await getCachedFile(blurCacheKey);
       if (cachedBlur) {
         return new Response(cachedBlur as unknown as BodyInit, {
-          headers: previewHeaders("image/jpeg", "86400"),
+          headers: previewHeaders("text/plain", "86400"),
+        });
+      }
+    } else {
+      const cached = await getCachedFile(wmCacheKey);
+      if (cached) {
+        return new Response(cached as unknown as BodyInit, {
+          headers: previewHeaders("image/jpeg", "31536000"),
         });
       }
     }
 
-    const cached = await getCachedFile(cacheKey);
-    if (cached && !isBlur) {
-      return new Response(cached as unknown as BodyInit, {
-        headers: previewHeaders("image/jpeg"),
-      });
+    let rawBuffer: Buffer | null = await getCachedFile(rawCacheKey);
+    let rawName: string;
+
+    if (rawBuffer) {
+      rawName = path[path.length - 1];
+    } else {
+      const file = await getPcloudFile(path);
+      if (!file) {
+        return new Response("Not found", { status: 404 });
+      }
+      rawBuffer = file.buffer;
+      rawName = file.name;
+      setCachedFile(rawCacheKey, rawBuffer).catch(() => {});
     }
 
-    const file = await getPcloudFile(path);
-    if (!file) {
-      return new Response("Not found", { status: 404 });
-    }
-
-    const { bytes, contentType } = await toBrowserBytes(file.name, file.buffer);
+    const { bytes, contentType } = await toBrowserBytes(rawName, rawBuffer);
 
     if (isBlur) {
       const blurDataUri = await generateBlurDataUrl(bytes, contentType);
@@ -99,13 +112,9 @@ export async function GET(
       });
     }
 
-    // Serve a watermarked, downscaled derivative only. The clean original is
-    // never sent to unauthenticated views — it can only be fetched via the
-    // gated /api/download route after payment.
     let preview = { bytes, contentType };
     try {
-      preview = await watermarkPreview(bytes, contentType);
-      // Fire-and-forget blur generation for future requests
+      preview = await watermarkPreview(bytes, contentType, size);
       generateBlurDataUrl(bytes, contentType)
         .then((dataUri) => {
           setCachedBlurDataUrl(pathStr, dataUri);
@@ -115,10 +124,10 @@ export async function GET(
     } catch (wmErr) {
       console.error("[photos] watermark failed, serving plain preview:", wmErr);
     }
-    await setCachedFile(cacheKey, preview.bytes);
+    await setCachedFile(wmCacheKey, preview.bytes);
 
     return new Response(preview.bytes as unknown as BodyInit, {
-      headers: previewHeaders(preview.contentType),
+      headers: previewHeaders(preview.contentType, "31536000"),
     });
   } catch (err) {
     console.error("pCloud photo proxy error:", err);
@@ -130,7 +139,7 @@ function previewHeaders(contentType: string, maxAge?: string): Record<string, st
   return {
     "Content-Type": contentType,
     "Content-Disposition": "inline",
-    "Cache-Control": `public, max-age=${maxAge ?? "86400"}, immutable`,
+    "Cache-Control": `public, max-age=${maxAge ?? "86400"}, s-maxage=${maxAge ?? "86400"}, stale-while-revalidate=604800`,
     "X-Content-Type-Options": "nosniff",
     "Referrer-Policy": "no-referrer",
     "Cross-Origin-Resource-Policy": "same-origin",

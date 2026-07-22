@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 
 interface SectionRevealProps {
@@ -26,18 +26,7 @@ export function SectionReveal({
   delay = 0,
   as = "div",
 }: SectionRevealProps) {
-  const reduce = useReducedMotion();
-
   const MotionTag = motion[as];
-
-  if (reduce) {
-    const Tag = as;
-    return (
-      <Tag className={className} style={style}>
-        {children}
-      </Tag>
-    );
-  }
 
   return (
     <MotionTag
@@ -78,13 +67,7 @@ export function RevealItem({
   className?: string;
   as?: "div" | "li" | "article" | "header";
 }) {
-  const reduce = useReducedMotion();
   const MotionTag = motion[as];
-
-  if (reduce) {
-    const Tag = as;
-    return <Tag className={className}>{children}</Tag>;
-  }
 
   return (
     <MotionTag className={className} variants={itemVariants}>

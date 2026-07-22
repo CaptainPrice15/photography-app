@@ -5,7 +5,6 @@ import {
   useScroll,
   useVelocity,
   useTransform,
-  useReducedMotion,
   motion,
 } from "framer-motion";
 import type { Collection, Photo } from "@/lib/storage/types";
@@ -26,7 +25,6 @@ export function MasonryGallery({ collections, photos }: Props) {
   const [page, setPage] = useState(1);
 
   const loaderRef = useRef<HTMLDivElement>(null);
-  const reduce = useReducedMotion();
 
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
@@ -77,7 +75,7 @@ export function MasonryGallery({ collections, photos }: Props) {
         <p className="py-20 text-center text-muted">No photos in this collection yet.</p>
       ) : (
         <motion.div
-          style={reduce ? undefined : { skewY }}
+          style={{ skewY }}
           className="cv-auto columns-1 gap-6 sm:columns-2 lg:columns-3 xl:columns-4 [column-fill:_balance]"
         >
           {visiblePhotos.map((p, i) => (

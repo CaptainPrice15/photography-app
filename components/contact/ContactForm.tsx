@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { submitContact, type ContactState } from "@/app/actions/contact";
 import { cn } from "@/lib/utils";
 
@@ -19,7 +19,6 @@ function FloatingField({
   type = "text",
   textarea = false,
   required,
-  reduce,
 }: {
   id: string;
   name: string;
@@ -27,7 +26,6 @@ function FloatingField({
   type?: string;
   textarea?: boolean;
   required?: boolean;
-  reduce: boolean | null;
 }) {
   const common = (
     <>
@@ -59,7 +57,6 @@ function FloatingField({
     </>
   );
 
-  if (reduce) return <div className="relative">{common}</div>;
   return (
     <motion.div variants={fieldVariants} className="relative">
       {common}
@@ -69,79 +66,59 @@ function FloatingField({
 
 export function ContactForm() {
   const [state, formAction, pending] = useActionState(submitContact, initialState);
-  const reduce = useReducedMotion();
 
   return (
     <motion.form
       action={formAction}
       className="flex flex-col gap-5"
-      initial={reduce ? undefined : "hidden"}
-      animate={reduce ? undefined : "show"}
+      initial="hidden"
+      animate="show"
       variants={{ show: { transition: { staggerChildren: 0.08 } } }}
     >
-      <FloatingField id="name" name="name" label="Name" required reduce={reduce} />
-      <FloatingField
-        id="email"
-        name="email"
-        label="Email"
-        type="email"
-        required
-        reduce={reduce}
-      />
-      <FloatingField
-        id="message"
-        name="message"
-        label="Message"
-        textarea
-        required
-        reduce={reduce}
-      />
+      <div className="grid gap-5 sm:grid-cols-2">
+        <FloatingField id="name" name="name" label="Name" required />
+        <FloatingField id="email" name="email" type="email" label="Email" required />
+      </div>
+      <FloatingField id="subject" name="subject" label="Subject" />
+      <FloatingField id="message" name="message" label="Message" textarea required />
 
-      <motion.div variants={reduce ? undefined : fieldVariants}>
-        <button
-          type="submit"
-          disabled={pending}
-          className={cn(
-            "relative w-full overflow-hidden rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-transform hover:scale-[1.02] hover:shadow-glow active:scale-[0.98] disabled:opacity-60",
-            pending && "cursor-progress"
-          )}
-        >
-          {pending && (
-            <span className="absolute inset-0 -z-0 animate-shimmer bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-          )}
-          <span className="relative z-10">{pending ? "Sending…" : "Send message"}</span>
-        </button>
-      </motion.div>
-
-      <AnimatePresence>
-        {state.status !== "idle" && (
-          <motion.div
-            role="status"
-            initial={{ opacity: 0, y: -8 }}
+      {state.status === "error" && (
+        <AnimatePresence mode="wait">
+          <motion.p
+            key="error"
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.3 }}
-            className={cn(
-              "flex items-center gap-2 rounded-xl border px-4 py-3 text-sm",
-              state.status === "success"
-                ? "border-accent/40 bg-accent/10 text-accent"
-                : "border-red-500/40 bg-red-500/10 text-red-500"
-            )}
+            className="text-sm text-red-500"
           >
-            <span
-              className={cn(
-                "grid h-5 w-5 place-items-center rounded-full text-xs font-bold",
-                state.status === "success"
-                  ? "bg-accent/20"
-                  : "bg-red-500/20"
-              )}
-            >
-              {state.status === "success" ? "✓" : "!"}
-            </span>
             {state.message}
-          </motion.div>
+          </motion.p>
+        </AnimatePresence>
+      )}
+      {state.status === "success" && (
+        <AnimatePresence mode="wait">
+          <motion.p
+            key="success"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="text-sm text-green-500"
+          >
+            {state.message}
+          </motion.p>
+        </AnimatePresence>
+      )}
+
+      <button
+        type="submit"
+        disabled={pending}
+        className="relative overflow-hidden self-start rounded-full bg-accent px-8 py-3 text-sm font-semibold text-white shadow-glow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-glow focus-glow active:scale-[0.98] disabled:opacity-60"
+      >
+        {pending && (
+          <span className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/20 to-transparent" />
         )}
-      </AnimatePresence>
+        {pending ? "Sending…" : "Send Message"}
+      </button>
     </motion.form>
   );
 }

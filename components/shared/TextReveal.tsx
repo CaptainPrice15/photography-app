@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
@@ -41,13 +41,7 @@ export function TextReveal({
   as = "div",
   split = false,
 }: TextRevealProps) {
-  const reduce = useReducedMotion();
   const Tag = motion[as];
-
-  if (reduce) {
-    const Plain = as;
-    return <Plain className={className}>{children}</Plain>;
-  }
 
   if (split && typeof children === "string") {
     const lines = children.split("\n");

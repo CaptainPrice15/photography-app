@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
@@ -15,11 +15,6 @@ interface MagneticButtonProps {
   [key: string]: unknown;
 }
 
-/**
- * CSS-free magnetic hover: the element follows the cursor within `strength` px
- * using a spring, then settles back on leave. GPU-only transform, no JS
- * mousemove binding. Disabled under prefers-reduced-motion.
- */
 export function MagneticButton({
   children,
   className,
@@ -29,17 +24,7 @@ export function MagneticButton({
   onClick,
   ...rest
 }: MagneticButtonProps) {
-  const reduce = useReducedMotion();
   const Tag = motion[as];
-
-  if (reduce) {
-    const Plain = as;
-    return (
-      <Plain className={className} {...(href ? { href } : {})} onClick={onClick} {...rest}>
-        {children}
-      </Plain>
-    );
-  }
 
   return (
     <Tag

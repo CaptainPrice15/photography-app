@@ -7,7 +7,7 @@ const securityHeaders = [
   {
     key: "Content-Security-Policy",
     // Images are same-origin only (watermarked previews + gated downloads).
-    value: "default-src 'self'; img-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; font-src 'self' data:; connect-src 'self'",
+    value: "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; font-src 'self' data:; connect-src 'self'",
   },
 ];
 

@@ -1,8 +1,14 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-const envPath = resolve(process.cwd(), ".env.local");
-const text = readFileSync(envPath, "utf8");
+let envPath = resolve(process.cwd(), ".env.local");
+let text;
+try {
+  text = readFileSync(envPath, "utf8");
+} catch {
+  envPath = resolve(process.cwd(), ".env");
+  text = readFileSync(envPath, "utf8");
+}
 for (const line of text.split("\n")) {
   const trimmed = line.trim();
   if (!trimmed || trimmed.startsWith("#")) continue;

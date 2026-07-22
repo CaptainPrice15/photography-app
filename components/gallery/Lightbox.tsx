@@ -44,6 +44,26 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
 
   const photo = index !== null ? photos[index] : null;
 
+  // Preload adjacent images for instant navigation.
+  useEffect(() => {
+    if (index === null) return;
+    const links: HTMLLinkElement[] = [];
+    for (const offset of [-1, 1]) {
+      const i = (index + offset + photos.length) % photos.length;
+      const p = photos[i];
+      if (!p) continue;
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "image";
+      link.href = p.src;
+      document.head.appendChild(link);
+      links.push(link);
+    }
+    return () => {
+      links.forEach((l) => l.remove());
+    };
+  }, [index, photos]);
+
   return (
     <AnimatePresence>
       {photo && (

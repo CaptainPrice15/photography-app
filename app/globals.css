@@ -69,6 +69,7 @@
   --animate-mesh-drift-b: mesh-drift-b 42s ease-in-out infinite;
   --animate-mesh-drift-c: mesh-drift-c 54s ease-in-out infinite;
   --animate-mesh-drift-d: mesh-drift-d 60s ease-in-out infinite;
+  /* mesh-drift-c and mesh-drift-d keyframes kept for theme parity but unused */
   --animate-marquee: marquee 38s linear infinite;
 
   /* Easings */

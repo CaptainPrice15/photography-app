@@ -1,5 +1,11 @@
 import { isOptimizable, type Collection, type Photo, type PhotoSource } from "./types";
 
+const SCAN_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+let scanCache: { collections: Collection[]; timestamp: number } | null = null;
+
+const URL_CACHE_TTL = 60 * 60 * 1000; // 1 hour
+const downloadUrlCache = new Map<number, { url: string; timestamp: number }>();
+
 // pCloud REST API (https://docs.pcloud.com). No SDK required — all calls go
 // through https://api.pcloud.com with the auth_token returned by /login.
 const API = process.env.PCLOUD_API_HOST ?? "https://api.pcloud.com";
@@ -69,7 +75,7 @@ async function apiCall(
     if (k === "method") continue;
     url.searchParams.set(k, v);
   }
-  const res = await fetch(url.toString(), { cache: "no-store" });
+  const res = await fetch(url.toString(), { cache: "no-store", keepalive: true });
   const data = (await res.json()) as PCloudResult;
   if (data.result !== 0 && opts.throwOnError !== false) {
     throw new Error(`pCloud error ${data.result}: ${data.error ?? "unknown"}`);
@@ -177,7 +183,7 @@ async function readManifestMeta(
       auth: token,
     });
     const link = `https://${file.hosts?.[0] ?? "api.pcloud.com"}${file.path}`;
-    const raw = await (await fetch(link)).text();
+    const raw = await (await fetch(link, { keepalive: true })).text();
     const data = JSON.parse(raw) as { collections?: Collection[] };
     for (const c of data.collections ?? []) {
       meta.set(c.slug, {
@@ -224,16 +230,27 @@ async function getDownloadUrl(
   fileid: number,
   token: string
 ): Promise<string> {
+  const cached = downloadUrlCache.get(fileid);
+  if (cached && Date.now() - cached.timestamp < URL_CACHE_TTL) {
+    return cached.url;
+  }
+
   const data = await apiCall({
     method: "getfilelink",
     fileid: String(fileid),
     auth: token,
   });
   const host = data.hosts?.[0] ?? "api.pcloud.com";
-  return `https://${host}${data.path}`;
+  const url = `https://${host}${data.path}`;
+  downloadUrlCache.set(fileid, { url, timestamp: Date.now() });
+  return url;
 }
 
 async function scanCollections(): Promise<Collection[]> {
+  if (scanCache && Date.now() - scanCache.timestamp < SCAN_CACHE_TTL) {
+    return scanCache.collections;
+  }
+
   try {
     const token = await login();
     const names = await listFolder(ROOT_FOLDER_ID, token);
@@ -246,53 +263,60 @@ async function scanCollections(): Promise<Collection[]> {
       );
 
     const collections: Collection[] = [];
-    for (const dir of collectionDirs) {
-      const slug = dir.name!;
-      const fileNames = await listFolder(String(dir.folderid), token);
-      const imageFiles = fileNames
-        .filter((f) => !f.isfolder && IMAGE_EXTENSIONS.has(extOf(f.name)))
-        .map((f) => f.name!)
-        .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+    const folderResults = await Promise.all(
+      collectionDirs.map(async (dir) => {
+        const slug = dir.name!;
+        const fileNames = await listFolder(String(dir.folderid), token);
+        const imageFiles = fileNames
+          .filter((f) => !f.isfolder && IMAGE_EXTENSIONS.has(extOf(f.name)))
+          .map((f) => f.name!)
+          .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 
-      if (imageFiles.length === 0) continue;
+        if (imageFiles.length === 0) return null;
 
-      const info = meta.get(slug);
-      const photos: Photo[] = imageFiles.map((file, i) => {
-        const format = extOf(file);
+        const info = meta.get(slug);
+        const photos: Photo[] = imageFiles.map((file, i) => {
+          const format = extOf(file);
+          return {
+            id: `${slug}-${i + 1}`,
+            src: `/api/photos/${slug}/${file}`,
+            alt: `${info?.title ?? titleCase(slug)} photograph ${i + 1}`,
+            width: 1600,
+            height: 1200,
+            title: `${info?.title ?? titleCase(slug)} ${i + 1}`,
+            collectionId: slug,
+            blurDataURL: undefined,
+            featured: i < 2,
+            format,
+            unoptimized: !isOptimizable(format),
+          };
+        });
+
         return {
-          id: `${slug}-${i + 1}`,
-          src: `/api/photos/${slug}/${file}`,
-          alt: `${info?.title ?? titleCase(slug)} photograph ${i + 1}`,
-          width: 1600,
-          height: 1200,
-          title: `${info?.title ?? titleCase(slug)} ${i + 1}`,
-          collectionId: slug,
-          blurDataURL: undefined,
-          featured: i < 2,
-          format,
-          unoptimized: !isOptimizable(format),
-        };
-      });
+          id: slug,
+          slug,
+          title: info?.title ?? titleCase(slug),
+          description: info?.description,
+          cover: photos[0].src,
+          accent: info?.accent ?? "#64748b",
+          accentSoft: info?.accentSoft,
+          photos,
+        } satisfies Collection;
+      })
+    );
 
-      collections.push({
-        id: slug,
-        slug,
-        title: info?.title ?? titleCase(slug),
-        description: info?.description,
-        cover: photos[0].src,
-        accent: info?.accent ?? "#64748b",
-        accentSoft: info?.accentSoft,
-        photos,
-      });
+    for (const c of folderResults) {
+      if (c) collections.push(c);
     }
 
+    scanCache = { collections, timestamp: Date.now() };
     console.log(`[pcloud] scanCollections → ${collections.length} collections`);
     return collections;
   } catch (err) {
     // Never blank the page on a pCloud error — log it for the host's logs
     // (e.g. Vercel function logs) and render an empty gallery instead.
     console.error("[pcloud] scanCollections failed:", err);
-    return [];
+    return scanCache?.collections ?? [];
   }
 }
 
@@ -324,7 +348,7 @@ export async function getPcloudFile(
     const resolved = await resolveFile(segments, token);
     if (!resolved) return null;
     const url = await getDownloadUrl(resolved.fileid, token);
-    const res = await fetch(url);
+    const res = await fetch(url, { keepalive: true });
     if (!res.ok) return null;
     const arrayBuffer = await res.arrayBuffer();
     return {

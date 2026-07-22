@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server";
 import { getPcloudFile } from "@/lib/storage/pcloudSource";
 import { getCachedFile, setCachedFile } from "@/lib/cache";
 import { watermarkPreview } from "@/lib/watermark";
+import { generateBlurDataUrl, setCachedBlurDataUrl } from "@/lib/blur";
 import convert from "heic-convert";
 
 export const runtime = "nodejs";
@@ -54,15 +55,28 @@ async function toBrowserBytes(
 }
 
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ path: string[] }> }
 ): Promise<Response> {
   const { path } = await params;
+  const isBlur = req.nextUrl.searchParams.get("size") === "blur";
+  const pathStr = path.join("/");
 
-  const cacheKey = `wm:${path.join("/")}`;
+  const cacheKey = `wm:${pathStr}`;
+  const blurCacheKey = `blur:${pathStr}`;
+
   try {
+    if (isBlur) {
+      const cachedBlur = await getCachedFile(blurCacheKey);
+      if (cachedBlur) {
+        return new Response(cachedBlur as unknown as BodyInit, {
+          headers: previewHeaders("image/jpeg", "86400"),
+        });
+      }
+    }
+
     const cached = await getCachedFile(cacheKey);
-    if (cached) {
+    if (cached && !isBlur) {
       return new Response(cached as unknown as BodyInit, {
         headers: previewHeaders("image/jpeg"),
       });
@@ -73,13 +87,31 @@ export async function GET(
       return new Response("Not found", { status: 404 });
     }
 
+    const { bytes, contentType } = await toBrowserBytes(file.name, file.buffer);
+
+    if (isBlur) {
+      const blurDataUri = await generateBlurDataUrl(bytes, contentType);
+      const blurBuffer = Buffer.from(blurDataUri);
+      await setCachedFile(blurCacheKey, blurBuffer);
+      setCachedBlurDataUrl(pathStr, blurDataUri);
+      return new Response(blurBuffer as unknown as BodyInit, {
+        headers: previewHeaders("text/plain", "86400"),
+      });
+    }
+
     // Serve a watermarked, downscaled derivative only. The clean original is
     // never sent to unauthenticated views — it can only be fetched via the
     // gated /api/download route after payment.
-    const { bytes, contentType } = await toBrowserBytes(file.name, file.buffer);
     let preview = { bytes, contentType };
     try {
       preview = await watermarkPreview(bytes, contentType);
+      // Fire-and-forget blur generation for future requests
+      generateBlurDataUrl(bytes, contentType)
+        .then((dataUri) => {
+          setCachedBlurDataUrl(pathStr, dataUri);
+          setCachedFile(blurCacheKey, Buffer.from(dataUri)).catch(() => {});
+        })
+        .catch(() => {});
     } catch (wmErr) {
       console.error("[photos] watermark failed, serving plain preview:", wmErr);
     }
@@ -94,11 +126,11 @@ export async function GET(
   }
 }
 
-function previewHeaders(contentType: string): Record<string, string> {
+function previewHeaders(contentType: string, maxAge?: string): Record<string, string> {
   return {
     "Content-Type": contentType,
     "Content-Disposition": "inline",
-    "Cache-Control": "public, max-age=86400, immutable",
+    "Cache-Control": `public, max-age=${maxAge ?? "86400"}, immutable`,
     "X-Content-Type-Options": "nosniff",
     "Referrer-Policy": "no-referrer",
     "Cross-Origin-Resource-Policy": "same-origin",

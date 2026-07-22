@@ -2,8 +2,14 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 // Load .env.local manually (no dotenv dependency).
-const envPath = resolve(process.cwd(), ".env.local");
-const text = readFileSync(envPath, "utf8");
+let envPath = resolve(process.cwd(), ".env.local");
+let text;
+try {
+  text = readFileSync(envPath, "utf8");
+} catch {
+  envPath = resolve(process.cwd(), ".env");
+  text = readFileSync(envPath, "utf8");
+}
 for (const line of text.split("\n")) {
   const trimmed = line.trim();
   if (!trimmed || trimmed.startsWith("#")) continue;
@@ -31,10 +37,8 @@ const IMAGE_EXTENSIONS = new Set([
 // Known collection metadata. Add new collections here, or rely on the
 // auto-generated fallback (title-cased folder name + neutral accent).
 const COLLECTION_META = {
-  aurora: { title: "Aurora", accent: "#2dd4bf", accentSoft: "#5eead4" },
-  sunset: { title: "Sunset", accent: "#f59e0b", accentSoft: "#fbbf24" },
-  mono: { title: "Mono", accent: "#64748b", accentSoft: "#94a3b8" },
-  bloom: { title: "Bloom", accent: "#ec4899", accentSoft: "#f472b6" },
+  Kedarnath: { title: "Kedarnath", accent: "#2dd4bf", accentSoft: "#5eead4" },
+  Sikkim: { title: "Sikkim", accent: "#f59e0b", accentSoft: "#fbbf24" },
 };
 const DEFAULT_ACCENT = "#64748b";
 const DEFAULT_ACCENT_SOFT = "#94a3b8";

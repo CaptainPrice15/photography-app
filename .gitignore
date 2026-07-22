@@ -37,6 +37,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# photo cache (local derivative pregeneration)
+.photo-cache/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

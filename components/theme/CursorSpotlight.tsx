@@ -4,9 +4,7 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export function CursorSpotlight() {
-  const [isVisible, setIsVisible] = useState(
-    () => typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches
-  );
+  const [isVisible, setIsVisible] = useState(false);
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 

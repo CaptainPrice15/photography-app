@@ -1,5 +1,5 @@
 {
-  "name": "photo-site",
+  "name": "lumen-monorepo",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,11 @@
     "lint": "eslint",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "ng:dev": "pnpm --filter lumen dev",
+    "ng:build": "pnpm --filter lumen build",
+    "api:dev": "pnpm --filter @lumen/api dev",
+    "api:build": "pnpm --filter @lumen/api build"
   },
   "engines": {
     "node": ">=20"

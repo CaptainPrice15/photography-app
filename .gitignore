@@ -17,6 +17,10 @@
 /.next/
 /out/
 
+# angular build
+dist/
+.tmp/
+
 # production
 /build
 

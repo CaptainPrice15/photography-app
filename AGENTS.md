@@ -1,5 +1,12 @@
-<!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
+# Lumen — Angular 19 + Express API
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
+## Commands
+
+```bash
+pnpm dev              # Run both Angular + API in parallel
+pnpm ng:dev           # Angular dev server
+pnpm api:dev          # Express API dev server
+pnpm ng:build         # Build Angular for production
+pnpm api:build        # Build Express API
+pnpm build            # Build both
+```

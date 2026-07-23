@@ -6,7 +6,7 @@ import type { Photo } from "@lumen/shared";
 
 const router = Router();
 
-router.get("/favorites", async (req, res) => {
+router.get("/", async (req, res) => {
   const session = getSession(req);
   if (!session || !session.email) {
     return res.json([]);
@@ -25,7 +25,7 @@ router.get("/favorites", async (req, res) => {
   res.json(favorites.map((f) => f.photoId));
 });
 
-router.post("/favorites/toggle", async (req, res) => {
+router.post("/toggle", async (req, res) => {
   const session = getSession(req);
   if (!session || !session.email) {
     return res.status(401).json({ error: "Unauthorized" });
@@ -66,7 +66,7 @@ router.post("/favorites/toggle", async (req, res) => {
   res.json({ success: true });
 });
 
-router.get("/favorites/photos", async (req, res) => {
+router.get("/photos", async (req, res) => {
   const session = getSession(req);
   if (!session || !session.email) {
     return res.json([]);

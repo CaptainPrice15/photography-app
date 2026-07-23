@@ -4,7 +4,7 @@ import { prisma } from "../lib/db.js";
 
 const router = Router();
 
-router.post("/webhook/stripe", async (req, res) => {
+router.post("/", async (req, res) => {
   const signature = req.headers["stripe-signature"] as string;
 
   if (!signature) {

@@ -2,12 +2,17 @@ import sharp from "sharp";
 
 export const WATERMARK_TEXT = "lumen.photo";
 
-export type PreviewSize = "thumb" | "preview" | "lightbox";
+export type PreviewSize = "thumb" | "preview" | "lightbox" | "w640" | "w1200" | "w1920";
+
+export type OutputFormat = "auto" | "avif" | "webp" | "jpeg";
 
 const SIZE_CONFIG: Record<PreviewSize, { longEdge: number; quality: number; opacity: number }> = {
   thumb: { longEdge: 400, quality: 70, opacity: 0.25 },
   preview: { longEdge: 900, quality: 75, opacity: 0.22 },
   lightbox: { longEdge: 1600, quality: 75, opacity: 0.22 },
+  w640: { longEdge: 640, quality: 75, opacity: 0.22 },
+  w1200: { longEdge: 1200, quality: 75, opacity: 0.22 },
+  w1920: { longEdge: 1920, quality: 75, opacity: 0.22 },
 };
 
 const svgCache = new Map<string, Buffer>();
@@ -35,13 +40,27 @@ function buildWatermarkSvg(w: number, h: number, opacity: number): Buffer {
   return svg;
 }
 
+function resolveFormat(format: OutputFormat, acceptHeader: string): "avif" | "webp" | "jpeg" {
+  if (format !== "auto") return format;
+  if (acceptHeader.includes("image/avif")) return "avif";
+  if (acceptHeader.includes("image/webp")) return "webp";
+  return "jpeg";
+}
+
+export interface PreviewOptions {
+  width?: number;
+  quality?: number;
+  format?: OutputFormat;
+  acceptHeader?: string;
+}
+
 export async function watermarkPreview(
   input: Buffer,
   contentType: string,
-  size: PreviewSize = "lightbox"
+  size: PreviewSize = "lightbox",
+  options: PreviewOptions = {}
 ): Promise<{ bytes: Buffer; contentType: string }> {
-  const isHeic =
-    contentType === "image/heic" || contentType === "image/heif";
+  const isHeic = contentType === "image/heic" || contentType === "image/heif";
 
   let base = sharp(input, { failOn: "none" });
 
@@ -64,16 +83,41 @@ export async function watermarkPreview(
     targetHeight = Math.round(imgHeight * ratio);
   }
 
+  if (options.width && options.width < targetWidth) {
+    const ratio = options.width / targetWidth;
+    targetWidth = options.width;
+    targetHeight = Math.round(targetHeight * ratio);
+  }
+
   const watermarkSvg = buildWatermarkSvg(targetWidth, targetHeight, SIZE_CONFIG[size].opacity);
 
-  const bytes = await base
+  const quality = options.quality ?? SIZE_CONFIG[size].quality;
+  const outputFormat = resolveFormat(options.format ?? "auto", options.acceptHeader ?? "");
+
+  let pipeline = base
     .resize(targetWidth, targetHeight, {
       fit: "inside",
       withoutEnlargement: true,
     })
-    .composite([{ input: watermarkSvg, gravity: "center", blend: "over" }])
-    .jpeg({ quality: SIZE_CONFIG[size].quality })
-    .toBuffer();
+    .composite([{ input: watermarkSvg, gravity: "center", blend: "over" }]);
 
-  return { bytes, contentType: "image/jpeg" };
+  let finalContentType: string;
+  switch (outputFormat) {
+    case "avif":
+      pipeline = pipeline.avif({ quality });
+      finalContentType = "image/avif";
+      break;
+    case "webp":
+      pipeline = pipeline.webp({ quality });
+      finalContentType = "image/webp";
+      break;
+    case "jpeg":
+    default:
+      pipeline = pipeline.jpeg({ quality });
+      finalContentType = "image/jpeg";
+      break;
+  }
+
+  const bytes = await pipeline.toBuffer();
+  return { bytes, contentType: finalContentType };
 }

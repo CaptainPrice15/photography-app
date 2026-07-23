@@ -71,7 +71,6 @@ export default async function PaymentPage() {
                     alt={order.photo.alt}
                     width={160}
                     height={120}
-                    unoptimized={order.photo.unoptimized}
                     className="h-full w-full object-cover"
                   />
                 </div>

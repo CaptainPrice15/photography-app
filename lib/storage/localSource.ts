@@ -84,7 +84,6 @@ async function scanCollections(): Promise<Collection[]> {
         title: `${info?.title ?? slug} ${i + 1}`,
         collectionId: slug,
         format,
-        unoptimized: !isOptimizable(format),
         featured: i < 2,
       };
     });

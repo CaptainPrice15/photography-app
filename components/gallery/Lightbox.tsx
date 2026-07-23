@@ -140,10 +140,10 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
                 alt={photo.alt}
                 width={photo.width}
                 height={photo.height}
-                unoptimized={photo.unoptimized}
                 placeholder={photo.blurDataURL ? "blur" : "empty"}
                 blurDataURL={photo.blurDataURL}
                 sizes="100vw"
+                priority
                 className="max-h-[82vh] w-auto rounded-lg object-contain"
               />
             </motion.div>

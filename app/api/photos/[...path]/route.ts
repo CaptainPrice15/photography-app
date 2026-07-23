@@ -1,13 +1,13 @@
 import type { NextRequest } from "next/server";
 import { getPcloudFile } from "@/lib/storage/pcloudSource";
 import { getCachedFile, setCachedFile } from "@/lib/cache";
-import { watermarkPreview, type PreviewSize } from "@/lib/watermark";
+import { watermarkPreview, type PreviewSize, type OutputFormat } from "@/lib/watermark";
 import { generateBlurDataUrl, setCachedBlurDataUrl } from "@/lib/blur";
 import convert from "heic-convert";
 
 export const runtime = "nodejs";
 
-const ALLOWED_SIZES = new Set(["thumb", "preview", "lightbox", "blur"]);
+const ALLOWED_SIZES = new Set(["thumb", "preview", "lightbox", "w640", "w1200", "w1920", "blur"]);
 
 const MIME: Record<string, string> = {
   jpg: "image/jpeg",
@@ -64,8 +64,18 @@ export async function GET(
   const pathStr = path.join("/");
   const isBlur = size === "blur";
 
+  // Format negotiation from Next.js Image Optimization
+  const formatParam = req.nextUrl.searchParams.get("fm") ?? "auto";
+  const format: OutputFormat = ["auto", "avif", "webp", "jpeg"].includes(formatParam)
+    ? (formatParam as OutputFormat)
+    : "auto";
+  const widthParam = req.nextUrl.searchParams.get("w");
+  const qualityParam = req.nextUrl.searchParams.get("q");
+  const width = widthParam ? parseInt(widthParam, 10) : undefined;
+  const quality = qualityParam ? parseInt(qualityParam, 10) : undefined;
+
   const rawCacheKey = `raw:${pathStr}`;
-  const wmCacheKey = `wm:${pathStr}:${size}`;
+  const wmCacheKey = `wm:${pathStr}:${size}:${format}`;
   const blurCacheKey = `blur:${pathStr}`;
 
   try {
@@ -114,7 +124,7 @@ export async function GET(
 
     let preview = { bytes, contentType };
     try {
-      preview = await watermarkPreview(bytes, contentType, size);
+      preview = await watermarkPreview(bytes, contentType, size, { width, quality, format });
       generateBlurDataUrl(bytes, contentType)
         .then((dataUri) => {
           setCachedBlurDataUrl(pathStr, dataUri);

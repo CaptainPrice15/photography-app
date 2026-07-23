@@ -318,7 +318,6 @@ async function scanCollections(): Promise<Collection[]> {
             blurDataURL: meta.blurDataURL,
             featured: i < 2,
             format,
-            unoptimized: !isOptimizable(format),
           };
         });
 

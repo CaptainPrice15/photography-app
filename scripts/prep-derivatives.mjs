@@ -117,7 +117,42 @@ async function getDownloadUrl(fileid, token) {
 }
 
 // --- watermark (same as lib/watermark.ts) ---
-async function watermark(input, contentType, longEdge, quality, opacity) {
+const WATERMARK_TEXT = "lumen.photo";
+
+const SIZE_CONFIG = {
+  thumb: { longEdge: 400, quality: 70, opacity: 0.25 },
+  preview: { longEdge: 900, quality: 75, opacity: 0.22 },
+  lightbox: { longEdge: 1600, quality: 75, opacity: 0.22 },
+  w640: { longEdge: 640, quality: 75, opacity: 0.22 },
+  w1200: { longEdge: 1200, quality: 75, opacity: 0.22 },
+  w1920: { longEdge: 1920, quality: 75, opacity: 0.22 },
+};
+
+const FORMATS = [
+  { name: "avif", ext: "avif", quality: 50 },
+  { name: "webp", ext: "webp", quality: 65 },
+  { name: "jpeg", ext: "jpg", quality: 75 },
+];
+
+const svgCache = new Map();
+
+function buildWatermarkSvg(w, h, opacity) {
+  const key = `${w}x${h}x${opacity}`;
+  const cached = svgCache.get(key);
+  if (cached) return cached;
+
+  const fontSize = Math.max(14, Math.round(Math.min(w, h) / 28));
+  const tileGap = fontSize * 6;
+
+  const svg = Buffer.from(
+    `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="wm" width="${tileGap}" height="${tileGap}" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)"><text x="0" y="${tileGap / 2}" font-family="Helvetica,Arial,sans-serif" font-size="${fontSize}" font-weight="600" fill="white" fill-opacity="${opacity}" letter-spacing="2">${WATERMARK_TEXT}</text></pattern></defs><rect width="100%" height="100%" fill="url(#wm)" /></svg>`
+  );
+
+  svgCache.set(key, svg);
+  return svg;
+}
+
+async function watermark(input, contentType, longEdge, quality, opacity, outputFormat) {
   let base = sharp(input, { failOn: "none" });
   if (contentType === "image/heic" || contentType === "image/heif") {
     base = sharp(await base.jpeg().toBuffer(), { failOn: "none" });
@@ -131,16 +166,26 @@ async function watermark(input, contentType, longEdge, quality, opacity) {
     tw = Math.round(iw * r);
     th = Math.round(ih * r);
   }
-  const fontSize = Math.max(14, Math.round(Math.min(tw, th) / 28));
-  const tileGap = fontSize * 6;
-  const svg = Buffer.from(
-    `<svg width="${tw}" height="${th}" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="wm" width="${tileGap}" height="${tileGap}" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)"><text x="0" y="${tileGap / 2}" font-family="Helvetica,Arial,sans-serif" font-size="${fontSize}" font-weight="600" fill="white" fill-opacity="${opacity}" letter-spacing="2">lumen.photo</text></pattern></defs><rect width="100%" height="100%" fill="url(#wm)" /></svg>`
-  );
-  return base
+  const watermarkSvg = buildWatermarkSvg(tw, th, opacity);
+
+  let pipeline = base
     .resize(tw, th, { fit: "inside", withoutEnlargement: true })
-    .composite([{ input: svg, gravity: "center", blend: "over" }])
-    .jpeg({ quality })
-    .toBuffer();
+    .composite([{ input: watermarkSvg, gravity: "center", blend: "over" }]);
+
+  switch (outputFormat) {
+    case "avif":
+      pipeline = pipeline.avif({ quality });
+      break;
+    case "webp":
+      pipeline = pipeline.webp({ quality });
+      break;
+    case "jpeg":
+    default:
+      pipeline = pipeline.jpeg({ quality });
+      break;
+  }
+
+  return pipeline.toBuffer();
 }
 
 async function generateBlur(input) {
@@ -159,6 +204,9 @@ const SIZES = [
   { name: "thumb", longEdge: 400, quality: 70, opacity: 0.25 },
   { name: "preview", longEdge: 900, quality: 75, opacity: 0.22 },
   { name: "lightbox", longEdge: 1600, quality: 75, opacity: 0.22 },
+  { name: "w640", longEdge: 640, quality: 75, opacity: 0.22 },
+  { name: "w1200", longEdge: 1200, quality: 75, opacity: 0.22 },
+  { name: "w1920", longEdge: 1920, quality: 75, opacity: 0.22 },
 ];
 
 async function main() {
@@ -203,14 +251,16 @@ async function main() {
 
       let anyGenerated = false;
       for (const size of SIZES) {
-        const wmKey = `wm:${pathStr}:${size.name}`;
-        const existing = await getCached(wmKey);
-        if (existing) { skipped++; continue; }
-        try {
-          const wm = await watermark(raw, mime, size.longEdge, size.quality, size.opacity);
-          await setCached(wmKey, wm);
-          anyGenerated = true;
-        } catch (e) { console.error(`  ✗ ${pathStr} ${size.name}: ${e.message}`); failed++; }
+        for (const fmt of FORMATS) {
+          const wmKey = `wm:${pathStr}:${size.name}:${fmt.name}`;
+          const existing = await getCached(wmKey);
+          if (existing) { skipped++; continue; }
+          try {
+            const wm = await watermark(raw, mime, size.longEdge, fmt.quality, size.opacity, fmt.name);
+            await setCached(wmKey, wm);
+            anyGenerated = true;
+          } catch (e) { console.error(`  ✗ ${pathStr} ${size.name}:${fmt.name}: ${e.message}`); failed++; }
+        }
       }
 
       const blurKey = `blur:${pathStr}`;

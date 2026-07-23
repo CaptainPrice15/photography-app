@@ -53,7 +53,6 @@ export default async function CollectionPage({
             alt={collection.title}
             fill
             sizes="100vw"
-            unoptimized={collection.photos[0]?.unoptimized}
             className="absolute inset-0 object-cover"
             placeholder={collection.photos[0]?.blurDataURL ? "blur" : "empty"}
             blurDataURL={collection.photos[0]?.blurDataURL}

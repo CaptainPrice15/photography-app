@@ -1,5 +1,4 @@
-// Formats the Next.js image optimizer can transcode. Anything else
-// (heic, svg, gif, tiff, …) must be served unoptimized.
+// Formats the Next.js image optimizer can transcode.
 export const OPTIMIZABLE_FORMATS = ["jpg", "jpeg", "png", "webp", "avif"] as const;
 
 export type PhotoFormat = string;
@@ -16,14 +15,10 @@ export interface Photo {
   blurDataURL?: string;
   featured?: boolean;
   format: PhotoFormat;
-  // True when the image cannot go through Next's optimizer (e.g. HEIC).
-  unoptimized: boolean;
 }
 
 export function isOptimizable(format: string): boolean {
-  return (OPTIMIZABLE_FORMATS as readonly string[]).includes(
-    format.toLowerCase()
-  );
+  return (OPTIMIZABLE_FORMATS as readonly string[]).includes(format.toLowerCase());
 }
 
 export interface Collection {

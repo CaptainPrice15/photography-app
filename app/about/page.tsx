@@ -47,7 +47,6 @@ export default async function AboutPage() {
               className="object-cover"
               placeholder={cover?.blurDataURL ? "blur" : "empty"}
               blurDataURL={cover?.blurDataURL}
-              unoptimized={cover?.unoptimized}
             />
           </div>
         </RevealItem>

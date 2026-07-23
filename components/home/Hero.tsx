@@ -89,7 +89,6 @@ export function Hero({ photos }: { photos: Photo[] }) {
                   fill
                   priority={idx === 0}
                   sizes="100vw"
-                  unoptimized={p.unoptimized}
                   className="absolute inset-0 object-cover"
                 />
               </motion.div>

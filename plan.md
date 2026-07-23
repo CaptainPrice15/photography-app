@@ -32,83 +32,83 @@ Browser ──→ Angular SSR ──→ Express API ──→ pCloud (images)
 
 ---
 
-## Phase 1 — Scaffold & Core (IN PROGRESS)
+## Phase 1 — Scaffold & Core ✅
 
 Monorepo setup, Angular 19 app scaffold, Express API, shared types, Prisma.
 
 ### 1.1 pnpm workspace
-- Root `package.json` + `pnpm-workspace.yaml`
-- `/apps/lumen` — Angular 19 SSR
-- `/apps/api` — Express + TypeScript
-- `/libs/shared` — shared types/schemas
+- [x] Root `package.json` + `pnpm-workspace.yaml`
+- [x] `/apps/lumen` — Angular 19 SSR
+- [x] `/apps/api` — Express + TypeScript
+- [x] `/libs/shared` — shared types/schemas
 
 ### 1.2 Angular 19 app
-- `npx @angular/cli new lumen` with SSR
-- Standalone components (no NgModules)
-- Tailwind v4 via PostCSS
-- `@angular/animations`, `@angular/cdk`
+- [x] `npx @angular/cli new lumen` with SSR
+- [x] Standalone components (no NgModules)
+- [x] Tailwind v4 via PostCSS
+- [x] `@angular/animations`, `@angular/cdk`
 
 ### 1.3 Express API
-- TypeScript + `tsx` dev runner
-- Prisma client, Sharp, Stripe SDK, pCloud fetch
-- `/api/photos/*`, `/api/auth/*`, `/api/favorites/*`, `/api/payment/*`, `/api/contact`
-- Cookie-based session (HMAC-signed, same as current)
+- [x] TypeScript + `tsx` dev runner
+- [x] Prisma client, Sharp, Stripe SDK, pCloud fetch
+- [x] `/api/photos/*`, `/api/auth/*`, `/api/favorites/*`, `/api/payment/*`, `/api/contact`
+- [x] Cookie-based session (HMAC-signed, same as current)
 
 ### 1.4 Shared lib
-- `@lumen/shared` — `Photo`, `Collection`, `PhotoSource`, `Session`, `Order` interfaces
-- Zod validation schemas for auth/contact forms
+- [x] `@lumen/shared` — `Photo`, `Collection`, `PhotoSource`, `Session`, `Order` interfaces
+- [x] Zod validation schemas for auth/contact forms
 
 ### 1.5 Prisma
-- Copy existing `schema.prisma` (User, Favorite, Order)
-- Set up Postgres connection
+- [x] Copy existing `schema.prisma` (User, Favorite, Order)
+- [x] Set up Postgres connection
 
 ### Files created
-- `pnpm-workspace.yaml`
-- `apps/lumen/` (Angular scaffold)
-- `apps/api/` (Express scaffold)
-- `libs/shared/src/index.ts` (types)
+- [x] `pnpm-workspace.yaml`
+- [x] `apps/lumen/` (Angular scaffold)
+- [x] `apps/api/` (Express scaffold)
+- [x] `libs/shared/src/index.ts` (types)
 
 ---
 
-## Phase 2 — Backend API (Weeks 1-2)
+## Phase 2 — Backend API ✅
 
 Migrate all Next.js API routes and server actions to Express routes.
 
 ### 2.1 Authentication routes — `apps/api/src/routes/auth.ts`
-- `POST /api/auth/login` — loginAction equivalent
-- `POST /api/auth/register` — registerAction equivalent
-- `POST /api/auth/logout` — logoutAction equivalent
-- `GET /api/auth/session` — getSession equivalent
+- [x] `POST /api/auth/login` — loginAction equivalent
+- [x] `POST /api/auth/register` — registerAction equivalent
+- [x] `POST /api/auth/logout` — logoutAction equivalent
+- [x] `GET /api/auth/session` — getSession equivalent
 
 ### 2.2 Photo routes — `apps/api/src/routes/photos.ts`
-- `GET /api/photos/*` — image proxy (pCloud fetch → cache → watermark → serve)
-- `GET /api/photos/collections` — list collections
-- `GET /api/photos/collections/:slug` — single collection
-- `GET /api/photos/featured` — featured photos
+- [x] `GET /api/photos/*` — image proxy (pCloud fetch → cache → watermark → serve)
+- [x] `GET /api/photos/collections` — list collections
+- [x] `GET /api/photos/collections/:slug` — single collection
+- [x] `GET /api/photos/featured` — featured photos
 
 ### 2.3 Download route — `apps/api/src/routes/download.ts`
-- `GET /api/download/*` — full-res download (paid guard)
+- [x] `GET /api/download/*` — full-res download (paid guard)
 
 ### 2.4 Favorites routes — `apps/api/src/routes/favorites.ts`
-- `GET /api/favorites` — get favorite photo IDs
-- `POST /api/favorites/toggle` — toggle favorite
-- `GET /api/favorites/photos` — get full favorite photo objects
+- [x] `GET /api/favorites` — get favorite photo IDs
+- [x] `POST /api/favorites/toggle` — toggle favorite
+- [x] `GET /api/favorites/photos` — get full favorite photo objects
 
 ### 2.5 Payment routes — `apps/api/src/routes/payment.ts`
-- `POST /api/checkout` — create Stripe checkout session
-- `POST /api/webhook/stripe` — Stripe webhook
-- `GET /api/orders` — user order history
+- [x] `POST /api/checkout` — create Stripe checkout session
+- [x] `POST /api/webhook/stripe` — Stripe webhook
+- [x] `GET /api/orders` — user order history
 
 ### 2.6 Contact route — `apps/api/src/routes/contact.ts`
-- `POST /api/contact` — submit contact form
+- [x] `POST /api/contact` — submit contact form
 
 ### 2.7 Core libs (copy from Next.js project)
-- `apps/api/src/lib/cache.ts` — dual-backend cache (KV/FS)
-- `apps/api/src/lib/watermark.ts` — Sharp watermark engine
-- `apps/api/src/lib/storage/*.ts` — pCloud + local source adapters
-- `apps/api/src/lib/auth.ts` — HMAC session management
-- `apps/api/src/lib/db.ts` — Prisma client singleton
-- `apps/api/src/lib/stripe.ts` — Stripe client singleton
+- [x] `apps/api/src/lib/cache.ts` — dual-backend cache (KV/FS)
+- [x] `apps/api/src/lib/watermark.ts` — Sharp watermark engine
+- [x] `apps/api/src/lib/storage/*.ts` — pCloud + local source adapters
+- [x] `apps/api/src/lib/auth.ts` — HMAC session management
+- [x] `apps/api/src/lib/db.ts` — Prisma client singleton
+- [x] `apps/api/src/lib/stripe.ts` — Stripe client singleton
 
 ---
 

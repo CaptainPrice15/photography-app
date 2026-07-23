@@ -39,7 +39,8 @@ export interface Session {
 
 export interface AuthState {
   status: "idle" | "success" | "error";
-  message: string;
+  message?: string;
+  session?: Session;
 }
 
 export interface ContactState {

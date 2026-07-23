@@ -10,10 +10,11 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "declaration": true,
+    "declaration": false,
     "paths": {
       "@lumen/shared": ["../../libs/shared/src"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "../../libs/shared/src"],
+  "references": [{ "path": "../../libs/shared" }]
 }

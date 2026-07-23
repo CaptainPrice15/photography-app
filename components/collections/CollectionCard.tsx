@@ -59,8 +59,6 @@ export function CollectionCard({
               linkWrapped
               sizes={featured ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 50vw"}
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.07]"
-              placeholder={collection.photos[0]?.blurDataURL ? "blur" : "empty"}
-              blurDataURL={collection.photos[0]?.blurDataURL}
             />
           </motion.div>
           <div
@@ -70,7 +68,7 @@ export function CollectionCard({
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
-          <span className="label absolute left-4 top-4 rounded-full bg-black/30 px-2.5 py-1 text-white/80 backdrop-blur">
+          <span className="label absolute left-4 top-4 rounded-full bg-black/30 px-2.5 py-1 text-white/80">
             {String(index + 1).padStart(2, "0")}
           </span>
         </div>

@@ -59,7 +59,7 @@ export default async function HomePage() {
           <RevealItem className="hidden shrink-0 sm:block">
             <Link
               href="/collections"
-              className="rounded-full border border-border bg-surface-65 px-4 py-2 text-sm font-medium text-muted backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:text-accent hover:shadow-glow-sm focus-glow active:scale-[0.98]"
+              className="rounded-full border border-border bg-surface-65 px-4 py-2 text-sm font-medium text-muted transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:text-accent hover:shadow-glow-sm focus-glow active:scale-[0.98]"
             >
               View all
             </Link>
@@ -90,7 +90,7 @@ export default async function HomePage() {
           </div>
           <Link
             href="/gallery"
-            className="hidden shrink-0 rounded-full border border-border bg-surface-65 px-4 py-2 text-sm font-medium text-muted backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:text-accent hover:shadow-glow-sm focus-glow active:scale-[0.98] sm:block"
+            className="hidden shrink-0 rounded-full border border-border bg-surface-65 px-4 py-2 text-sm font-medium text-muted transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:text-accent hover:shadow-glow-sm focus-glow active:scale-[0.98] sm:block"
           >
             Open gallery
           </Link>

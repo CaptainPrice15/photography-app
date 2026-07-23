@@ -70,8 +70,6 @@ function titleCase(slug: string): string {
 interface PhotoMeta {
   width?: number;
   height?: number;
-  blurDataURL?: string;
-  dominantColor?: string;
 }
 
 let photoMeta: Record<string, PhotoMeta> | null = null;
@@ -315,20 +313,18 @@ async function scanCollections(): Promise<Collection[]> {
             height: meta.height ?? 1200,
             title: `${info?.title ?? titleCase(slug)} ${i + 1}`,
             collectionId: slug,
-            blurDataURL: meta.blurDataURL,
             featured: i < 2,
             format,
           };
         });
 
-        const coverMeta = metaMap[`${slug}/${imageFiles[0]}`] ?? {};
         return {
           id: slug,
           slug,
           title: info?.title ?? titleCase(slug),
           description: info?.description,
           cover: photos[0].src,
-          accent: coverMeta.dominantColor ?? info?.accent ?? "#64748b",
+          accent: info?.accent ?? "#64748b",
           accentSoft: info?.accentSoft,
           photos,
         } satisfies Collection;

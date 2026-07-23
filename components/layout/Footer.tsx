@@ -68,7 +68,7 @@ export function Footer() {
                 href={s.href}
                 target="_blank"
                 rel="noreferrer"
-                className="ext-link flex items-center gap-1 rounded-full border border-border-40 bg-surface-65 px-3 py-1.5 text-xs font-medium text-muted backdrop-blur transition-all duration-200 hover:border-accent/60 hover:text-accent hover:shadow-glow-sm"
+                className="ext-link flex items-center gap-1 rounded-full border border-border-40 bg-surface-65 px-3 py-1.5 text-xs font-medium text-muted transition-all duration-200 hover:border-accent/60 hover:text-accent hover:shadow-glow-sm"
               >
                 {s.label}
                 <svg

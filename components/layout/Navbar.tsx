@@ -109,7 +109,7 @@ export function Navbar({ session }: { session: Session | null }) {
               <form action={logoutAction}>
                 <button
                   type="submit"
-                  className="rounded-full border border-border bg-surface-65 px-4 py-2 text-sm font-medium backdrop-blur transition-all duration-200 hover:border-accent/60 hover:text-accent hover:shadow-glow-sm focus-glow active:scale-[0.98]"
+                  className="rounded-full border border-border bg-surface-65 px-4 py-2 text-sm font-medium transition-all duration-200 hover:border-accent/60 hover:text-accent hover:shadow-glow-sm focus-glow active:scale-[0.98]"
                 >
                   {session.role === "admin" ? "Admin · Log out" : "Log out"}
                 </button>
@@ -129,7 +129,7 @@ export function Navbar({ session }: { session: Session | null }) {
             aria-label="Toggle menu"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="grid h-9 w-9 place-items-center rounded-full border border-border bg-surface-65 text-fg backdrop-blur transition-colors hover:bg-surface-2"
+            className="grid h-9 w-9 place-items-center rounded-full border border-border bg-surface-65 text-fg transition-colors hover:bg-surface-2"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               {open ? <path d="M18 6 6 18M6 6l12 12" /> : <path d="M3 6h18M3 12h18M3 18h18" />}

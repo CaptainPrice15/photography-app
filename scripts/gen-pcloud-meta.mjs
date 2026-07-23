@@ -126,18 +126,6 @@ async function main() {
           entry.width = meta.width ?? 1600;
           entry.height = meta.height ?? 1200;
 
-          const blur = await img
-            .resize(16, Math.max(1, Math.round((16 * entry.height) / entry.width)), { fit: "inside" })
-            .jpeg({ quality: 50 })
-            .toBuffer();
-          entry.blurDataURL = `data:image/jpeg;base64,${blur.toString("base64")}`;
-
-          if (total === 0) {
-            const { data } = await sharp(buf).resize(1, 1).raw().toBuffer({ resolveWithObject: true });
-            const toHex = (c) => c.toString(16).padStart(2, "0");
-            entry.dominantColor = `#${toHex(data[0])}${toHex(data[1])}${toHex(data[2])}`;
-          }
-
           console.log(`  ✓ ${file.name} — ${entry.width}×${entry.height}`);
         } catch (err) {
           console.log(`  ✗ ${file.name} — ${err.message}`);

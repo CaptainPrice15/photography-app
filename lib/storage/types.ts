@@ -12,7 +12,6 @@ export interface Photo {
   height: number;
   title?: string;
   collectionId: string;
-  blurDataURL?: string;
   featured?: boolean;
   format: PhotoFormat;
 }

@@ -68,7 +68,7 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
     <AnimatePresence>
       {photo && (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-xl"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -140,8 +140,6 @@ export function Lightbox({ photos, index, onClose, onNavigate }: Props) {
                 alt={photo.alt}
                 width={photo.width}
                 height={photo.height}
-                placeholder={photo.blurDataURL ? "blur" : "empty"}
-                blurDataURL={photo.blurDataURL}
                 sizes="100vw"
                 priority
                 className="max-h-[82vh] w-auto rounded-lg object-contain"

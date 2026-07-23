@@ -2,12 +2,11 @@ import type { NextRequest } from "next/server";
 import { getPcloudFile } from "@/lib/storage/pcloudSource";
 import { getCachedFile, setCachedFile } from "@/lib/cache";
 import { watermarkPreview, type PreviewSize, type OutputFormat } from "@/lib/watermark";
-import { generateBlurDataUrl, setCachedBlurDataUrl } from "@/lib/blur";
 import convert from "heic-convert";
 
 export const runtime = "nodejs";
 
-const ALLOWED_SIZES = new Set(["thumb", "preview", "lightbox", "w640", "w1200", "w1920", "blur"]);
+const ALLOWED_SIZES = new Set(["thumb", "preview", "lightbox", "w640", "w1200", "w1920"]);
 
 const MIME: Record<string, string> = {
   jpg: "image/jpeg",
@@ -59,10 +58,9 @@ export async function GET(
 ): Promise<Response> {
   const { path } = await params;
   const sizeParam = req.nextUrl.searchParams.get("size") ?? "lightbox";
-  const size: PreviewSize | "blur" =
-    ALLOWED_SIZES.has(sizeParam) ? (sizeParam as PreviewSize | "blur") : "lightbox";
+  const size: PreviewSize =
+    ALLOWED_SIZES.has(sizeParam) ? (sizeParam as PreviewSize) : "lightbox";
   const pathStr = path.join("/");
-  const isBlur = size === "blur";
 
   // Format negotiation from Next.js Image Optimization
   const formatParam = req.nextUrl.searchParams.get("fm") ?? "auto";
@@ -76,23 +74,13 @@ export async function GET(
 
   const rawCacheKey = `raw:${pathStr}`;
   const wmCacheKey = `wm:${pathStr}:${size}:${format}`;
-  const blurCacheKey = `blur:${pathStr}`;
 
   try {
-    if (isBlur) {
-      const cachedBlur = await getCachedFile(blurCacheKey);
-      if (cachedBlur) {
-        return new Response(cachedBlur as unknown as BodyInit, {
-          headers: previewHeaders("text/plain", "86400"),
-        });
-      }
-    } else {
-      const cached = await getCachedFile(wmCacheKey);
-      if (cached) {
-        return new Response(cached as unknown as BodyInit, {
-          headers: previewHeaders("image/jpeg", "31536000"),
-        });
-      }
+    const cached = await getCachedFile(wmCacheKey);
+    if (cached) {
+      return new Response(cached as unknown as BodyInit, {
+        headers: previewHeaders("image/jpeg", "31536000"),
+      });
     }
 
     let rawBuffer: Buffer | null = await getCachedFile(rawCacheKey);
@@ -112,25 +100,9 @@ export async function GET(
 
     const { bytes, contentType } = await toBrowserBytes(rawName, rawBuffer);
 
-    if (isBlur) {
-      const blurDataUri = await generateBlurDataUrl(bytes, contentType);
-      const blurBuffer = Buffer.from(blurDataUri);
-      await setCachedFile(blurCacheKey, blurBuffer);
-      setCachedBlurDataUrl(pathStr, blurDataUri);
-      return new Response(blurBuffer as unknown as BodyInit, {
-        headers: previewHeaders("text/plain", "86400"),
-      });
-    }
-
     let preview = { bytes, contentType };
     try {
       preview = await watermarkPreview(bytes, contentType, size, { width, quality, format });
-      generateBlurDataUrl(bytes, contentType)
-        .then((dataUri) => {
-          setCachedBlurDataUrl(pathStr, dataUri);
-          setCachedFile(blurCacheKey, Buffer.from(dataUri)).catch(() => {});
-        })
-        .catch(() => {});
     } catch (wmErr) {
       console.error("[photos] watermark failed, serving plain preview:", wmErr);
     }

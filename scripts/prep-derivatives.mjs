@@ -188,18 +188,6 @@ async function watermark(input, contentType, longEdge, quality, opacity, outputF
   return pipeline.toBuffer();
 }
 
-async function generateBlur(input) {
-  const base = sharp(input, { failOn: "none" });
-  const meta = await base.metadata();
-  const w = meta.width ?? 16;
-  const h = meta.height ?? 16;
-  const blob = await base
-    .resize(16, Math.max(1, Math.round((16 * h) / w)), { fit: "inside" })
-    .jpeg({ quality: 50 })
-    .toBuffer();
-  return `data:image/jpeg;base64,${blob.toString("base64")}`;
-}
-
 const SIZES = [
   { name: "thumb", longEdge: 400, quality: 70, opacity: 0.25 },
   { name: "preview", longEdge: 900, quality: 75, opacity: 0.22 },
@@ -261,14 +249,6 @@ async function main() {
             anyGenerated = true;
           } catch (e) { console.error(`  ✗ ${pathStr} ${size.name}:${fmt.name}: ${e.message}`); failed++; }
         }
-      }
-
-      const blurKey = `blur:${pathStr}`;
-      if (!(await getCached(blurKey))) {
-        try {
-          const blurDataUri = await generateBlur(raw);
-          await setCached(blurKey, Buffer.from(blurDataUri));
-        } catch { /* non-fatal */ }
       }
 
       if (anyGenerated) total++;

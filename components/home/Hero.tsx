@@ -104,7 +104,7 @@ export function Hero({ photos }: { photos: Photo[] }) {
                 >
                   <motion.p
                     variants={item}
-                    className="mb-5 inline-block rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-white backdrop-blur"
+                    className="mb-5 inline-block rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.2em] text-white"
                   >
                     Featured · {p.title}
                   </motion.p>
@@ -127,7 +127,7 @@ export function Hero({ photos }: { photos: Photo[] }) {
                   >
                     <Link
                       href="/gallery"
-                      className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-black shadow-lg backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:shadow-glow focus-glow active:scale-[0.98]"
+                      className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-black shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-glow focus-glow active:scale-[0.98]"
                     >
                       View Gallery
                     </Link>

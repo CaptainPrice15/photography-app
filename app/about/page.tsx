@@ -45,8 +45,6 @@ export default async function AboutPage() {
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover"
-              placeholder={cover?.blurDataURL ? "blur" : "empty"}
-              blurDataURL={cover?.blurDataURL}
             />
           </div>
         </RevealItem>
@@ -77,7 +75,7 @@ export default async function AboutPage() {
             </MagneticButton>
             <Link
               href="/gallery"
-              className="rounded-full border border-border bg-surface-65 px-5 py-2.5 text-sm font-semibold text-fg backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:text-accent hover:shadow-glow-sm focus-glow active:scale-[0.98]"
+              className="rounded-full border border-border bg-surface-65 px-5 py-2.5 text-sm font-semibold text-fg transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:text-accent hover:shadow-glow-sm focus-glow active:scale-[0.98]"
             >
               View gallery
             </Link>

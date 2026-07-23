@@ -42,7 +42,7 @@ export default function SignupPage() {
               type="email"
               required
               autoComplete="email"
-              className="mt-1 w-full rounded-xl border border-border bg-surface-65 px-4 py-2.5 text-sm outline-none backdrop-blur transition-colors focus:border-accent focus:shadow-glow-sm"
+              className="mt-1 w-full rounded-xl border border-border bg-surface-65 px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent focus:shadow-glow-sm"
               placeholder="you@example.com"
             />
           </div>
@@ -57,7 +57,7 @@ export default function SignupPage() {
               required
               autoComplete="new-password"
               minLength={8}
-              className="mt-1 w-full rounded-xl border border-border bg-surface-65 px-4 py-2.5 text-sm outline-none backdrop-blur transition-colors focus:border-accent focus:shadow-glow-sm"
+              className="mt-1 w-full rounded-xl border border-border bg-surface-65 px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent focus:shadow-glow-sm"
               placeholder="At least 8 characters"
             />
           </div>
@@ -72,7 +72,7 @@ export default function SignupPage() {
               required
               autoComplete="new-password"
               minLength={8}
-              className="mt-1 w-full rounded-xl border border-border bg-surface-65 px-4 py-2.5 text-sm outline-none backdrop-blur transition-colors focus:border-accent focus:shadow-glow-sm"
+              className="mt-1 w-full rounded-xl border border-border bg-surface-65 px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent focus:shadow-glow-sm"
               placeholder="Re-enter password"
             />
           </div>

@@ -54,8 +54,6 @@ export default async function CollectionPage({
             fill
             sizes="100vw"
             className="absolute inset-0 object-cover"
-            placeholder={collection.photos[0]?.blurDataURL ? "blur" : "empty"}
-            blurDataURL={collection.photos[0]?.blurDataURL}
           />
           <div
             className="absolute inset-0 opacity-60"
@@ -67,7 +65,7 @@ export default async function CollectionPage({
         </div>
         <div className="mx-auto -mt-24 max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionReveal
-            className="inline-block rounded-3xl border border-border bg-surface/80 px-6 py-5 backdrop-blur"
+            className="inline-block rounded-3xl border border-border bg-surface/80 px-6 py-5"
             style={{ boxShadow: `0 18px 60px -16px ${collection.accent}66` }}
           >
             <p className="label mb-2 text-accent">

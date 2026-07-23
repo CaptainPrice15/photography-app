@@ -41,7 +41,7 @@ export default function LoginPage() {
               name="email"
               type="email"
               required
-              className="mt-1 w-full rounded-xl border border-border bg-surface-65 px-4 py-2.5 text-sm outline-none backdrop-blur transition-colors focus:border-accent focus:shadow-glow-sm"
+              className="mt-1 w-full rounded-xl border border-border bg-surface-65 px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent focus:shadow-glow-sm"
               placeholder="you@example.com"
             />
           </div>
@@ -55,7 +55,7 @@ export default function LoginPage() {
               type="password"
               required
               minLength={4}
-              className="mt-1 w-full rounded-xl border border-border bg-surface-65 px-4 py-2.5 text-sm outline-none backdrop-blur transition-colors focus:border-accent focus:shadow-glow-sm"
+              className="mt-1 w-full rounded-xl border border-border bg-surface-65 px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent focus:shadow-glow-sm"
               placeholder="••••••••"
             />
           </div>

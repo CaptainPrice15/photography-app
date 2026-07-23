@@ -41,8 +41,6 @@ export function PhotoCard({ photo, onOpen, sizes, priority }: Props) {
           alt={photo.alt}
           width={photo.width}
           height={photo.height}
-          placeholder={photo.blurDataURL ? "blur" : "empty"}
-          blurDataURL={photo.blurDataURL}
           sizes={sizes ?? "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"}
           priority={priority}
           className="h-auto w-full object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.06]"

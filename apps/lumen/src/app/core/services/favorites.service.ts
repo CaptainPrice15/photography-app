@@ -2,8 +2,7 @@ import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { Photo } from '@lumen/shared';
-
-const API_URL = '/api';
+import { API_BASE_URL } from './api.config';
 
 @Injectable({ providedIn: 'root' })
 export class FavoritesService {
@@ -22,7 +21,7 @@ export class FavoritesService {
 
   loadFavorites(): Observable<string[]> {
     this.loading.set(true);
-    return this.http.get<string[]>(`${API_URL}/favorites`, { withCredentials: true }).pipe(
+    return this.http.get<string[]>(`${API_BASE_URL}/favorites`, { withCredentials: true }).pipe(
       tap(ids => {
         this._favoriteIds.set(ids);
         this.loading.set(false);
@@ -36,14 +35,14 @@ export class FavoritesService {
   }
 
   loadFavoritePhotos(): Observable<Photo[]> {
-    return this.http.get<Photo[]>(`${API_URL}/favorites/photos`, { withCredentials: true }).pipe(
+    return this.http.get<Photo[]>(`${API_BASE_URL}/favorites/photos`, { withCredentials: true }).pipe(
       tap(photos => this._favoritePhotos.set(photos)),
       catchError(() => of([]))
     );
   }
 
   toggleFavorite(photoId: string): Observable<{ success: boolean }> {
-    return this.http.post<{ success: boolean }>(`${API_URL}/favorites/toggle`, { photoId }, { withCredentials: true }).pipe(
+    return this.http.post<{ success: boolean }>(`${API_BASE_URL}/favorites/toggle`, { photoId }, { withCredentials: true }).pipe(
       tap(() => {
         this.loadFavorites().subscribe();
         this.loadFavoritePhotos().subscribe();

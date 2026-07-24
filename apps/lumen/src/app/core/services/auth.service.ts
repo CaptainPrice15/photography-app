@@ -3,8 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap, catchError, of } from 'rxjs';
 import { Session, AuthState } from '@lumen/shared';
-
-const API_URL = '/api';
+import { API_BASE_URL } from './api.config';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -19,7 +18,7 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   init(): Observable<AuthState> {
-    return this.http.get<AuthState>(`${API_URL}/auth/session`, { withCredentials: true }).pipe(
+    return this.http.get<AuthState>(`${API_BASE_URL}/auth/session`, { withCredentials: true }).pipe(
       tap(res => {
         if (res.session) {
           this._session.set(res.session);
@@ -32,7 +31,7 @@ export class AuthService {
   login(email: string, password: string, returnTo = '/gallery'): Observable<AuthState> {
     this.loading.set(true);
     this.error.set(null);
-    return this.http.post<AuthState>(`${API_URL}/auth/login`, { email, password }, { withCredentials: true }).pipe(
+    return this.http.post<AuthState>(`${API_BASE_URL}/auth/login`, { email, password }, { withCredentials: true }).pipe(
       tap(res => {
         if (res.status === 'success' && res.session) {
           this._session.set(res.session);
@@ -53,7 +52,7 @@ export class AuthService {
   register(email: string, password: string, confirm: string, returnTo = '/gallery'): Observable<AuthState> {
     this.loading.set(true);
     this.error.set(null);
-    return this.http.post<AuthState>(`${API_URL}/auth/register`, { email, password, confirm }, { withCredentials: true }).pipe(
+    return this.http.post<AuthState>(`${API_BASE_URL}/auth/register`, { email, password, confirm }, { withCredentials: true }).pipe(
       tap(res => {
         if (res.status === 'success' && res.session) {
           this._session.set(res.session);
@@ -72,7 +71,7 @@ export class AuthService {
   }
 
   logout(): Observable<{ status: string }> {
-    return this.http.post<{ status: string }>(`${API_URL}/auth/logout`, {}, { withCredentials: true }).pipe(
+    return this.http.post<{ status: string }>(`${API_BASE_URL}/auth/logout`, {}, { withCredentials: true }).pipe(
       tap(() => {
         this._session.set(null);
         this.router.navigate(['/login']);

@@ -1,10 +1,9 @@
 {
   "framework": "angular",
   "buildCommand": "pnpm ng:build",
-  "outputDirectory": "apps/lumen/dist/lumen",
+  "outputDirectory": "apps/lumen/dist/lumen/browser",
   "installCommand": "pnpm install",
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/api-handler" },
-    { "source": "/(.*)", "destination": "/api/ssr-handler" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

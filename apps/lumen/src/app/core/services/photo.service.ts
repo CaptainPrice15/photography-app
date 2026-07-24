@@ -2,8 +2,7 @@ import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, of, tap, firstValueFrom } from 'rxjs';
 import { Photo, Collection, PhotoSource } from '@lumen/shared';
-
-const API_URL = '/api';
+import { API_ORIGIN, API_BASE_URL } from './api.config';
 
 // Named sizes supported by the server (apps/api/src/lib/watermark.ts SIZE_CONFIG).
 // Long edges: thumb=400, w640=640, preview=900, w1200=1200, lightbox=1600, w1920=1920.
@@ -42,7 +41,7 @@ export class PhotoService implements PhotoSource {
   }
 
   getCollection(slug: string): Promise<Collection | null> {
-    return firstValueFrom(this.http.get<Collection>(`${API_URL}/photos/collections/${slug}`)) as Promise<Collection | null>;
+    return firstValueFrom(this.http.get<Collection>(`${API_BASE_URL}/photos/collections/${slug}`)) as Promise<Collection | null>;
   }
 
   getFeatured(): Promise<Photo[]> {
@@ -59,7 +58,7 @@ export class PhotoService implements PhotoSource {
 
   loadCollections(): Observable<Collection[]> {
     this.loading.set(true);
-    return this.http.get<Collection[]>(`${API_URL}/photos/collections`).pipe(
+    return this.http.get<Collection[]>(`${API_BASE_URL}/photos/collections`).pipe(
       tap(collections => {
         this._collections.set(collections);
         this.loading.set(false);
@@ -73,21 +72,21 @@ export class PhotoService implements PhotoSource {
   }
 
   loadFeatured(): Observable<Photo[]> {
-    return this.http.get<Photo[]>(`${API_URL}/photos/featured`).pipe(
+    return this.http.get<Photo[]>(`${API_BASE_URL}/photos/featured`).pipe(
       tap(photos => this._featured.set(photos)),
       catchError(() => of([]))
     );
   }
 
   loadAllPhotos(): Observable<Photo[]> {
-    return this.http.get<Photo[]>(`${API_URL}/photos/all`).pipe(
+    return this.http.get<Photo[]>(`${API_BASE_URL}/photos/all`).pipe(
       tap(photos => this._allPhotos.set(photos)),
       catchError(() => of([]))
     );
   }
 
   loadLatest(limit = 12): Observable<Photo[]> {
-    return this.http.get<Photo[]>(`${API_URL}/photos/latest?limit=${limit}`).pipe(
+    return this.http.get<Photo[]>(`${API_BASE_URL}/photos/latest?limit=${limit}`).pipe(
       tap(photos => this._latest.set(photos)),
       catchError(() => of([]))
     );
@@ -96,11 +95,11 @@ export class PhotoService implements PhotoSource {
   getPhotoUrl(photo: Photo, size: PhotoSize = 'lightbox'): string {
     // `photo.src` is already a full path like `/api/photos/{slug}/{file}`
     // (see pcloudSource.ts), so build the URL from it directly — never re-prefix `/api/photos`.
-    return `${photo.src}?size=${size}&fm=auto`;
+    return `${API_ORIGIN}${photo.src}?size=${size}&fm=auto`;
   }
 
   getCollectionCoverUrl(collection: Collection, size: PhotoSize = 'lightbox'): string {
-    return `${collection.cover}?size=${size}&fm=auto`;
+    return `${API_ORIGIN}${collection.cover}?size=${size}&fm=auto`;
   }
 
   /**
@@ -112,7 +111,7 @@ export class PhotoService implements PhotoSource {
     return longEdges
       .map((edge) => {
         const size = this.sizeForLongEdge(edge);
-        return `${photo.src}?size=${size}&fm=auto ${edge}w`;
+        return `${API_ORIGIN}${photo.src}?size=${size}&fm=auto ${edge}w`;
       })
       .join(', ');
   }
@@ -121,7 +120,7 @@ export class PhotoService implements PhotoSource {
     return longEdges
       .map((edge) => {
         const size = this.sizeForLongEdge(edge);
-        return `${collection.cover}?size=${size}&fm=auto ${edge}w`;
+        return `${API_ORIGIN}${collection.cover}?size=${size}&fm=auto ${edge}w`;
       })
       .join(', ');
   }

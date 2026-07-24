@@ -13,7 +13,15 @@ const app = express();
 
 app.use("/api/webhook/stripe", express.raw({ type: "application/json" }));
 
-app.use(cors({ origin: process.env.ORIGIN ?? "http://localhost:4200", credentials: true }));
+app.use(cors({
+  origin: (origin, cb) => {
+    if (!origin || process.env.NODE_ENV === "development") return cb(null, true);
+    const allowed = (process.env.ORIGIN ?? "").split(",").map(s => s.trim()).filter(Boolean);
+    allowed.push("http://localhost:4200");
+    cb(null, allowed.includes(origin) || allowed.length === 0);
+  },
+  credentials: true,
+}));
 app.use(express.json());
 
 app.get("/api/health", (_req, res) => {

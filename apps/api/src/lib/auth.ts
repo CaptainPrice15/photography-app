@@ -78,8 +78,8 @@ export function setSession(res: Response, session: Session): void {
 
   (res as any).cookie(COOKIE_NAME, signed, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: true,
+    sameSite: "none",
     maxAge: SESSION_DAYS * 24 * 60 * 60 * 1000,
     path: "/",
   });

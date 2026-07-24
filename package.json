@@ -11,7 +11,7 @@
     "db:push": "prisma db push",
     "postinstall": "prisma generate",
     "dev": "concurrently \"pnpm:api:dev\" \"pnpm:ng:dev\"",
-    "build": "pnpm:ng:build",
+    "build": "pnpm ng:build",
     "lint": "eslint"
   },
   "engines": {

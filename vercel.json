@@ -8,11 +8,11 @@
     { "source": "/(.*)", "destination": "/api/ssr-handler" }
   ],
   "functions": {
-    "api/api-handler.ts": {
+    "api/api-handler.mts": {
       "memory": 512,
       "maxDuration": 30
     },
-    "api/ssr-handler.ts": {
+    "api/ssr-handler.mts": {
       "memory": 1024,
       "maxDuration": 30
     }

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "prisma generate && tsc",
     "start": "node dist/index.js",
     "gen:meta": "tsx src/scripts/gen-pcloud-meta.ts",
     "gen:manifest": "tsx src/scripts/gen-pcloud-manifest.ts",

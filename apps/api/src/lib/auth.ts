@@ -53,7 +53,7 @@ function verify(value: string): SignedSession | null {
 }
 
 export function getSession(req: Request): Session | null {
-  const raw = req.headers.cookie;
+  const raw = (req as any).headers.cookie;
   if (!raw) return null;
 
   const parsed = Object.fromEntries(
@@ -76,7 +76,7 @@ export function setSession(res: Response, session: Session): void {
   const payload = Buffer.from(JSON.stringify({ ...session, exp })).toString("base64url");
   const signed = sign(payload);
 
-  res.cookie(COOKIE_NAME, signed, {
+  (res as any).cookie(COOKIE_NAME, signed, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
@@ -86,7 +86,7 @@ export function setSession(res: Response, session: Session): void {
 }
 
 export function clearSession(res: Response): void {
-  res.clearCookie(COOKIE_NAME, { path: "/" });
+  (res as any).clearCookie(COOKIE_NAME, { path: "/" });
 }
 
 export function updateSession(res: Response, updates: Partial<Session>, req: Request): void {

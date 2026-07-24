@@ -4,6 +4,8 @@ import os from "node:os";
 import path from "node:path";
 import { kv } from "@vercel/kv";
 
+const KV = kv as any;
+
 const CACHE_DIR = path.join(
   process.env.PHOTO_CACHE_DIR ?? path.join(os.tmpdir(), "lumen-photo-cache"),
   "files"
@@ -28,7 +30,7 @@ export async function getCachedFile(
 
   if (hasKV) {
     try {
-      const b64 = await kv.get<string>(key);
+      const b64 = await KV.get<string>(key);
       if (b64) return Buffer.from(b64, "base64");
       return null;
     } catch {
@@ -55,7 +57,7 @@ export async function setCachedFile(
 
   if (hasKV) {
     try {
-      await kv.set(key, buffer.toString("base64"), { ex: 2592000 }); // 30 days
+      await KV.set(key, buffer.toString("base64"), { ex: 2592000 }); // 30 days
       return;
     } catch (e) {
       console.warn("KV cache write failed, falling back to FS.", e);

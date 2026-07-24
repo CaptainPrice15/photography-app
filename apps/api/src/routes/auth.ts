@@ -36,10 +36,9 @@ router.post("/register", async (req, res) => {
   const result = await register(email, password, confirm);
 
   if (!result.ok) {
-    res.status(400).json({
-      status: "error",
-      message: REGISTER_MESSAGES[result.error] ?? "Registration failed.",
-    } as AuthState);
+    const error = result.error;
+    const message = REGISTER_MESSAGES[error] ?? "Registration failed.";
+    res.status(400).json({ status: "error", message } as AuthState);
     return;
   }
 

@@ -45,8 +45,8 @@ import { FavoritesService } from '../../../core/services/favorites.service';
           <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
             <div class="flex items-center justify-between">
               <div>
-                <h3 class="text-white font-medium">{{ currentPhoto()?.title || 'Untitled' }}</h3>
-                <p class="text-white/70 text-sm">{{ currentPhoto()?.collectionId }}</p>
+                <h3 class="text-white font-medium">{{ currentPhoto() ? (currentPhoto()!.title || 'Untitled') : 'Untitled' }}</h3>
+                <p class="text-white/70 text-sm">{{ currentPhoto() ? currentPhoto()!.collectionId : '' }}</p>
               </div>
               <div class="flex items-center gap-2">
                 <button

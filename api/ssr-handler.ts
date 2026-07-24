@@ -8,6 +8,7 @@ let ssrApp: any = null;
 
 async function getSsrApp() {
   if (ssrApp) return ssrApp;
+  // @ts-expect-error module only exists after Angular build completes
   const mod = await import('../apps/lumen/dist/lumen/server/server.mjs');
   ssrApp = mod.default;
   return ssrApp;

@@ -9,16 +9,22 @@ import { ParallaxImageDirective } from '../../directives/parallax-image.directiv
   standalone: true,
   imports: [CommonModule, ParallaxImageDirective],
   template: `
-    <section class="relative w-full" [class.min-h-[60vh]]="true">
+    <section class="relative w-full min-h-[60vh]">
       <div class="relative overflow-hidden" #carouselContainer>
         <div class="flex transition-transform duration-1000 ease-out" [style.transform]="'translateX(' + (-currentIndex * 100) + '%)'">
-          @for (photo of photos; track photo.id) {
+          @for (photo of photos; track photo.id; let i = $index) {
             <div class="w-full flex-shrink-0 relative min-h-[60vh]" appParallaxImage [distance]="120">
               <img
-                [src]="photoService.getPhotoUrl(photo, 'w1920')"
+                [src]="photoService.getPhotoUrl(photo, isActive(i) ? 'w1200' : 'w640')"
+                [srcset]="photoService.getPhotoSrcset(photo, [640, 1200, 1920])"
+                sizes="100vw"
+                [width]="photo.width"
+                [height]="photo.height"
                 [alt]="photo.alt"
                 class="absolute inset-0 w-full h-full object-cover"
-                loading="eager"
+                [loading]="isActive(i) ? 'eager' : 'lazy'"
+                [attr.fetchpriority]="isActive(i) ? 'high' : 'low'"
+                decoding="async"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-bg/60 via-transparent to-transparent"></div>
             </div>
@@ -73,6 +79,10 @@ export class HeroCarouselComponent implements AfterViewInit, OnDestroy {
   currentIndex = signal(0);
   private autoAdvanceId: any = null;
   private touchStartX = 0;
+
+  isActive(index: number): boolean {
+    return index === this.currentIndex();
+  }
 
   ngAfterViewInit() {
     if (this.isBrowser && this.photos.length > 1) {

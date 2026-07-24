@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FavoritesService } from '../../../core/services/favorites.service';
 
@@ -6,6 +6,7 @@ import { FavoritesService } from '../../../core/services/favorites.service';
   selector: 'app-favorite-button',
   standalone: true,
   imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <button
       (click)="toggle($event)"
@@ -40,7 +41,8 @@ export class FavoriteButtonComponent {
   favoritesService = inject(FavoritesService);
 
   isFavorite() {
-    return this.favoritesService.isFavorite(this.photoId) || this.initialFavorite;
+    // `isFavorite` is a computed that returns a `(id: string) => boolean` function.
+    return this.favoritesService.isFavorite()(this.photoId) || this.initialFavorite;
   }
 
   toggle(event: MouseEvent) {

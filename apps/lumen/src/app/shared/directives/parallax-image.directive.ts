@@ -1,4 +1,4 @@
-import { Directive, Input, HostListener, HostBinding, ElementRef, inject, OnInit, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { Directive, Input, HostBinding, ElementRef, inject, OnInit, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 @Directive({
@@ -13,13 +13,13 @@ export class ParallaxImageDirective implements OnInit, OnDestroy {
   private platformId = inject(PLATFORM_ID);
   private isBrowser = isPlatformBrowser(this.platformId);
   private ticking = false;
-  private lastScrollY = 0;
 
   @HostBinding('style.transform') transform = 'translateY(0px)';
 
   ngOnInit() {
     if (this.isBrowser) {
       this.updateTransform();
+      // Single passive scroll listener — previously duplicated by an @HostListener('window:scroll').
       window.addEventListener('scroll', this.onScroll, { passive: true });
     }
   }
@@ -30,7 +30,6 @@ export class ParallaxImageDirective implements OnInit, OnDestroy {
     }
   }
 
-  @HostListener('window:scroll', ['$event'])
   onScroll = () => {
     if (!this.isBrowser || this.ticking) return;
     this.ticking = true;

@@ -1,5 +1,50 @@
 @import "tailwindcss";
 
+/* Self-hosted Geist typography. woff2 files live in apps/lumen/public/fonts/.
+   font-display: swap avoids FOIT; the most critical weights are preloaded in index.html. */
+@font-face {
+  font-family: 'Geist Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/geist-sans-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Geist Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/geist-sans-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Geist Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/geist-sans-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Geist Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/geist-sans-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/geist-mono-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/geist-mono-500.woff2') format('woff2');
+}
+
 @theme inline {
   --color-bg: rgb(var(--bg));
   --color-surface: rgb(var(--surface));
@@ -13,6 +58,7 @@
   --color-border-40: rgb(var(--border) / 0.4);
   --color-border-25: rgb(var(--border) / 0.25);
   --color-accent: rgb(var(--accent));
+  --color-accent-fg: rgb(var(--accent-fg));
   --color-accent-50: rgb(var(--accent) / 0.5);
   --color-accent-25: rgb(var(--accent) / 0.25);
   --color-accent-15: rgb(var(--accent) / 0.15);
@@ -20,9 +66,9 @@
   --color-accent-soft: rgb(var(--accent-soft));
   --color-glow: rgb(var(--glow));
   --color-glow-soft: rgb(var(--glow-soft));
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-display: var(--font-display), var(--font-geist-sans), system-ui, sans-serif;
+  --font-sans: 'Geist Sans', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-display: 'Geist Sans', system-ui, sans-serif;
   --font-size-display: var(--text-display);
   --font-size-h1: var(--text-h1);
   --font-size-h2: var(--text-h2);
@@ -33,10 +79,10 @@
   --shadow-card: 0 8px 32px -8px rgb(0 0 0 / 0.2);
   --shadow-card-hover: 0 16px 48px -12px rgb(0 0 0 / 0.3);
   --shadow-card-strong: 0 24px 64px -16px rgb(0 0 0 / 0.4);
-  --shadow-glow: 0 0 40px -10px rgb(var(--accent) / 0.35);
-  --shadow-glow-sm: 0 0 24px -8px rgb(var(--accent) / 0.25);
-  --shadow-glow-lg: 0 0 72px -16px rgb(var(--accent) / 0.45);
-  --shadow-glow-xl: 0 0 96px -20px rgb(var(--accent) / 0.5);
+  --shadow-glow: 0 0 40px -12px rgb(var(--accent) / 0.2);
+  --shadow-glow-sm: 0 0 24px -10px rgb(var(--accent) / 0.15);
+  --shadow-glow-lg: 0 0 72px -20px rgb(var(--accent) / 0.26);
+  --shadow-glow-xl: 0 0 96px -24px rgb(var(--accent) / 0.3);
   --shadow-inset: inset 0 1px 0 0 rgb(255 255 255 / 0.08);
   --shadow-inset-light: inset 0 1px 0 0 rgb(255 255 255 / 0.12);
   --animate-fade-up: fade-up 0.45s var(--ease-out-expo) forwards;
@@ -64,6 +110,7 @@
   --border: 214 214 220;
   --accent: 54 65 115;
   --accent-soft: 88 102 178;
+  --accent-fg: 255 255 255;
   --glow: 99 102 241;
   --glow-soft: 129 140 248;
   --text-display: clamp(3.5rem, 12vw, 9rem);
@@ -83,6 +130,7 @@
   --border: 42 42 52;
   --accent: 124 141 238;
   --accent-soft: 162 175 252;
+  --accent-fg: 255 255 255;
   --glow: 139 92 246;
   --glow-soft: 196 181 253;
 }
@@ -108,7 +156,7 @@ html {
 body {
   background-color: rgb(var(--bg));
   color: rgb(var(--fg));
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: 'Geist Sans', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -132,7 +180,7 @@ body {
 }
 
 .label {
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: 'Geist Mono', ui-monospace, monospace;
   font-size: 0.6875rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
@@ -140,7 +188,7 @@ body {
 }
 
 .display {
-  font-family: var(--font-display), var(--font-geist-sans), system-ui, sans-serif;
+  font-family: 'Geist Sans', system-ui, sans-serif;
   font-size: var(--text-display);
   line-height: 0.9;
   letter-spacing: -0.04em;

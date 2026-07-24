@@ -47,4 +47,16 @@ router.get("/all", async (_req, res) => {
   }
 });
 
+router.get("/latest", async (req, res) => {
+  try {
+    const rawLimit = Number.parseInt(req.query.limit as string, 10);
+    const limit = Number.isFinite(rawLimit) && rawLimit > 0 ? Math.min(rawLimit, 60) : 12;
+    const latest = await photoSource.getLatest(limit);
+    res.json(latest);
+  } catch (err) {
+    console.error("[photos] latest failed:", err);
+    res.status(500).json({ error: "Failed to load latest photos" });
+  }
+});
+
 export { router as photosMetaRouter };

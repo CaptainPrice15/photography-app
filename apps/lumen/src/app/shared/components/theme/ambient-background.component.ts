@@ -7,13 +7,13 @@ import { ThemeService } from '../../../core/services/theme.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div 
+    <div
       class="fixed inset-0 -z-10 overflow-hidden pointer-events-none"
       [style.background]="backgroundStyle()"
       aria-hidden="true"
     >
-      <div class="absolute inset-0" [class.animate-mesh-drift-a]="true"></div>
-      <div class="absolute inset-0" [class.animate-mesh-drift-b]="true"></div>
+      <div class="absolute inset-0 opacity-60 animate-mesh-drift-a"></div>
+      <div class="absolute inset-0 opacity-50 animate-mesh-drift-b"></div>
     </div>
   `,
   styles: [`

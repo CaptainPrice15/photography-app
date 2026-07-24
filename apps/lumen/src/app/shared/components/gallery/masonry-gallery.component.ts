@@ -63,9 +63,7 @@ export class MasonryGalleryComponent implements OnInit, OnDestroy {
     return `${50}% ${50}%`;
   });
 
-  ngOnInit() {
-    // Initialize with first 20 photos for performance
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {}
 

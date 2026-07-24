@@ -334,6 +334,10 @@ export const pcloudSource: PhotoSource = {
     const all = await scanCollections();
     return all.flatMap((c) => c.photos);
   },
+  async getLatest(limit = 12): Promise<Photo[]> {
+    const all = await scanCollections();
+    return all.flatMap((c) => c.photos).slice(0, limit);
+  },
 };
 
 export async function getPcloudFile(

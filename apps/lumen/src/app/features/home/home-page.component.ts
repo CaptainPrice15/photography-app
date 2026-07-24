@@ -8,11 +8,12 @@ import { CollectionCardComponent } from '../../shared/components/collections/col
 import { MasonryGalleryComponent } from '../../shared/components/gallery/masonry-gallery.component';
 import { TextRevealComponent } from '../../shared/components/shared/text-reveal.component';
 import { RevealItemComponent } from '../../shared/components/shared/reveal-item.component';
+import { ButtonComponent } from '../../shared/components/button.component';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, RouterModule, HeroCarouselComponent, CollectionCardComponent, MasonryGalleryComponent, TextRevealComponent, RevealItemComponent],
+  imports: [CommonModule, RouterModule, HeroCarouselComponent, CollectionCardComponent, MasonryGalleryComponent, TextRevealComponent, RevealItemComponent, ButtonComponent],
   template: `
     <div class="min-h-screen">
       <app-hero-carousel [photos]="featured()" />
@@ -42,9 +43,7 @@ import { RevealItemComponent } from '../../shared/components/shared/reveal-item.
               Albums with their own weather.
             </app-text-reveal>
           </app-reveal-item>
-          <a routerLink="/collections" class="hidden shrink-0 rounded-full border border-border bg-surface-65 px-4 py-2 text-sm font-medium text-muted transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:text-accent hover:shadow-glow-sm focus-glow active:scale-[0.98] sm:block">
-            View all
-          </a>
+          <app-button variant="primary" size="md" [routerLink]="['/collections']" class="hidden shrink-0 sm:inline-flex">View all</app-button>
         </div>
 
         <div class="grid auto-rows-[180px] gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -64,9 +63,7 @@ import { RevealItemComponent } from '../../shared/components/shared/reveal-item.
         <div class="mb-10 flex items-end justify-between gap-4">
           <app-text-reveal [split]="true" class="label mb-3">Latest</app-text-reveal>
           <app-text-reveal [split]="true" class="text-h2 font-semibold tracking-tight">Fresh frames</app-text-reveal>
-          <a routerLink="/gallery" class="hidden shrink-0 rounded-full border border-border bg-surface-65 px-4 py-2 text-sm font-medium text-muted transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:text-accent hover:shadow-glow-sm focus-glow active:scale-[0.98] sm:block">
-            Open gallery
-          </a>
+          <app-button variant="primary" size="md" [routerLink]="['/gallery']" class="hidden shrink-0 sm:inline-flex">Open gallery</app-button>
         </div>
 
         <app-masonry-gallery 
@@ -83,7 +80,7 @@ export class HomePageComponent implements OnInit {
 
   collections = this.photoService.collections;
   featured = this.photoService.featured;
-  allPhotos = this.photoService.allPhotos;
+  latest = this.photoService.latest;
 
   marqueeItems = computed(() => [
     ...this.collections().map(c => c.title),
@@ -92,11 +89,11 @@ export class HomePageComponent implements OnInit {
     'Light is the only subject'
   ]);
 
-  latestPhotos = computed(() => this.allPhotos().slice(0, 12));
+  latestPhotos = computed(() => this.latest());
 
   ngOnInit() {
     this.photoService.loadCollections().subscribe();
     this.photoService.loadFeatured().subscribe();
-    this.photoService.loadAllPhotos().subscribe();
+    this.photoService.loadLatest(12).subscribe();
   }
 }

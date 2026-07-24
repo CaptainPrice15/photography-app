@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
+import { ButtonComponent } from '../../shared/components/button.component';
 
 @Component({
   selector: 'app-checkout-success-page',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ButtonComponent],
   template: `
     <main class="flex-1 pt-16 flex items-center justify-center min-h-screen px-4">
       <div class="w-full max-w-lg text-center">
@@ -21,9 +22,7 @@ import { RouterModule, ActivatedRoute } from '@angular/router';
         </p>
 
         <div class="space-y-4">
-          <a routerLink="/gallery" class="inline-block rounded-full border border-border bg-surface px-6 py-3 text-sm font-medium text-fg transition-all hover:border-accent/60 hover:text-accent">
-            Continue browsing
-          </a>
+          <app-button variant="primary" size="lg" [routerLink]="['/gallery']">Continue browsing</app-button>
         </div>
       </div>
     </main>

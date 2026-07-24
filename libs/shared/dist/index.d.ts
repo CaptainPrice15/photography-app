@@ -26,6 +26,7 @@ export interface PhotoSource {
     getCollection(slug: string): Promise<Collection | null>;
     getFeatured(): Promise<Photo[]>;
     getAllPhotos(): Promise<Photo[]>;
+    getLatest(limit?: number): Promise<Photo[]>;
 }
 export interface Session {
     email: string;

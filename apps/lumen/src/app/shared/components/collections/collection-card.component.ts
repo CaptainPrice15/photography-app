@@ -1,4 +1,4 @@
-import { Component, Input, HostBinding, inject, PLATFORM_ID } from '@angular/core';
+import { Component, Input, HostBinding, inject, PLATFORM_ID, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
@@ -10,6 +10,7 @@ import { ParallaxImageDirective } from '../../directives/parallax-image.directiv
   selector: 'app-collection-card',
   standalone: true,
   imports: [CommonModule, RouterModule, ParallaxImageDirective],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <article
       class="relative group overflow-hidden rounded-xl bg-surface border border-border-25 transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1"
@@ -20,9 +21,14 @@ import { ParallaxImageDirective } from '../../directives/parallax-image.directiv
       <a [routerLink]="['/collections', collection.slug]" class="absolute inset-0 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-bg" [attr.aria-label]="'View ' + collection.title + ' collection'">
         <img
           [src]="photoService.getCollectionCoverUrl(collection, 'w640')"
+          [srcset]="photoService.getCollectionCoverSrcset(collection, [400, 640, 1200])"
+          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+          [width]="coverWidth()"
+          [height]="coverHeight()"
           [alt]="collection.title"
           class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           loading="lazy"
+          decoding="async"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-bg/70 via-bg/10 to-transparent"></div>
       </a>
@@ -52,4 +58,11 @@ export class CollectionCardComponent {
   @Input() className = '';
 
   photoService = inject(PhotoService);
+
+  // Look up the cover photo's intrinsic dimensions from collection.photos for CLS-safe rendering.
+  private coverPhoto = computed(() =>
+    this.collection.photos.find((p) => p.src === this.collection.cover) ?? this.collection.photos[0] ?? null
+  );
+  coverWidth = computed(() => this.coverPhoto()?.width ?? 1600);
+  coverHeight = computed(() => this.coverPhoto()?.height ?? 1000);
 }

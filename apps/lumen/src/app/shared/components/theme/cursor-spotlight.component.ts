@@ -8,7 +8,7 @@ import { ThemeService } from '../../../core/services/theme.service';
   imports: [CommonModule],
   template: `
     @if (isBrowser && !reducedMotion) {
-      <div 
+      <div
         class="fixed inset-0 -z-10 pointer-events-none overflow-hidden"
         [style.background]="spotlightStyle()"
         aria-hidden="true"
@@ -27,19 +27,19 @@ import { ThemeService } from '../../../core/services/theme.service';
 })
 export class CursorSpotlightComponent implements OnInit, OnDestroy {
   @HostBinding('class') class = 'fixed inset-0 -z-10 pointer-events-none overflow-hidden';
-  
+
   private themeService = inject(ThemeService);
   private platformId = inject(PLATFORM_ID);
-  
+
   isBrowser = isPlatformBrowser(this.platformId);
   reducedMotion = false;
   private mouseX = signal(0);
   private mouseY = signal(0);
-  private animationId: number | null = null;
 
   spotlightStyle = signal('none');
 
   constructor() {
+    // The effect re-runs only when theme/mouse position change — no continuous rAF loop needed.
     effect(() => {
       const theme = this.themeService.effectiveTheme();
       const x = this.mouseX();
@@ -57,29 +57,23 @@ export class CursorSpotlightComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (!this.isBrowser) return;
-    
+
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     this.reducedMotion = mediaQuery.matches;
-    
+
     if (!this.reducedMotion && window.matchMedia('(pointer: fine)').matches) {
-      window.addEventListener('mousemove', this.onMouseMove);
-      this.animate();
+      window.addEventListener('mousemove', this.onMouseMove, { passive: true });
     }
   }
 
   ngOnDestroy() {
     if (this.isBrowser) {
       window.removeEventListener('mousemove', this.onMouseMove);
-      if (this.animationId) cancelAnimationFrame(this.animationId);
     }
   }
 
   private onMouseMove = (e: MouseEvent) => {
     this.mouseX.set(e.clientX);
     this.mouseY.set(e.clientY);
-  };
-
-  private animate = () => {
-    this.animationId = requestAnimationFrame(this.animate);
   };
 }

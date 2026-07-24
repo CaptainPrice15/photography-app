@@ -1,16 +1,16 @@
-import { Router, Request } from "express";
+import { Router, Request, Response } from "express";
 import { getPcloudFile } from "../lib/storage/pcloudSource.js";
 import { getSession } from "../lib/auth.js";
 
 const router = Router();
 
-router.get("/*path", async (req: Request, res) => {
+router.get("/*path", async (req: Request<{ path?: string[] }, any, any, any, { path?: string[] }>, res: Response) => {
   const session = getSession(req);
   if (!session || !session.paid) {
     return res.status(402).send("Payment required");
   }
 
-  const path = (req.params as { path?: string[] }).path ?? [];
+  const path = req.params.path ?? [];
 
   try {
     const file = await getPcloudFile(path);

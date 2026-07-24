@@ -38,7 +38,7 @@ import { FavoritesService } from '../../../core/services/favorites.service';
         <div class="relative max-w-[90vw] max-h-[90vh]">
           <img
           [src]="currentPhoto() ? photoService.getPhotoUrl(currentPhoto()!, 'lightbox') : ''"
-          [alt]="currentPhoto()?.alt || ''"
+          [alt]="currentPhoto() ? currentPhoto()!.alt : ''"
             class="max-w-[90vw] max-h-[90vh] object-contain"
           />
 

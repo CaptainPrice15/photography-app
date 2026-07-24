@@ -1,0 +1,6 @@
+{
+  "framework": "angular",
+  "buildCommand": "pnpm ng:build",
+  "outputDirectory": "apps/lumen/dist/lumen/browser",
+  "installCommand": "pnpm install"
+}
